@@ -39,14 +39,31 @@ def _pseudonimo(nome: str) -> str:
     return "comerciante-" + hashlib.sha1(nome.encode()).hexdigest()[:6]
 
 
+LEGENDA = {
+    "gasto_total_por_mes": "soma das saidas que contam como gasto (sem investimentos nem transferencias)",
+    "receita_por_mes": "soma das entradas (salario, bolsa, rendimentos; sem resgates nem fatura paga)",
+    "gasto_por_categoria": "categoria -> mes -> valor em BRL",
+    "categorias": "categorias existentes; 'tipo' fixo/variavel = gasto, receita = entrada, "
+    "transferencia = dinheiro entre contas do proprio usuario; 'dentro_de' = categoria-mae",
+    "sem_categoria": "grupos de lancamentos ainda sem categoria: descricao normalizada (sem numeros), "
+    "origem (conta corrente ou cartao), fluxo (entrada/saida), n lancamentos e total em BRL",
+    "recorrencias": "cobrancas repetidas detectadas; tipo assinatura/parcela/detectada",
+    "previsao": "estimativa dos proximos meses com faixa [p25, p75]",
+}
+
+
 def montar_resumo(
     resumo_mensal: dict[str, Any],
     recorrencias: list[dict[str, Any]],
     previsao: dict[str, Any],
     pseudonimizar: bool = False,
+    categorias: list[dict[str, Any]] | None = None,
+    pendentes: list[dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
-    """Reduz os tres agregados ao essencial. Nomes de categoria sao publicos; nomes de comerciante sao
-    os unicos dados potencialmente identificaveis e por isso tem a opcao de pseudonimo."""
+    """Reduz os agregados ao essencial e explica cada bloco numa legenda, para o modelo nao ter que
+    adivinhar o que e gasto, entrada ou transferencia. Nomes de categoria sao publicos; nomes de
+    comerciante (recorrencias e grupos sem categoria) sao os unicos dados potencialmente identificaveis
+    e por isso tem a opcao de pseudonimo (que impede o modelo de catalogar, mas e a escolha do usuario)."""
     meses = resumo_mensal.get("months", [])
     por_categoria: dict[str, dict[str, float]] = {}
     for linha in resumo_mensal.get("by_category", []):
@@ -81,9 +98,18 @@ def montar_resumo(
             for ln in previsao.get("lines", [])
         ],
     }
+    por_id = {c.get("id"): c.get("name") for c in categorias or []}
+    cats = [
+        {"nome": c["name"], "tipo": c["kind"], "dentro_de": por_id.get(c.get("parent_id"))}
+        for c in categorias or []
+    ]
+    sem = [{**g, "descricao": nome(g["descricao"])} for g in pendentes or []]
     return {
         "moeda": "BRL",
+        "legenda": LEGENDA,
         "meses": meses,
+        "categorias": cats,
+        "sem_categoria": sem,
         "gasto_total_por_mes": {
             m: round(float(v), 2) for m, v in resumo_mensal.get("total_by_month", {}).items()
         },

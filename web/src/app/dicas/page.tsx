@@ -1,20 +1,21 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import { AcoesList, CatalogarPanel } from "@/components/Catalogar";
 import { Icon } from "@/components/Icon";
 import { btn, btn2, Chip, ErrorBox, input, Meter, PageHeader, Panel, Skeleton } from "@/components/ui";
-import { ApiError, askQuestion, getHealth, getInsights } from "@/lib/api";
+import { ApiError, askQuestion, getHealth, getInsights, getSummary } from "@/lib/api";
 import { catLabel, formatBRL } from "@/lib/format";
-import type { InsightsOut } from "@/lib/types";
+import type { Action, InsightsOut } from "@/lib/types";
 import { useApi } from "@/lib/useApi";
 
-const VAI = ["Totais por categoria e por mês", "Nomes normalizados de comerciantes", "Recorrências (nome, valor e periodicidade)", "Previsão e gastos fora do padrão"];
+const VAI = ["Totais por categoria e por mês", "Lista das suas categorias", "Descrições normalizadas (sem números) de comerciantes e dos lançamentos sem categoria", "Recorrências, previsão e gastos fora do padrão"];
 const NAO_VAI = ["Descrição original das transações", "Dados de conta, cartão ou banco", "Identificadores do Open Finance", "Seu nome ou documentos"];
-const SUGESTOES = ["Onde mais posso economizar?", "Quanto gasto por mês com assinaturas?", "Meus gastos com alimentação estão subindo?"];
+const SUGESTOES = ["Onde mais posso economizar?", "Quanto gasto por mês com assinaturas?", "Organize meus lançamentos sem categoria", "Crie uma categoria para pets"];
 
 const msgErro = (e: unknown) =>
   e instanceof ApiError && e.status === 409 ? "A OpenAI não está configurada na API. Veja as instruções acima." : (e as Error).message;
 
-type Msg = { id: number; q: string; a?: string; error?: string };
+type Msg = { id: number; q: string; a?: string; acoes?: Action[]; error?: string };
 
 function OpenAIOff() {
   return (
@@ -108,7 +109,7 @@ function Resultado({ ins }: { ins: InsightsOut }) {
   );
 }
 
-function Chat({ disabled }: { disabled: boolean }) {
+function Chat({ disabled, onAplicado }: { disabled: boolean; onAplicado?: () => void }) {
   const [msgs, setMsgs] = useState<Msg[]>([]);
   const [texto, setTexto] = useState("");
   const [pensando, setPensando] = useState(false);
@@ -124,7 +125,7 @@ function Chat({ disabled }: { disabled: boolean }) {
     setPensando(true);
     try {
       const r = await askQuestion(q);
-      setMsgs((m) => m.map((x) => (x.id === id ? { ...x, a: r.resposta } : x)));
+      setMsgs((m) => m.map((x) => (x.id === id ? { ...x, a: r.resposta, acoes: r.acoes } : x)));
     } catch (e) {
       setMsgs((m) => m.map((x) => (x.id === id ? { ...x, error: msgErro(e) } : x)));
     }
@@ -132,7 +133,7 @@ function Chat({ disabled }: { disabled: boolean }) {
   };
 
   return (
-    <Panel title="Pergunte sobre seus gastos" subtitle="O histórico fica só nesta aba e some ao recarregar a página.">
+    <Panel title="Pergunte sobre seus gastos" subtitle="Peça também para criar categorias ou organizar lançamentos: a IA propõe e você aprova. O histórico fica só nesta aba.">
       {msgs.length === 0 ? (
         <div className="flex flex-wrap gap-2">
           {SUGESTOES.map((s) => (
@@ -145,7 +146,10 @@ function Chat({ disabled }: { disabled: boolean }) {
             <div key={m.id} className="space-y-2">
               <div className="ml-auto w-fit max-w-[85%] rounded-[14px] rounded-br-[4px] bg-accent px-3.5 py-2 text-sm text-accent-ink">{m.q}</div>
               {m.a ? (
-                <div className="w-fit max-w-[85%] whitespace-pre-wrap rounded-[14px] rounded-bl-[4px] bg-surface-2 px-3.5 py-2 text-sm leading-relaxed text-ink">{m.a}</div>
+                <>
+                  <div className="w-fit max-w-[85%] whitespace-pre-wrap rounded-[14px] rounded-bl-[4px] bg-surface-2 px-3.5 py-2 text-sm leading-relaxed text-ink">{m.a}</div>
+                  {m.acoes && m.acoes.length > 0 && <div className="max-w-[85%]"><AcoesList acoes={m.acoes} onAplicado={onAplicado} /></div>}
+                </>
               ) : m.error ? (
                 <div className="w-fit max-w-[85%] rounded-[14px] rounded-bl-[4px] bg-danger-soft px-3.5 py-2 text-sm text-danger-text">{m.error}</div>
               ) : (
@@ -171,6 +175,7 @@ function Chat({ disabled }: { disabled: boolean }) {
 export default function Dicas() {
   const health = useApi(getHealth).data;
   const off = health ? !health.openai : false;
+  const sum = useApi(() => getSummary(12));
   const [ins, setIns] = useState<{ data?: InsightsOut; error?: string; loading: boolean }>({ loading: false });
   const gerar = () => {
     setIns((s) => ({ data: s.data, loading: true }));
@@ -192,7 +197,8 @@ export default function Dicas() {
         {ins.data ? <Resultado ins={ins.data} /> : ins.loading ? (
           <div className="grid gap-4 md:grid-cols-2">{[0, 1, 2, 3].map((i) => <Skeleton key={i} className="h-44" />)}</div>
         ) : <Privacidade onGerar={gerar} disabled={off || ins.loading} loading={ins.loading} />}
-        <Chat disabled={off} />
+        <CatalogarPanel disabled={off} pendentes={sum.data?.uncategorized} onAplicado={sum.reload} />
+        <Chat disabled={off} onAplicado={sum.reload} />
       </div>
     </>
   );

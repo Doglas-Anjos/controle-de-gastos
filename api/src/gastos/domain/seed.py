@@ -13,6 +13,7 @@ from gastos.domain.models import Category, CategoryRule
 from gastos.domain.normalize import _sem_acento
 
 SEM_CATEGORIA = "Sem categoria"
+KINDS = {"fixo", "variavel", "receita", "transferencia"}
 
 CATEGORIAS_BASE = {
     "Moradia": "fixo",

@@ -100,3 +100,11 @@ def test_categorias_cria_subcategoria_e_apaga(http):
     assert http.delete(f"/categories/{r.json()['id']}").status_code == 204
     assert http.delete(f"/categories/{cats['Sem categoria']['id']}").status_code == 409
     assert http.delete("/categories/9999").status_code == 404
+
+
+def test_rota_aplicar_acoes_da_ia(http):
+    http.get("/categories")
+    acao = {"tipo": "criar_categoria", "nome": "Pets", "kind": "variavel"}
+    r = http.post("/insights/aplicar", json={"acoes": [acao]})
+    assert r.status_code == 200 and r.json()["categorias_criadas"] == 1
+    assert http.post("/insights/aplicar", json={"acoes": []}).status_code == 422

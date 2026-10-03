@@ -23,9 +23,10 @@ description: Checklist de privacidade deste repositorio publico. Use antes de qu
 - CPF em fixture so como `000.000.000-00`.
 
 ## O que pode ir para o LLM (OpenAI)
-Somente o resumo produzido por `insights/redact.py`: totais por categoria e mes, nomes normalizados de comerciantes (ou pseudonimos se `INSIGHTS_PSEUDONIMIZAR=true`), recorrencias (nome, valor, periodicidade), previsao, anomalias.
-Proibido: `raw_json`, `external_id`, ids de conta/item, numero de cartao, saldo com identificacao de conta, nome do titular.
+Somente o resumo produzido por `insights/redact.py`: totais por categoria e mes, lista de categorias (nome, tipo, mae), nomes normalizados de comerciantes (ou pseudonimos se `INSIGHTS_PSEUDONIMIZAR=true`), recorrencias (nome, valor, periodicidade), previsao, anomalias e os **grupos** de lancamentos sem categoria (`description_norm`, conta/cartao, entrada/saida, contagem, total; nunca a transacao individual, data exata ou valor unitario). O payload leva uma `legenda` explicando cada bloco.
+Proibido: `raw_json`, `external_id`, ids de conta/item, numero de cartao, saldo com identificacao de conta, nome do titular, descricao original.
 Ha teste que falha se qualquer campo proibido aparecer no payload.
+O modelo **nunca escreve**: devolve propostas (`acoes`: criar_categoria, categorizar) que a tela mostra e o usuario aprova; so `POST /insights/aplicar` grava, e so o que foi aprovado.
 
 ## Logs
 Nivel INFO nunca imprime transacao individual. DEBUG pode imprimir `description_norm` e valor, nunca `raw_json`.

@@ -10,10 +10,9 @@ from sqlalchemy.orm import Session
 from gastos.api.schemas import CategoryIn, CategoryOut
 from gastos.core.db import get_session
 from gastos.domain.models import Category, CategoryRule, Forecast, Recurrence, TransactionOverride
-from gastos.domain.seed import SEM_CATEGORIA, semear_categorias
+from gastos.domain.seed import KINDS, SEM_CATEGORIA, semear_categorias
 
 router = APIRouter()
-KINDS = {"fixo", "variavel", "receita", "transferencia"}
 
 
 @router.get("/categories", response_model=list[CategoryOut])

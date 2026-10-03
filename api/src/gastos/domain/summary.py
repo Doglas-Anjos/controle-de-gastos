@@ -9,7 +9,7 @@ from sqlalchemy.orm import Session
 
 from gastos.domain.categorize import categoria_out, categorias_efetivas, eh_gasto
 from gastos.domain.forecast import mes_str
-from gastos.domain.models import Transaction
+from gastos.domain.models import Account, Transaction
 from gastos.domain.recurrence import somar_meses
 from gastos.domain.seed import SEM_CATEGORIA
 
@@ -63,3 +63,42 @@ def resumo_mensal(sessao: Session, meses: int = 12) -> dict:
         "income_by_month": {m: round(v, 2) for m, v in receita.items()},
         "uncategorized": {"count": sem["count"], "total": round(sem["total"], 2)},
     }
+
+
+def grupos_sem_categoria(sessao: Session, meses: int = 6, limite: int = 40) -> list[dict]:
+    """Lancamentos ainda em "Sem categoria" agrupados por descricao normalizada e origem (conta corrente
+    ou cartao), maiores primeiro. E o que o LLM recebe para catalogar: so a descricao normalizada (sem
+    numeros, documento ou conta), contagem e total do grupo, nunca a transacao individual. `limite`
+    segura o tamanho do prompt."""
+    ultima = sessao.scalar(select(func.max(Transaction.date)))
+    if ultima is None:
+        return []
+    inicio = somar_meses(ultima.replace(day=1), -(meses - 1))
+    txs = list(sessao.scalars(select(Transaction).where(Transaction.date >= inicio)))
+    efetivas = categorias_efetivas(sessao, txs)
+    contas = {a.id: a for a in sessao.scalars(select(Account))}
+    grupos: dict[tuple[str, str], dict] = {}
+    for t in txs:
+        cat, _, excluida = efetivas[t.id]
+        if excluida or (cat is not None and cat.name != SEM_CATEGORIA):
+            continue
+        origem = "cartao" if contas[t.account_id].type == "credit" else "conta corrente"
+        g = grupos.setdefault(
+            (t.description_norm, origem),
+            {"descricao": t.description_norm, "origem": origem, "n": 0, "soma": 0.0, "ultima": t.date},
+        )
+        g["n"] += 1
+        g["soma"] += t.amount
+        g["ultima"] = max(g["ultima"], t.date)
+    maiores = sorted(grupos.values(), key=lambda g: -abs(g["soma"]))[:limite]
+    return [
+        {
+            "descricao": g["descricao"],
+            "origem": g["origem"],
+            "fluxo": "entrada" if g["soma"] > 0 else "saida",
+            "n": g["n"],
+            "total": round(abs(g["soma"]), 2),
+            "ultima": g["ultima"].isoformat(),
+        }
+        for g in maiores
+    ]

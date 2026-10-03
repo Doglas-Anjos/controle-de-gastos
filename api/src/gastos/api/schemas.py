@@ -222,6 +222,36 @@ class QuestionIn(BaseModel):
     pergunta: str = Field(min_length=3, max_length=2000)
 
 
+class Action(BaseModel):
+    """Acao proposta pelo LLM e aprovada pelo usuario. Validada de verdade em domain.catalogo."""
+
+    tipo: str  # criar_categoria | categorizar
+    nome: str | None = None
+    kind: str | None = None
+    mae: str | None = None
+    descricao: str | None = None
+    categoria: str | None = None
+    motivo: str | None = None
+    confianca: float = 1.0
+
+
 class AnswerOut(BaseModel):
     resposta: str
+    acoes: list[Action] = []
     gerado_em: datetime
+
+
+class CatalogOut(BaseModel):
+    sugestoes: list[Action]
+    gerado_em: datetime
+    cache: bool = False
+
+
+class ApplyIn(BaseModel):
+    acoes: list[Action] = Field(min_length=1, max_length=200)
+
+
+class ApplyOut(BaseModel):
+    categorias_criadas: int
+    regras_criadas: int
+    ignoradas: list[str]

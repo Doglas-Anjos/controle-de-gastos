@@ -38,7 +38,14 @@ export interface ImportResult { files: number; accounts_created: number; transac
 export interface SyncResult { items: number; accounts: number; transactions_new: number; transactions_updated: number; errors: string[] }
 export interface Tip { titulo: string; categoria: string | null; economia_estimada_mensal: number | null; acao: string; confianca: number }
 export interface InsightsOut { resumo: string; dicas: Tip[]; alertas: string[]; gerado_em: string; cache: boolean }
-export interface AnswerOut { resposta: string; gerado_em: string }
+export interface Action {
+  tipo: "criar_categoria" | "categorizar" | string
+  nome?: string | null; kind?: string | null; mae?: string | null
+  descricao?: string | null; categoria?: string | null; motivo?: string | null; confianca: number
+}
+export interface AnswerOut { resposta: string; acoes: Action[]; gerado_em: string }
+export interface CatalogOut { sugestoes: Action[]; gerado_em: string; cache: boolean }
+export interface ApplyOut { categorias_criadas: number; regras_criadas: number; ignoradas: string[] }
 export interface ProjectionPoint { month: string; total: number; card: number; bank: number; recurring: number; projected: boolean }
 export interface ProjectionOut {
   category: CategoryOut | null; months_window: number; horizon: number
