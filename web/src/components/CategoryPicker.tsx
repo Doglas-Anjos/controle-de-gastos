@@ -56,6 +56,7 @@ export function CategoryPicker({ categories, value, onChange, allLabel, placehol
   const [foco, setFoco] = useState(0);
   const [pos, setPos] = useState({ top: 0, left: 0, acima: false });
   const root = useRef<HTMLDivElement>(null);
+  const lista = useRef<HTMLUListElement>(null);
   const listId = useId();
   const porId = new Map(categories.map((c) => [c.id, c]));
   const mae = (c: CategoryOut | null | undefined) => (c?.parent_id != null ? porId.get(c.parent_id) : undefined);
@@ -77,12 +78,18 @@ export function CategoryPicker({ categories, value, onChange, allLabel, placehol
   useEffect(() => {
     if (!open) return;
     const fora = (e: MouseEvent) => { if (!root.current?.contains(e.target as Node)) setOpen(false); };
+    // Rolagem da pagina desalinha o menu fixo, entao ele fecha; rolagem dentro da propria lista nao.
+    const rolou = (e: Event) => { if (!lista.current?.contains(e.target as Node)) setOpen(false); };
     const fechar = () => setOpen(false);
     document.addEventListener("mousedown", fora);
-    window.addEventListener("scroll", fechar, true);
+    window.addEventListener("scroll", rolou, true);
     window.addEventListener("resize", fechar);
-    return () => { document.removeEventListener("mousedown", fora); window.removeEventListener("scroll", fechar, true); window.removeEventListener("resize", fechar); };
+    return () => { document.removeEventListener("mousedown", fora); window.removeEventListener("scroll", rolou, true); window.removeEventListener("resize", fechar); };
   }, [open]);
+  // Opcao focada pelo teclado entra na area visivel da lista (no hover ja esta visivel: nao rola).
+  useEffect(() => {
+    if (open) lista.current?.querySelector<HTMLElement>('[data-foco="true"]')?.scrollIntoView?.({ block: "nearest" }); // jsdom nao implementa
+  }, [open, foco]);
   const onKey = (e: KeyboardEvent<HTMLDivElement>) => {
     if (e.key === "Escape") { setOpen(false); return; }
     if (!open) { if (["ArrowDown", "ArrowUp"].includes(e.key)) { e.preventDefault(); abrir(); } return; }
@@ -106,7 +113,7 @@ export function CategoryPicker({ categories, value, onChange, allLabel, placehol
         <Icon name="down" size={14} className="shrink-0 text-muted" />
       </button>
       {open && (
-        <ul role="listbox" id={listId} aria-label={ariaLabel} style={{ top: pos.acima ? undefined : pos.top, bottom: pos.acima ? window.innerHeight - pos.top + 40 : undefined, left: pos.left }}
+        <ul ref={lista} role="listbox" id={listId} aria-label={ariaLabel} style={{ top: pos.acima ? undefined : pos.top, bottom: pos.acima ? window.innerHeight - pos.top + 40 : undefined, left: pos.left }}
           className="fixed z-40 max-h-80 w-64 overflow-auto rounded-[12px] border border-line bg-surface p-1 shadow-[0_12px_32px_-8px_rgba(0,0,0,0.35)]">
           {grupos.map((g) => (
             <li key={g.label || "todas"} role="presentation">
@@ -117,7 +124,7 @@ export function CategoryPicker({ categories, value, onChange, allLabel, placehol
                   const sel = (c?.id ?? "") === value;
                   const sub = mae(c);
                   return (
-                    <li key={c?.id ?? "todas"} role="option" aria-selected={sel} onMouseEnter={() => setFoco(i)} onClick={() => escolher(c)}
+                    <li key={c?.id ?? "todas"} role="option" aria-selected={sel} data-foco={i === foco} onMouseEnter={() => setFoco(i)} onClick={() => escolher(c)}
                       className={`flex cursor-pointer items-center gap-2 rounded-[8px] py-1.5 pr-2 text-sm ${sub ? "pl-7" : "pl-2"} ${i === foco ? "bg-surface-2" : ""} ${sel ? "font-medium text-ink" : "text-ink-2"}`}>
                       {c ? <CategoryDot category={c} parent={sub} size={sub ? 18 : 22} /> : <span className="inline-flex h-[22px] w-[22px] items-center justify-center text-muted"><Icon name="list" size={14} /></span>}
                       <span className="flex-1 truncate">{c ? catLabel(c.name) : allLabel}</span>
