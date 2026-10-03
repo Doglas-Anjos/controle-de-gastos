@@ -2,11 +2,23 @@
 usuario decidiu por cima (categories, category_rules, transaction_overrides, recurrences). O sync
 so escreve na primeira camada e nunca apaga; a segunda sobrevive a qualquer re-sync.
 """
+
 from __future__ import annotations
 
 from datetime import date, datetime
 
-from sqlalchemy import JSON, Boolean, Date, DateTime, Float, ForeignKey, Integer, String, Text, UniqueConstraint
+from sqlalchemy import (
+    JSON,
+    Boolean,
+    Date,
+    DateTime,
+    Float,
+    ForeignKey,
+    Integer,
+    String,
+    Text,
+    UniqueConstraint,
+)
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from gastos.core.db import Base
@@ -23,7 +35,7 @@ class Account(Base):
     external_id: Mapped[str | None] = mapped_column(String(80), unique=True)  # id Pluggy ou ACCTID do OFX
     last_sync_at: Mapped[datetime | None] = mapped_column(DateTime)
 
-    transactions: Mapped[list["Transaction"]] = relationship(back_populates="account")
+    transactions: Mapped[list[Transaction]] = relationship(back_populates="account")
 
 
 class Transaction(Base):
@@ -45,7 +57,7 @@ class Transaction(Base):
     raw_json: Mapped[dict | None] = mapped_column(JSON)  # nunca sai do banco local
 
     account: Mapped[Account] = relationship(back_populates="transactions")
-    override: Mapped["TransactionOverride | None"] = relationship(back_populates="transaction", uselist=False)
+    override: Mapped[TransactionOverride | None] = relationship(back_populates="transaction", uselist=False)
 
 
 class Category(Base):

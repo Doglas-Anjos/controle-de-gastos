@@ -1,4 +1,5 @@
 """Sessao SQLAlchemy sobre SQLite local. Um engine por processo; testes trocam a URL por memoria."""
+
 from __future__ import annotations
 
 from collections.abc import Iterator

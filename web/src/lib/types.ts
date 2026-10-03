@@ -1,0 +1,38 @@
+// Contrato da API (api/src/gastos/api/schemas.py). Mantem snake_case como no JSON.
+export interface Health { ok: boolean; pluggy: boolean; openai: boolean }
+export interface AccountOut { id: number; bank: string; name: string; type: string; source: string; last_sync_at: string | null }
+export interface CategoryOut { id: number; name: string; kind: string; parent_id: number | null }
+export interface TransactionOut {
+  id: number; account_id: number; date: string; description: string; amount: number
+  category: CategoryOut | null
+  category_source: "override" | "regra" | "pluggy" | "nenhuma" | string
+  excluded: boolean; installment: string | null; bill_month: string | null; recurrence_id: number | null
+}
+export interface Page { items: TransactionOut[]; total: number; page: number; page_size: number }
+export interface MonthlyByCategory { month: string; category: CategoryOut | null; total: number }
+export interface SummaryOut {
+  months: string[]; by_category: MonthlyByCategory[]
+  total_by_month: Record<string, number>; income_by_month: Record<string, number>
+}
+export type RecurrenceKind = "assinatura" | "parcela" | "detectada"
+export interface RecurrenceOut {
+  id: number; merchant: string; account: AccountOut; kind: RecurrenceKind
+  periodicity: "semanal" | "mensal" | "anual" | string
+  expected_amount: number; expected_day: number | null
+  next_due: string | null; ends_at: string | null; occurrences: number; confidence: number
+  active: boolean; user_decision: "confirmada" | "descartada" | null; category: CategoryOut | null
+}
+export interface RecurrenceDecision { decision: "confirmada" | "descartada" }
+export interface ForecastLine {
+  month: string; category: CategoryOut | null; amount: number; low: number; high: number
+  method: "recorrencia" | "mediana3" | "sazonal" | string
+}
+export interface ForecastOut { horizon_months: number; lines: ForecastLine[]; total_by_month: Record<string, number> }
+export interface RuleIn { pattern: string; category_id: number; priority: number }
+export interface RuleOut extends RuleIn { id: number }
+export interface OverrideIn { category_id?: number | null; exclude?: boolean; note?: string | null }
+export interface ImportResult { files: number; accounts_created: number; transactions_new: number; transactions_updated: number; errors: string[] }
+export interface SyncResult { items: number; accounts: number; transactions_new: number; transactions_updated: number; errors: string[] }
+export interface Tip { titulo: string; categoria: string | null; economia_estimada_mensal: number | null; acao: string; confianca: number }
+export interface InsightsOut { resumo: string; dicas: Tip[]; alertas: string[]; gerado_em: string; cache: boolean }
+export interface AnswerOut { resposta: string; gerado_em: string }

@@ -5,6 +5,7 @@ Falha (exit 1) se algum arquivo staged estiver em caminho proibido ou se o diff 
 contiver padroes de dado pessoal. Com --history varre todo o historico (`git log -p`) lido
 da entrada padrao, para auditoria antes do primeiro push.
 """
+
 from __future__ import annotations
 
 import re
@@ -23,9 +24,7 @@ CAMINHOS_PERMITIDOS = (re.compile(r"^api/tests/fixtures/"),)
 PADROES = {
     "CPF formatado": re.compile(r"\b\d{3}\.\d{3}\.\d{3}-\d{2}\b"),
     "chave OpenAI": re.compile(r"sk-[A-Za-z0-9_-]{20,}"),
-    "credencial Pluggy": re.compile(
-        r"(?i)pluggy_client_(id|secret)\s*[:=]\s*[\"']?[a-f0-9-]{20,}"
-    ),
+    "credencial Pluggy": re.compile(r"(?i)pluggy_client_(id|secret)\s*[:=]\s*[\"']?[a-f0-9-]{20,}"),
     "item id Pluggy": re.compile(r"(?i)pluggy_item_ids\s*[:=]\s*[\"']?[a-f0-9-]{36}"),
     "agencia/conta real": re.compile(
         r"(?i)\b(ag(encia)?|cc|conta)\s*[:.]?\s*\d{3,5}-?\d?\s*[/,]\s*(c/?c|conta)?\s*\d{4,12}-?\d\b"
@@ -35,7 +34,10 @@ PLACEHOLDERS = re.compile(r"000\.000\.000-00|sk-xxx|SEU_|YOUR_|<[a-z_]+>")
 
 
 def _git(*args: str) -> str:
-    return subprocess.run(["git", *args], capture_output=True, text=True, check=False).stdout
+    # utf-8 tolerante: fixtures OFX em cp1252 e descricoes acentuadas nao podem derrubar a barreira
+    return subprocess.run(
+        ["git", *args], capture_output=True, text=True, encoding="utf-8", errors="replace", check=False
+    ).stdout
 
 
 def _permitido(caminho: str) -> bool:
@@ -67,6 +69,7 @@ def verificar_conteudo(texto: str) -> list[str]:
 
 def main() -> int:
     if "--history" in sys.argv:
+        sys.stdin.reconfigure(encoding="utf-8", errors="replace")
         erros = verificar_conteudo(sys.stdin.read())
     else:
         staged = [a for a in _git("diff", "--cached", "--name-only", "--diff-filter=ACMR").split("\n") if a]
@@ -75,7 +78,10 @@ def main() -> int:
         print("BLOQUEADO: possivel dado pessoal indo para o repositorio.", file=sys.stderr)
         for e in erros:
             print(f"  - {e}", file=sys.stderr)
-        print("Remova do stage (git restore --staged <arquivo>) ou substitua por dado sintetico.", file=sys.stderr)
+        print(
+            "Remova do stage (git restore --staged <arquivo>) ou substitua por dado sintetico.",
+            file=sys.stderr,
+        )
         return 1
     return 0
 

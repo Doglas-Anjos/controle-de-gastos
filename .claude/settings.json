@@ -17,6 +17,7 @@
       "Bash(git log *)"
     ]
   },
+  "enabledMcpjsonServers": ["pluggy-docs"],
   "hooks": {
     "PreToolUse": [
       {

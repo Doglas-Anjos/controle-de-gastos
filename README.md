@@ -41,6 +41,13 @@ OFX / CSV exportados ───────┘          │
    ```
 
 `gastos demo-seed` popula o banco com dados sinteticos para conhecer o app sem conectar nada.
+`gastos recalcular` refaz categorias automaticas, recorrencias e previsao (o sync e o import ja fazem isso).
+
+## Estado
+
+- Backend: ingestao OFX/CSV e Pluggy, categorias em camadas, recorrencias, previsao e dicas, com 74 testes.
+- Frontend: 7 telas (visao geral, transacoes, recorrencias, previsao, dicas, importar, regras).
+- Ainda sem screenshots; serao gerados a partir do modo demo.
 
 ## Privacidade e LGPD
 

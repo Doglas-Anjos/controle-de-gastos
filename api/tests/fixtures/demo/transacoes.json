@@ -1,0 +1,3419 @@
+{
+ "seed": 42,
+ "contas": [
+  {
+   "chave": "corrente",
+   "bank": "Banco Exemplo",
+   "name": "Conta Corrente Exemplo",
+   "type": "checking"
+  },
+  {
+   "chave": "cartao",
+   "bank": "Cartao Exemplo",
+   "name": "Cartao Exemplo",
+   "type": "credit"
+  }
+ ],
+ "transacoes": [
+  {
+   "conta": "cartao",
+   "date": "2025-08-01",
+   "description": "IFOOD *PIZZARIA OMEGA",
+   "amount": -86.74,
+   "pluggy_category": null,
+   "external_id": "demo-00001"
+  },
+  {
+   "conta": "cartao",
+   "date": "2025-08-03",
+   "description": "UBER *TRIP",
+   "amount": -28.51,
+   "pluggy_category": null,
+   "external_id": "demo-00002"
+  },
+  {
+   "conta": "cartao",
+   "date": "2025-08-04",
+   "description": "UBER *TRIP",
+   "amount": -24.7,
+   "pluggy_category": null,
+   "external_id": "demo-00003"
+  },
+  {
+   "conta": "corrente",
+   "date": "2025-08-05",
+   "description": "COMPRA NO DEBITO DROGARIA EXEMPLO",
+   "amount": -47.99,
+   "pluggy_category": "Farmácia",
+   "external_id": "demo-00004"
+  },
+  {
+   "conta": "corrente",
+   "date": "2025-08-05",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -74.46,
+   "pluggy_category": null,
+   "external_id": "demo-00005"
+  },
+  {
+   "conta": "corrente",
+   "date": "2025-08-05",
+   "description": "SALARIO EMPRESA EXEMPLO LTDA",
+   "amount": 6500.0,
+   "pluggy_category": "Renda",
+   "external_id": "demo-00006"
+  },
+  {
+   "conta": "corrente",
+   "date": "2025-08-06",
+   "description": "PIX ENVIADO ALUGUEL IMOVEL EXEMPLO",
+   "amount": -1800.0,
+   "pluggy_category": null,
+   "external_id": "demo-00007"
+  },
+  {
+   "conta": "cartao",
+   "date": "2025-08-07",
+   "description": "IFOOD *PIZZARIA OMEGA",
+   "amount": -64.85,
+   "pluggy_category": null,
+   "external_id": "demo-00008"
+  },
+  {
+   "conta": "corrente",
+   "date": "2025-08-08",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -320.16,
+   "pluggy_category": null,
+   "external_id": "demo-00009"
+  },
+  {
+   "conta": "corrente",
+   "date": "2025-08-09",
+   "description": "COMPRA NO DEBITO DROGARIA EXEMPLO",
+   "amount": -119.25,
+   "pluggy_category": "Farmácia",
+   "external_id": "demo-00010"
+  },
+  {
+   "conta": "corrente",
+   "date": "2025-08-09",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -244.97,
+   "pluggy_category": null,
+   "external_id": "demo-00011"
+  },
+  {
+   "conta": "cartao",
+   "date": "2025-08-12",
+   "description": "STREAMING ALFA",
+   "amount": -39.9,
+   "pluggy_category": "Streaming de vídeo",
+   "external_id": "demo-00012"
+  },
+  {
+   "conta": "cartao",
+   "date": "2025-08-12",
+   "description": "UBER *TRIP",
+   "amount": -14.09,
+   "pluggy_category": null,
+   "external_id": "demo-00013"
+  },
+  {
+   "conta": "cartao",
+   "date": "2025-08-13",
+   "description": "POSTO EXEMPLO COMBUSTIVEL",
+   "amount": -157.88,
+   "pluggy_category": null,
+   "external_id": "demo-00014"
+  },
+  {
+   "conta": "cartao",
+   "date": "2025-08-13",
+   "description": "UBER *TRIP",
+   "amount": -34.05,
+   "pluggy_category": null,
+   "external_id": "demo-00015"
+  },
+  {
+   "conta": "corrente",
+   "date": "2025-08-15",
+   "description": "CONTA DE LUZ ENERGIA EXEMPLO",
+   "amount": -146.05,
+   "pluggy_category": "Eletricidade",
+   "external_id": "demo-00016"
+  },
+  {
+   "conta": "cartao",
+   "date": "2025-08-17",
+   "description": "LANCHONETE DELTA",
+   "amount": -80.98,
+   "pluggy_category": null,
+   "external_id": "demo-00017"
+  },
+  {
+   "conta": "cartao",
+   "date": "2025-08-18",
+   "description": "RESTAURANTE SABOR CASEIRO",
+   "amount": -97.09,
+   "pluggy_category": null,
+   "external_id": "demo-00018"
+  },
+  {
+   "conta": "cartao",
+   "date": "2025-08-20",
+   "description": "RESTAURANTE SABOR CASEIRO",
+   "amount": -91.32,
+   "pluggy_category": null,
+   "external_id": "demo-00019"
+  },
+  {
+   "conta": "corrente",
+   "date": "2025-08-24",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -262.34,
+   "pluggy_category": null,
+   "external_id": "demo-00020"
+  },
+  {
+   "conta": "cartao",
+   "date": "2025-08-28",
+   "description": "UBER *TRIP",
+   "amount": -17.99,
+   "pluggy_category": null,
+   "external_id": "demo-00021"
+  },
+  {
+   "conta": "corrente",
+   "date": "2025-08-29",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -47.24,
+   "pluggy_category": null,
+   "external_id": "demo-00022"
+  },
+  {
+   "conta": "cartao",
+   "date": "2025-08-30",
+   "description": "POSTO EXEMPLO COMBUSTIVEL",
+   "amount": -179.32,
+   "pluggy_category": null,
+   "external_id": "demo-00023"
+  },
+  {
+   "conta": "corrente",
+   "date": "2025-08-31",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -71.07,
+   "pluggy_category": null,
+   "external_id": "demo-00024"
+  },
+  {
+   "conta": "cartao",
+   "date": "2025-09-02",
+   "description": "UBER *TRIP",
+   "amount": -15.18,
+   "pluggy_category": null,
+   "external_id": "demo-00025"
+  },
+  {
+   "conta": "corrente",
+   "date": "2025-09-02",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -332.63,
+   "pluggy_category": null,
+   "external_id": "demo-00026"
+  },
+  {
+   "conta": "corrente",
+   "date": "2025-09-03",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -414.31,
+   "pluggy_category": null,
+   "external_id": "demo-00027"
+  },
+  {
+   "conta": "corrente",
+   "date": "2025-09-05",
+   "description": "SALARIO EMPRESA EXEMPLO LTDA",
+   "amount": 6500.0,
+   "pluggy_category": "Renda",
+   "external_id": "demo-00028"
+  },
+  {
+   "conta": "corrente",
+   "date": "2025-09-06",
+   "description": "PIX ENVIADO ALUGUEL IMOVEL EXEMPLO",
+   "amount": -1800.0,
+   "pluggy_category": null,
+   "external_id": "demo-00029"
+  },
+  {
+   "conta": "cartao",
+   "date": "2025-09-07",
+   "description": "IFOOD *PIZZARIA OMEGA",
+   "amount": -86.56,
+   "pluggy_category": null,
+   "external_id": "demo-00030"
+  },
+  {
+   "conta": "corrente",
+   "date": "2025-09-07",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -364.3,
+   "pluggy_category": null,
+   "external_id": "demo-00031"
+  },
+  {
+   "conta": "corrente",
+   "date": "2025-09-08",
+   "description": "COMPRA NO DEBITO DROGARIA EXEMPLO",
+   "amount": -109.0,
+   "pluggy_category": "Farmácia",
+   "external_id": "demo-00032"
+  },
+  {
+   "conta": "corrente",
+   "date": "2025-09-08",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -368.6,
+   "pluggy_category": null,
+   "external_id": "demo-00033"
+  },
+  {
+   "conta": "corrente",
+   "date": "2025-09-08",
+   "description": "PAGAMENTO FATURA CARTAO EXEMPLO",
+   "amount": -917.42,
+   "pluggy_category": null,
+   "external_id": "demo-00034"
+  },
+  {
+   "conta": "cartao",
+   "date": "2025-09-09",
+   "description": "IFOOD *PIZZARIA OMEGA",
+   "amount": -85.32,
+   "pluggy_category": null,
+   "external_id": "demo-00035"
+  },
+  {
+   "conta": "cartao",
+   "date": "2025-09-09",
+   "description": "PAGAMENTO RECEBIDO",
+   "amount": 917.42,
+   "pluggy_category": null,
+   "external_id": "demo-00036"
+  },
+  {
+   "conta": "cartao",
+   "date": "2025-09-09",
+   "description": "UBER *TRIP",
+   "amount": -55.83,
+   "pluggy_category": null,
+   "external_id": "demo-00037"
+  },
+  {
+   "conta": "cartao",
+   "date": "2025-09-11",
+   "description": "UBER *TRIP",
+   "amount": -39.22,
+   "pluggy_category": null,
+   "external_id": "demo-00038"
+  },
+  {
+   "conta": "cartao",
+   "date": "2025-09-12",
+   "description": "IFOOD *PIZZARIA OMEGA",
+   "amount": -94.27,
+   "pluggy_category": null,
+   "external_id": "demo-00039"
+  },
+  {
+   "conta": "cartao",
+   "date": "2025-09-12",
+   "description": "STREAMING ALFA",
+   "amount": -39.9,
+   "pluggy_category": "Streaming de vídeo",
+   "external_id": "demo-00040"
+  },
+  {
+   "conta": "cartao",
+   "date": "2025-09-13",
+   "description": "UBER *TRIP",
+   "amount": -46.46,
+   "pluggy_category": null,
+   "external_id": "demo-00041"
+  },
+  {
+   "conta": "corrente",
+   "date": "2025-09-15",
+   "description": "CONTA DE LUZ ENERGIA EXEMPLO",
+   "amount": -162.13,
+   "pluggy_category": "Eletricidade",
+   "external_id": "demo-00042"
+  },
+  {
+   "conta": "corrente",
+   "date": "2025-09-18",
+   "description": "COMPRA NO DEBITO DROGARIA EXEMPLO",
+   "amount": -129.57,
+   "pluggy_category": "Farmácia",
+   "external_id": "demo-00043"
+  },
+  {
+   "conta": "corrente",
+   "date": "2025-09-19",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -181.35,
+   "pluggy_category": null,
+   "external_id": "demo-00044"
+  },
+  {
+   "conta": "cartao",
+   "date": "2025-09-22",
+   "description": "RESTAURANTE SABOR CASEIRO",
+   "amount": -68.91,
+   "pluggy_category": null,
+   "external_id": "demo-00045"
+  },
+  {
+   "conta": "corrente",
+   "date": "2025-09-22",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -209.56,
+   "pluggy_category": null,
+   "external_id": "demo-00046"
+  },
+  {
+   "conta": "cartao",
+   "date": "2025-09-23",
+   "description": "LANCHONETE DELTA",
+   "amount": -119.0,
+   "pluggy_category": null,
+   "external_id": "demo-00047"
+  },
+  {
+   "conta": "corrente",
+   "date": "2025-09-23",
+   "description": "COMPRA NO DEBITO DROGARIA EXEMPLO",
+   "amount": -120.88,
+   "pluggy_category": "Farmácia",
+   "external_id": "demo-00048"
+  },
+  {
+   "conta": "corrente",
+   "date": "2025-09-23",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -356.13,
+   "pluggy_category": null,
+   "external_id": "demo-00049"
+  },
+  {
+   "conta": "cartao",
+   "date": "2025-09-26",
+   "description": "UBER *TRIP",
+   "amount": -22.21,
+   "pluggy_category": null,
+   "external_id": "demo-00050"
+  },
+  {
+   "conta": "cartao",
+   "date": "2025-09-27",
+   "description": "UBER *TRIP",
+   "amount": -35.96,
+   "pluggy_category": null,
+   "external_id": "demo-00051"
+  },
+  {
+   "conta": "cartao",
+   "date": "2025-09-29",
+   "description": "POSTO EXEMPLO COMBUSTIVEL",
+   "amount": -214.29,
+   "pluggy_category": null,
+   "external_id": "demo-00052"
+  },
+  {
+   "conta": "cartao",
+   "date": "2025-09-30",
+   "description": "POSTO EXEMPLO COMBUSTIVEL",
+   "amount": -164.29,
+   "pluggy_category": null,
+   "external_id": "demo-00053"
+  },
+  {
+   "conta": "cartao",
+   "date": "2025-10-03",
+   "description": "LANCHONETE DELTA",
+   "amount": -117.25,
+   "pluggy_category": null,
+   "external_id": "demo-00054"
+  },
+  {
+   "conta": "corrente",
+   "date": "2025-10-05",
+   "description": "SALARIO EMPRESA EXEMPLO LTDA",
+   "amount": 6500.0,
+   "pluggy_category": "Renda",
+   "external_id": "demo-00055"
+  },
+  {
+   "conta": "corrente",
+   "date": "2025-10-06",
+   "description": "PIX ENVIADO ALUGUEL IMOVEL EXEMPLO",
+   "amount": -1800.0,
+   "pluggy_category": null,
+   "external_id": "demo-00056"
+  },
+  {
+   "conta": "corrente",
+   "date": "2025-10-08",
+   "description": "PAGAMENTO FATURA CARTAO EXEMPLO",
+   "amount": -1087.4,
+   "pluggy_category": null,
+   "external_id": "demo-00057"
+  },
+  {
+   "conta": "cartao",
+   "date": "2025-10-09",
+   "description": "PAGAMENTO RECEBIDO",
+   "amount": 1087.4,
+   "pluggy_category": null,
+   "external_id": "demo-00058"
+  },
+  {
+   "conta": "corrente",
+   "date": "2025-10-09",
+   "description": "COMPRA NO DEBITO DROGARIA EXEMPLO",
+   "amount": -146.35,
+   "pluggy_category": "Farmácia",
+   "external_id": "demo-00059"
+  },
+  {
+   "conta": "corrente",
+   "date": "2025-10-09",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -174.37,
+   "pluggy_category": null,
+   "external_id": "demo-00060"
+  },
+  {
+   "conta": "cartao",
+   "date": "2025-10-10",
+   "description": "UBER *TRIP",
+   "amount": -41.23,
+   "pluggy_category": null,
+   "external_id": "demo-00061"
+  },
+  {
+   "conta": "cartao",
+   "date": "2025-10-12",
+   "description": "STREAMING ALFA",
+   "amount": -39.9,
+   "pluggy_category": "Streaming de vídeo",
+   "external_id": "demo-00062"
+  },
+  {
+   "conta": "cartao",
+   "date": "2025-10-13",
+   "description": "RESTAURANTE SABOR CASEIRO",
+   "amount": -89.63,
+   "pluggy_category": null,
+   "external_id": "demo-00063"
+  },
+  {
+   "conta": "corrente",
+   "date": "2025-10-13",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -418.97,
+   "pluggy_category": null,
+   "external_id": "demo-00064"
+  },
+  {
+   "conta": "corrente",
+   "date": "2025-10-14",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -88.26,
+   "pluggy_category": null,
+   "external_id": "demo-00065"
+  },
+  {
+   "conta": "cartao",
+   "date": "2025-10-15",
+   "description": "RESTAURANTE SABOR CASEIRO",
+   "amount": -89.76,
+   "pluggy_category": null,
+   "external_id": "demo-00066"
+  },
+  {
+   "conta": "corrente",
+   "date": "2025-10-15",
+   "description": "CONTA DE LUZ ENERGIA EXEMPLO",
+   "amount": -167.03,
+   "pluggy_category": "Eletricidade",
+   "external_id": "demo-00067"
+  },
+  {
+   "conta": "cartao",
+   "date": "2025-10-17",
+   "description": "IFOOD *PIZZARIA OMEGA",
+   "amount": -96.33,
+   "pluggy_category": null,
+   "external_id": "demo-00068"
+  },
+  {
+   "conta": "cartao",
+   "date": "2025-10-17",
+   "description": "POSTO EXEMPLO COMBUSTIVEL",
+   "amount": -150.06,
+   "pluggy_category": null,
+   "external_id": "demo-00069"
+  },
+  {
+   "conta": "cartao",
+   "date": "2025-10-17",
+   "description": "UBER *TRIP",
+   "amount": -19.34,
+   "pluggy_category": null,
+   "external_id": "demo-00070"
+  },
+  {
+   "conta": "corrente",
+   "date": "2025-10-18",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -225.0,
+   "pluggy_category": null,
+   "external_id": "demo-00071"
+  },
+  {
+   "conta": "corrente",
+   "date": "2025-10-19",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -325.98,
+   "pluggy_category": null,
+   "external_id": "demo-00072"
+  },
+  {
+   "conta": "cartao",
+   "date": "2025-10-20",
+   "description": "IFOOD *PIZZARIA OMEGA",
+   "amount": -57.32,
+   "pluggy_category": null,
+   "external_id": "demo-00073"
+  },
+  {
+   "conta": "cartao",
+   "date": "2025-10-21",
+   "description": "UBER *TRIP",
+   "amount": -48.6,
+   "pluggy_category": null,
+   "external_id": "demo-00074"
+  },
+  {
+   "conta": "corrente",
+   "date": "2025-10-24",
+   "description": "COMPRA NO DEBITO DROGARIA EXEMPLO",
+   "amount": -119.06,
+   "pluggy_category": "Farmácia",
+   "external_id": "demo-00075"
+  },
+  {
+   "conta": "corrente",
+   "date": "2025-10-24",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -366.52,
+   "pluggy_category": null,
+   "external_id": "demo-00076"
+  },
+  {
+   "conta": "cartao",
+   "date": "2025-10-27",
+   "description": "UBER *TRIP",
+   "amount": -37.89,
+   "pluggy_category": null,
+   "external_id": "demo-00077"
+  },
+  {
+   "conta": "corrente",
+   "date": "2025-10-27",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -93.84,
+   "pluggy_category": null,
+   "external_id": "demo-00078"
+  },
+  {
+   "conta": "cartao",
+   "date": "2025-10-28",
+   "description": "UBER *TRIP",
+   "amount": -49.37,
+   "pluggy_category": null,
+   "external_id": "demo-00079"
+  },
+  {
+   "conta": "cartao",
+   "date": "2025-10-29",
+   "description": "LANCHONETE DELTA",
+   "amount": -66.3,
+   "pluggy_category": null,
+   "external_id": "demo-00080"
+  },
+  {
+   "conta": "corrente",
+   "date": "2025-10-29",
+   "description": "COMPRA NO DEBITO DROGARIA EXEMPLO",
+   "amount": -86.0,
+   "pluggy_category": "Farmácia",
+   "external_id": "demo-00081"
+  },
+  {
+   "conta": "cartao",
+   "date": "2025-10-30",
+   "description": "POSTO EXEMPLO COMBUSTIVEL",
+   "amount": -182.42,
+   "pluggy_category": null,
+   "external_id": "demo-00082"
+  },
+  {
+   "conta": "cartao",
+   "date": "2025-10-31",
+   "description": "LANCHONETE DELTA",
+   "amount": -25.31,
+   "pluggy_category": null,
+   "external_id": "demo-00083"
+  },
+  {
+   "conta": "corrente",
+   "date": "2025-10-31",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -96.59,
+   "pluggy_category": null,
+   "external_id": "demo-00084"
+  },
+  {
+   "conta": "cartao",
+   "date": "2025-11-01",
+   "description": "UBER *TRIP",
+   "amount": -40.25,
+   "pluggy_category": null,
+   "external_id": "demo-00085"
+  },
+  {
+   "conta": "cartao",
+   "date": "2025-11-02",
+   "description": "POSTO EXEMPLO COMBUSTIVEL",
+   "amount": -183.04,
+   "pluggy_category": null,
+   "external_id": "demo-00086"
+  },
+  {
+   "conta": "corrente",
+   "date": "2025-11-02",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -373.03,
+   "pluggy_category": null,
+   "external_id": "demo-00087"
+  },
+  {
+   "conta": "corrente",
+   "date": "2025-11-05",
+   "description": "SALARIO EMPRESA EXEMPLO LTDA",
+   "amount": 6500.0,
+   "pluggy_category": "Renda",
+   "external_id": "demo-00088"
+  },
+  {
+   "conta": "cartao",
+   "date": "2025-11-06",
+   "description": "IFOOD *PIZZARIA OMEGA",
+   "amount": -107.88,
+   "pluggy_category": null,
+   "external_id": "demo-00089"
+  },
+  {
+   "conta": "corrente",
+   "date": "2025-11-06",
+   "description": "PIX ENVIADO ALUGUEL IMOVEL EXEMPLO",
+   "amount": -1800.0,
+   "pluggy_category": null,
+   "external_id": "demo-00090"
+  },
+  {
+   "conta": "cartao",
+   "date": "2025-11-08",
+   "description": "UBER *TRIP",
+   "amount": -12.35,
+   "pluggy_category": null,
+   "external_id": "demo-00091"
+  },
+  {
+   "conta": "corrente",
+   "date": "2025-11-08",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -399.58,
+   "pluggy_category": null,
+   "external_id": "demo-00092"
+  },
+  {
+   "conta": "corrente",
+   "date": "2025-11-08",
+   "description": "PAGAMENTO FATURA CARTAO EXEMPLO",
+   "amount": -1110.71,
+   "pluggy_category": null,
+   "external_id": "demo-00093"
+  },
+  {
+   "conta": "cartao",
+   "date": "2025-11-09",
+   "description": "LANCHONETE DELTA",
+   "amount": -116.61,
+   "pluggy_category": null,
+   "external_id": "demo-00094"
+  },
+  {
+   "conta": "cartao",
+   "date": "2025-11-09",
+   "description": "PAGAMENTO RECEBIDO",
+   "amount": 1110.71,
+   "pluggy_category": null,
+   "external_id": "demo-00095"
+  },
+  {
+   "conta": "corrente",
+   "date": "2025-11-10",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -67.98,
+   "pluggy_category": null,
+   "external_id": "demo-00096"
+  },
+  {
+   "conta": "cartao",
+   "date": "2025-11-11",
+   "description": "UBER *TRIP",
+   "amount": -45.98,
+   "pluggy_category": null,
+   "external_id": "demo-00097"
+  },
+  {
+   "conta": "cartao",
+   "date": "2025-11-12",
+   "description": "STREAMING ALFA",
+   "amount": -39.9,
+   "pluggy_category": "Streaming de vídeo",
+   "external_id": "demo-00098"
+  },
+  {
+   "conta": "corrente",
+   "date": "2025-11-12",
+   "description": "COMPRA NO DEBITO DROGARIA EXEMPLO",
+   "amount": -136.95,
+   "pluggy_category": "Farmácia",
+   "external_id": "demo-00099"
+  },
+  {
+   "conta": "corrente",
+   "date": "2025-11-15",
+   "description": "COMPRA NO DEBITO DROGARIA EXEMPLO",
+   "amount": -78.69,
+   "pluggy_category": "Farmácia",
+   "external_id": "demo-00100"
+  },
+  {
+   "conta": "corrente",
+   "date": "2025-11-15",
+   "description": "CONTA DE LUZ ENERGIA EXEMPLO",
+   "amount": -185.2,
+   "pluggy_category": "Eletricidade",
+   "external_id": "demo-00101"
+  },
+  {
+   "conta": "cartao",
+   "date": "2025-11-16",
+   "description": "IFOOD *PIZZARIA OMEGA",
+   "amount": -96.75,
+   "pluggy_category": null,
+   "external_id": "demo-00102"
+  },
+  {
+   "conta": "cartao",
+   "date": "2025-11-18",
+   "description": "IFOOD *PIZZARIA OMEGA",
+   "amount": -44.11,
+   "pluggy_category": null,
+   "external_id": "demo-00103"
+  },
+  {
+   "conta": "cartao",
+   "date": "2025-11-18",
+   "description": "UBER *TRIP",
+   "amount": -14.83,
+   "pluggy_category": null,
+   "external_id": "demo-00104"
+  },
+  {
+   "conta": "cartao",
+   "date": "2025-11-19",
+   "description": "UBER *TRIP",
+   "amount": -15.24,
+   "pluggy_category": null,
+   "external_id": "demo-00105"
+  },
+  {
+   "conta": "corrente",
+   "date": "2025-11-21",
+   "description": "COMPRA NO DEBITO DROGARIA EXEMPLO",
+   "amount": -52.23,
+   "pluggy_category": "Farmácia",
+   "external_id": "demo-00106"
+  },
+  {
+   "conta": "cartao",
+   "date": "2025-11-22",
+   "description": "LANCHONETE DELTA",
+   "amount": -62.9,
+   "pluggy_category": null,
+   "external_id": "demo-00107"
+  },
+  {
+   "conta": "corrente",
+   "date": "2025-11-26",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -222.11,
+   "pluggy_category": null,
+   "external_id": "demo-00108"
+  },
+  {
+   "conta": "corrente",
+   "date": "2025-11-27",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -61.65,
+   "pluggy_category": null,
+   "external_id": "demo-00109"
+  },
+  {
+   "conta": "cartao",
+   "date": "2025-11-28",
+   "description": "POSTO EXEMPLO COMBUSTIVEL",
+   "amount": -201.42,
+   "pluggy_category": null,
+   "external_id": "demo-00110"
+  },
+  {
+   "conta": "corrente",
+   "date": "2025-11-28",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -327.83,
+   "pluggy_category": null,
+   "external_id": "demo-00111"
+  },
+  {
+   "conta": "corrente",
+   "date": "2025-11-29",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -329.85,
+   "pluggy_category": null,
+   "external_id": "demo-00112"
+  },
+  {
+   "conta": "cartao",
+   "date": "2025-12-01",
+   "description": "UBER *TRIP",
+   "amount": -31.51,
+   "pluggy_category": null,
+   "external_id": "demo-00113"
+  },
+  {
+   "conta": "cartao",
+   "date": "2025-12-02",
+   "description": "LANCHONETE DELTA",
+   "amount": -94.18,
+   "pluggy_category": null,
+   "external_id": "demo-00114"
+  },
+  {
+   "conta": "cartao",
+   "date": "2025-12-02",
+   "description": "UBER *TRIP",
+   "amount": -35.11,
+   "pluggy_category": null,
+   "external_id": "demo-00115"
+  },
+  {
+   "conta": "cartao",
+   "date": "2025-12-03",
+   "description": "UBER *TRIP",
+   "amount": -53.5,
+   "pluggy_category": null,
+   "external_id": "demo-00116"
+  },
+  {
+   "conta": "cartao",
+   "date": "2025-12-04",
+   "description": "RESTAURANTE SABOR CASEIRO",
+   "amount": -48.62,
+   "pluggy_category": null,
+   "external_id": "demo-00117"
+  },
+  {
+   "conta": "cartao",
+   "date": "2025-12-04",
+   "description": "UBER *TRIP",
+   "amount": -55.32,
+   "pluggy_category": null,
+   "external_id": "demo-00118"
+  },
+  {
+   "conta": "corrente",
+   "date": "2025-12-05",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -128.55,
+   "pluggy_category": null,
+   "external_id": "demo-00119"
+  },
+  {
+   "conta": "corrente",
+   "date": "2025-12-05",
+   "description": "SALARIO EMPRESA EXEMPLO LTDA",
+   "amount": 6500.0,
+   "pluggy_category": "Renda",
+   "external_id": "demo-00120"
+  },
+  {
+   "conta": "cartao",
+   "date": "2025-12-06",
+   "description": "UBER *TRIP",
+   "amount": -19.9,
+   "pluggy_category": null,
+   "external_id": "demo-00121"
+  },
+  {
+   "conta": "corrente",
+   "date": "2025-12-06",
+   "description": "PIX ENVIADO ALUGUEL IMOVEL EXEMPLO",
+   "amount": -1800.0,
+   "pluggy_category": null,
+   "external_id": "demo-00122"
+  },
+  {
+   "conta": "corrente",
+   "date": "2025-12-07",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -217.09,
+   "pluggy_category": null,
+   "external_id": "demo-00123"
+  },
+  {
+   "conta": "cartao",
+   "date": "2025-12-08",
+   "description": "UBER *TRIP",
+   "amount": -12.1,
+   "pluggy_category": null,
+   "external_id": "demo-00124"
+  },
+  {
+   "conta": "corrente",
+   "date": "2025-12-08",
+   "description": "COMPRA NO DEBITO DROGARIA EXEMPLO",
+   "amount": -133.68,
+   "pluggy_category": "Farmácia",
+   "external_id": "demo-00125"
+  },
+  {
+   "conta": "corrente",
+   "date": "2025-12-08",
+   "description": "PAGAMENTO FATURA CARTAO EXEMPLO",
+   "amount": -981.26,
+   "pluggy_category": null,
+   "external_id": "demo-00126"
+  },
+  {
+   "conta": "cartao",
+   "date": "2025-12-09",
+   "description": "PAGAMENTO RECEBIDO",
+   "amount": 981.26,
+   "pluggy_category": null,
+   "external_id": "demo-00127"
+  },
+  {
+   "conta": "cartao",
+   "date": "2025-12-10",
+   "description": "POSTO EXEMPLO COMBUSTIVEL",
+   "amount": -219.66,
+   "pluggy_category": null,
+   "external_id": "demo-00128"
+  },
+  {
+   "conta": "cartao",
+   "date": "2025-12-12",
+   "description": "STREAMING ALFA",
+   "amount": -39.9,
+   "pluggy_category": "Streaming de vídeo",
+   "external_id": "demo-00129"
+  },
+  {
+   "conta": "cartao",
+   "date": "2025-12-14",
+   "description": "POSTO EXEMPLO COMBUSTIVEL",
+   "amount": -223.05,
+   "pluggy_category": null,
+   "external_id": "demo-00130"
+  },
+  {
+   "conta": "corrente",
+   "date": "2025-12-15",
+   "description": "COMPRA NO DEBITO DROGARIA EXEMPLO",
+   "amount": -29.8,
+   "pluggy_category": "Farmácia",
+   "external_id": "demo-00131"
+  },
+  {
+   "conta": "corrente",
+   "date": "2025-12-15",
+   "description": "CONTA DE LUZ ENERGIA EXEMPLO",
+   "amount": -211.0,
+   "pluggy_category": "Eletricidade",
+   "external_id": "demo-00132"
+  },
+  {
+   "conta": "corrente",
+   "date": "2025-12-16",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -191.72,
+   "pluggy_category": null,
+   "external_id": "demo-00133"
+  },
+  {
+   "conta": "cartao",
+   "date": "2025-12-18",
+   "description": "UBER *TRIP",
+   "amount": -30.74,
+   "pluggy_category": null,
+   "external_id": "demo-00134"
+  },
+  {
+   "conta": "corrente",
+   "date": "2025-12-18",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -71.32,
+   "pluggy_category": null,
+   "external_id": "demo-00135"
+  },
+  {
+   "conta": "corrente",
+   "date": "2025-12-19",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -288.71,
+   "pluggy_category": null,
+   "external_id": "demo-00136"
+  },
+  {
+   "conta": "cartao",
+   "date": "2025-12-21",
+   "description": "RESTAURANTE SABOR CASEIRO",
+   "amount": -75.95,
+   "pluggy_category": null,
+   "external_id": "demo-00137"
+  },
+  {
+   "conta": "cartao",
+   "date": "2025-12-21",
+   "description": "UBER *TRIP",
+   "amount": -56.47,
+   "pluggy_category": null,
+   "external_id": "demo-00138"
+  },
+  {
+   "conta": "cartao",
+   "date": "2025-12-22",
+   "description": "RESTAURANTE SABOR CASEIRO",
+   "amount": -65.08,
+   "pluggy_category": null,
+   "external_id": "demo-00139"
+  },
+  {
+   "conta": "corrente",
+   "date": "2025-12-24",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -171.4,
+   "pluggy_category": null,
+   "external_id": "demo-00140"
+  },
+  {
+   "conta": "cartao",
+   "date": "2025-12-27",
+   "description": "UBER *TRIP",
+   "amount": -49.69,
+   "pluggy_category": null,
+   "external_id": "demo-00141"
+  },
+  {
+   "conta": "corrente",
+   "date": "2025-12-27",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -193.27,
+   "pluggy_category": null,
+   "external_id": "demo-00142"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-01-02",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -318.26,
+   "pluggy_category": null,
+   "external_id": "demo-00143"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-01-03",
+   "description": "POSTO EXEMPLO COMBUSTIVEL",
+   "amount": -171.32,
+   "pluggy_category": null,
+   "external_id": "demo-00144"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-01-03",
+   "description": "RESTAURANTE SABOR CASEIRO",
+   "amount": -89.15,
+   "pluggy_category": null,
+   "external_id": "demo-00145"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-01-05",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -58.47,
+   "pluggy_category": null,
+   "external_id": "demo-00146"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-01-05",
+   "description": "SALARIO EMPRESA EXEMPLO LTDA",
+   "amount": 6500.0,
+   "pluggy_category": "Renda",
+   "external_id": "demo-00147"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-01-06",
+   "description": "RESTAURANTE SABOR CASEIRO",
+   "amount": -63.36,
+   "pluggy_category": null,
+   "external_id": "demo-00148"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-01-06",
+   "description": "PIX ENVIADO ALUGUEL IMOVEL EXEMPLO",
+   "amount": -1800.0,
+   "pluggy_category": null,
+   "external_id": "demo-00149"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-01-07",
+   "description": "UBER *TRIP",
+   "amount": -31.0,
+   "pluggy_category": null,
+   "external_id": "demo-00150"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-01-07",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -155.74,
+   "pluggy_category": null,
+   "external_id": "demo-00151"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-01-08",
+   "description": "UBER *TRIP",
+   "amount": -44.24,
+   "pluggy_category": null,
+   "external_id": "demo-00152"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-01-08",
+   "description": "PAGAMENTO FATURA CARTAO EXEMPLO",
+   "amount": -1110.78,
+   "pluggy_category": null,
+   "external_id": "demo-00153"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-01-09",
+   "description": "PAGAMENTO RECEBIDO",
+   "amount": 1110.78,
+   "pluggy_category": null,
+   "external_id": "demo-00154"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-01-09",
+   "description": "UBER *TRIP",
+   "amount": -26.4,
+   "pluggy_category": null,
+   "external_id": "demo-00155"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-01-10",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -54.3,
+   "pluggy_category": null,
+   "external_id": "demo-00156"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-01-11",
+   "description": "UBER *TRIP",
+   "amount": -27.18,
+   "pluggy_category": null,
+   "external_id": "demo-00157"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-01-12",
+   "description": "STREAMING ALFA",
+   "amount": -39.9,
+   "pluggy_category": "Streaming de vídeo",
+   "external_id": "demo-00158"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-01-14",
+   "description": "COMPRA NO DEBITO DROGARIA EXEMPLO",
+   "amount": -105.46,
+   "pluggy_category": "Farmácia",
+   "external_id": "demo-00159"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-01-15",
+   "description": "CONTA DE LUZ ENERGIA EXEMPLO",
+   "amount": -235.2,
+   "pluggy_category": "Eletricidade",
+   "external_id": "demo-00160"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-01-16",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -218.56,
+   "pluggy_category": null,
+   "external_id": "demo-00161"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-01-17",
+   "description": "UBER *TRIP",
+   "amount": -48.09,
+   "pluggy_category": null,
+   "external_id": "demo-00162"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-01-18",
+   "description": "POSTO EXEMPLO COMBUSTIVEL",
+   "amount": -176.52,
+   "pluggy_category": null,
+   "external_id": "demo-00163"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-01-19",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -388.96,
+   "pluggy_category": null,
+   "external_id": "demo-00164"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-01-20",
+   "description": "IFOOD *PIZZARIA OMEGA",
+   "amount": -48.39,
+   "pluggy_category": null,
+   "external_id": "demo-00165"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-01-22",
+   "description": "UBER *TRIP",
+   "amount": -15.48,
+   "pluggy_category": null,
+   "external_id": "demo-00166"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-01-23",
+   "description": "UBER *TRIP",
+   "amount": -34.0,
+   "pluggy_category": null,
+   "external_id": "demo-00167"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-01-23",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -239.48,
+   "pluggy_category": null,
+   "external_id": "demo-00168"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-01-28",
+   "description": "IFOOD *PIZZARIA OMEGA",
+   "amount": -28.78,
+   "pluggy_category": null,
+   "external_id": "demo-00169"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-01-28",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -56.9,
+   "pluggy_category": null,
+   "external_id": "demo-00170"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-01-29",
+   "description": "UBER *TRIP",
+   "amount": -59.93,
+   "pluggy_category": null,
+   "external_id": "demo-00171"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-01-30",
+   "description": "UBER *TRIP",
+   "amount": -59.81,
+   "pluggy_category": null,
+   "external_id": "demo-00172"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-02-01",
+   "description": "UBER *TRIP",
+   "amount": -19.76,
+   "pluggy_category": null,
+   "external_id": "demo-00173"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-02-02",
+   "description": "UBER *TRIP",
+   "amount": -33.21,
+   "pluggy_category": null,
+   "external_id": "demo-00174"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-02-03",
+   "description": "COMPRA NO DEBITO DROGARIA EXEMPLO",
+   "amount": -102.46,
+   "pluggy_category": "Farmácia",
+   "external_id": "demo-00175"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-02-04",
+   "description": "IFOOD *PIZZARIA OMEGA",
+   "amount": -77.56,
+   "pluggy_category": null,
+   "external_id": "demo-00176"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-02-05",
+   "description": "LANCHONETE DELTA",
+   "amount": -51.77,
+   "pluggy_category": null,
+   "external_id": "demo-00177"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-02-05",
+   "description": "POSTO EXEMPLO COMBUSTIVEL",
+   "amount": -153.6,
+   "pluggy_category": null,
+   "external_id": "demo-00178"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-02-05",
+   "description": "UBER *TRIP",
+   "amount": -45.87,
+   "pluggy_category": null,
+   "external_id": "demo-00179"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-02-05",
+   "description": "SALARIO EMPRESA EXEMPLO LTDA",
+   "amount": 6500.0,
+   "pluggy_category": "Renda",
+   "external_id": "demo-00180"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-02-06",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -305.86,
+   "pluggy_category": null,
+   "external_id": "demo-00181"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-02-06",
+   "description": "PIX ENVIADO ALUGUEL IMOVEL EXEMPLO",
+   "amount": -1800.0,
+   "pluggy_category": null,
+   "external_id": "demo-00182"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-02-08",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -270.5,
+   "pluggy_category": null,
+   "external_id": "demo-00183"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-02-08",
+   "description": "PAGAMENTO FATURA CARTAO EXEMPLO",
+   "amount": -963.55,
+   "pluggy_category": null,
+   "external_id": "demo-00184"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-02-09",
+   "description": "PAGAMENTO RECEBIDO",
+   "amount": 963.55,
+   "pluggy_category": null,
+   "external_id": "demo-00185"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-02-09",
+   "description": "RESTAURANTE SABOR CASEIRO",
+   "amount": -93.17,
+   "pluggy_category": null,
+   "external_id": "demo-00186"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-02-09",
+   "description": "UBER *TRIP",
+   "amount": -38.92,
+   "pluggy_category": null,
+   "external_id": "demo-00187"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-02-10",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -415.08,
+   "pluggy_category": null,
+   "external_id": "demo-00188"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-02-11",
+   "description": "UBER *TRIP",
+   "amount": -17.37,
+   "pluggy_category": null,
+   "external_id": "demo-00189"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-02-12",
+   "description": "STREAMING ALFA",
+   "amount": -39.9,
+   "pluggy_category": "Streaming de vídeo",
+   "external_id": "demo-00190"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-02-12",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -286.78,
+   "pluggy_category": null,
+   "external_id": "demo-00191"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-02-15",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -38.01,
+   "pluggy_category": null,
+   "external_id": "demo-00192"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-02-15",
+   "description": "CONTA DE LUZ ENERGIA EXEMPLO",
+   "amount": -234.57,
+   "pluggy_category": "Eletricidade",
+   "external_id": "demo-00193"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-02-18",
+   "description": "POSTO EXEMPLO COMBUSTIVEL",
+   "amount": -186.92,
+   "pluggy_category": null,
+   "external_id": "demo-00194"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-02-18",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -349.59,
+   "pluggy_category": null,
+   "external_id": "demo-00195"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-02-21",
+   "description": "UBER *TRIP",
+   "amount": -57.36,
+   "pluggy_category": null,
+   "external_id": "demo-00196"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-02-22",
+   "description": "RESTAURANTE SABOR CASEIRO",
+   "amount": -90.31,
+   "pluggy_category": null,
+   "external_id": "demo-00197"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-02-24",
+   "description": "LANCHONETE DELTA",
+   "amount": -73.01,
+   "pluggy_category": null,
+   "external_id": "demo-00198"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-02-25",
+   "description": "UBER *TRIP",
+   "amount": -45.17,
+   "pluggy_category": null,
+   "external_id": "demo-00199"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-02-27",
+   "description": "LANCHONETE DELTA",
+   "amount": -111.01,
+   "pluggy_category": null,
+   "external_id": "demo-00200"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-03-02",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -115.88,
+   "pluggy_category": null,
+   "external_id": "demo-00201"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-03-05",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -131.07,
+   "pluggy_category": null,
+   "external_id": "demo-00202"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-03-05",
+   "description": "SALARIO EMPRESA EXEMPLO LTDA",
+   "amount": 6500.0,
+   "pluggy_category": "Renda",
+   "external_id": "demo-00203"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-03-06",
+   "description": "RESTAURANTE SABOR CASEIRO",
+   "amount": -108.73,
+   "pluggy_category": null,
+   "external_id": "demo-00204"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-03-06",
+   "description": "COMPRA NO DEBITO DROGARIA EXEMPLO",
+   "amount": -111.17,
+   "pluggy_category": "Farmácia",
+   "external_id": "demo-00205"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-03-06",
+   "description": "PIX ENVIADO ALUGUEL IMOVEL EXEMPLO",
+   "amount": -1800.0,
+   "pluggy_category": null,
+   "external_id": "demo-00206"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-03-07",
+   "description": "POSTO EXEMPLO COMBUSTIVEL",
+   "amount": -189.85,
+   "pluggy_category": null,
+   "external_id": "demo-00207"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-03-07",
+   "description": "UBER *TRIP",
+   "amount": -56.09,
+   "pluggy_category": null,
+   "external_id": "demo-00208"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-03-08",
+   "description": "RESTAURANTE SABOR CASEIRO",
+   "amount": -42.04,
+   "pluggy_category": null,
+   "external_id": "demo-00209"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-03-08",
+   "description": "UBER *TRIP",
+   "amount": -28.78,
+   "pluggy_category": null,
+   "external_id": "demo-00210"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-03-08",
+   "description": "PAGAMENTO FATURA CARTAO EXEMPLO",
+   "amount": -1134.91,
+   "pluggy_category": null,
+   "external_id": "demo-00211"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-03-09",
+   "description": "PAGAMENTO RECEBIDO",
+   "amount": 1134.91,
+   "pluggy_category": null,
+   "external_id": "demo-00212"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-03-10",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -74.58,
+   "pluggy_category": null,
+   "external_id": "demo-00213"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-03-12",
+   "description": "STREAMING ALFA",
+   "amount": -39.9,
+   "pluggy_category": "Streaming de vídeo",
+   "external_id": "demo-00214"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-03-12",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -335.34,
+   "pluggy_category": null,
+   "external_id": "demo-00215"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-03-15",
+   "description": "CONTA DE LUZ ENERGIA EXEMPLO",
+   "amount": -204.39,
+   "pluggy_category": "Eletricidade",
+   "external_id": "demo-00216"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-03-16",
+   "description": "UBER *TRIP",
+   "amount": -51.39,
+   "pluggy_category": null,
+   "external_id": "demo-00217"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-03-22",
+   "description": "POSTO EXEMPLO COMBUSTIVEL",
+   "amount": -177.86,
+   "pluggy_category": null,
+   "external_id": "demo-00218"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-03-26",
+   "description": "LANCHONETE DELTA",
+   "amount": -99.33,
+   "pluggy_category": null,
+   "external_id": "demo-00219"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-03-26",
+   "description": "COMPRA NO DEBITO DROGARIA EXEMPLO",
+   "amount": -69.73,
+   "pluggy_category": "Farmácia",
+   "external_id": "demo-00220"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-03-26",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -375.39,
+   "pluggy_category": null,
+   "external_id": "demo-00221"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-03-27",
+   "description": "UBER *TRIP",
+   "amount": -53.82,
+   "pluggy_category": null,
+   "external_id": "demo-00222"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-03-28",
+   "description": "LANCHONETE DELTA",
+   "amount": -101.21,
+   "pluggy_category": null,
+   "external_id": "demo-00223"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-03-28",
+   "description": "UBER *TRIP",
+   "amount": -22.7,
+   "pluggy_category": null,
+   "external_id": "demo-00224"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-03-28",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -191.46,
+   "pluggy_category": null,
+   "external_id": "demo-00225"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-03-30",
+   "description": "IFOOD *PIZZARIA OMEGA",
+   "amount": -102.02,
+   "pluggy_category": null,
+   "external_id": "demo-00226"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-03-30",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -273.95,
+   "pluggy_category": null,
+   "external_id": "demo-00227"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-04-04",
+   "description": "UBER *TRIP",
+   "amount": -31.6,
+   "pluggy_category": null,
+   "external_id": "demo-00228"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-04-05",
+   "description": "SALARIO EMPRESA EXEMPLO LTDA",
+   "amount": 6500.0,
+   "pluggy_category": "Renda",
+   "external_id": "demo-00229"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-04-06",
+   "description": "PIX ENVIADO ALUGUEL IMOVEL EXEMPLO",
+   "amount": -1800.0,
+   "pluggy_category": null,
+   "external_id": "demo-00230"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-04-08",
+   "description": "PAGAMENTO FATURA CARTAO EXEMPLO",
+   "amount": -1073.72,
+   "pluggy_category": null,
+   "external_id": "demo-00231"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-04-09",
+   "description": "PAGAMENTO RECEBIDO",
+   "amount": 1073.72,
+   "pluggy_category": null,
+   "external_id": "demo-00232"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-04-10",
+   "description": "LOJA BETA 01/12",
+   "amount": -289.9,
+   "pluggy_category": "Compras",
+   "external_id": "demo-00233"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-04-10",
+   "description": "POSTO EXEMPLO COMBUSTIVEL",
+   "amount": -204.79,
+   "pluggy_category": null,
+   "external_id": "demo-00234"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-04-10",
+   "description": "UBER *TRIP",
+   "amount": -31.32,
+   "pluggy_category": null,
+   "external_id": "demo-00235"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-04-11",
+   "description": "RESTAURANTE SABOR CASEIRO",
+   "amount": -61.59,
+   "pluggy_category": null,
+   "external_id": "demo-00236"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-04-11",
+   "description": "UBER *TRIP",
+   "amount": -26.19,
+   "pluggy_category": null,
+   "external_id": "demo-00237"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-04-11",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -396.61,
+   "pluggy_category": null,
+   "external_id": "demo-00238"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-04-12",
+   "description": "IFOOD *PIZZARIA OMEGA",
+   "amount": -43.06,
+   "pluggy_category": null,
+   "external_id": "demo-00239"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-04-12",
+   "description": "STREAMING ALFA",
+   "amount": -39.9,
+   "pluggy_category": "Streaming de vídeo",
+   "external_id": "demo-00240"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-04-12",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -79.41,
+   "pluggy_category": null,
+   "external_id": "demo-00241"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-04-13",
+   "description": "POSTO EXEMPLO COMBUSTIVEL",
+   "amount": -150.04,
+   "pluggy_category": null,
+   "external_id": "demo-00242"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-04-13",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -408.6,
+   "pluggy_category": null,
+   "external_id": "demo-00243"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-04-14",
+   "description": "RESTAURANTE SABOR CASEIRO",
+   "amount": -92.33,
+   "pluggy_category": null,
+   "external_id": "demo-00244"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-04-15",
+   "description": "CONTA DE LUZ ENERGIA EXEMPLO",
+   "amount": -164.5,
+   "pluggy_category": "Eletricidade",
+   "external_id": "demo-00245"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-04-17",
+   "description": "RESTAURANTE SABOR CASEIRO",
+   "amount": -74.39,
+   "pluggy_category": null,
+   "external_id": "demo-00246"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-04-17",
+   "description": "UBER *TRIP",
+   "amount": -18.11,
+   "pluggy_category": null,
+   "external_id": "demo-00247"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-04-17",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -103.75,
+   "pluggy_category": null,
+   "external_id": "demo-00248"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-04-18",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -405.58,
+   "pluggy_category": null,
+   "external_id": "demo-00249"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-04-20",
+   "description": "IFOOD *PIZZARIA OMEGA",
+   "amount": -90.25,
+   "pluggy_category": null,
+   "external_id": "demo-00250"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-04-21",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -137.2,
+   "pluggy_category": null,
+   "external_id": "demo-00251"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-04-22",
+   "description": "UBER *TRIP",
+   "amount": -32.18,
+   "pluggy_category": null,
+   "external_id": "demo-00252"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-04-22",
+   "description": "COMPRA NO DEBITO DROGARIA EXEMPLO",
+   "amount": -139.7,
+   "pluggy_category": "Farmácia",
+   "external_id": "demo-00253"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-04-22",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -76.73,
+   "pluggy_category": null,
+   "external_id": "demo-00254"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-04-24",
+   "description": "IFOOD *PIZZARIA OMEGA",
+   "amount": -95.02,
+   "pluggy_category": null,
+   "external_id": "demo-00255"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-04-24",
+   "description": "UBER *TRIP",
+   "amount": -57.14,
+   "pluggy_category": null,
+   "external_id": "demo-00256"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-04-25",
+   "description": "UBER *TRIP",
+   "amount": -44.51,
+   "pluggy_category": null,
+   "external_id": "demo-00257"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-04-26",
+   "description": "RESTAURANTE SABOR CASEIRO",
+   "amount": -59.6,
+   "pluggy_category": null,
+   "external_id": "demo-00258"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-04-28",
+   "description": "UBER *TRIP",
+   "amount": -55.33,
+   "pluggy_category": null,
+   "external_id": "demo-00259"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-04-29",
+   "description": "UBER *TRIP",
+   "amount": -41.54,
+   "pluggy_category": null,
+   "external_id": "demo-00260"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-05-03",
+   "description": "RESTAURANTE SABOR CASEIRO",
+   "amount": -101.62,
+   "pluggy_category": null,
+   "external_id": "demo-00261"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-05-05",
+   "description": "POSTO EXEMPLO COMBUSTIVEL",
+   "amount": -230.14,
+   "pluggy_category": null,
+   "external_id": "demo-00262"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-05-05",
+   "description": "SALARIO EMPRESA EXEMPLO LTDA",
+   "amount": 6500.0,
+   "pluggy_category": "Renda",
+   "external_id": "demo-00263"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-05-06",
+   "description": "UBER *TRIP",
+   "amount": -57.98,
+   "pluggy_category": null,
+   "external_id": "demo-00264"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-05-06",
+   "description": "PIX ENVIADO ALUGUEL IMOVEL EXEMPLO",
+   "amount": -1800.0,
+   "pluggy_category": null,
+   "external_id": "demo-00265"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-05-08",
+   "description": "RESTAURANTE SABOR CASEIRO",
+   "amount": -27.32,
+   "pluggy_category": null,
+   "external_id": "demo-00266"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-05-08",
+   "description": "UBER *TRIP",
+   "amount": -36.86,
+   "pluggy_category": null,
+   "external_id": "demo-00267"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-05-08",
+   "description": "PAGAMENTO FATURA CARTAO EXEMPLO",
+   "amount": -1538.79,
+   "pluggy_category": null,
+   "external_id": "demo-00268"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-05-09",
+   "description": "PAGAMENTO RECEBIDO",
+   "amount": 1538.79,
+   "pluggy_category": null,
+   "external_id": "demo-00269"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-05-10",
+   "description": "LOJA BETA 02/12",
+   "amount": -289.9,
+   "pluggy_category": "Compras",
+   "external_id": "demo-00270"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-05-10",
+   "description": "RESTAURANTE SABOR CASEIRO",
+   "amount": -118.47,
+   "pluggy_category": null,
+   "external_id": "demo-00271"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-05-11",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -205.23,
+   "pluggy_category": null,
+   "external_id": "demo-00272"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-05-12",
+   "description": "STREAMING ALFA",
+   "amount": -39.9,
+   "pluggy_category": "Streaming de vídeo",
+   "external_id": "demo-00273"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-05-13",
+   "description": "COMPRA NO DEBITO DROGARIA EXEMPLO",
+   "amount": -71.95,
+   "pluggy_category": "Farmácia",
+   "external_id": "demo-00274"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-05-14",
+   "description": "UBER *TRIP",
+   "amount": -14.41,
+   "pluggy_category": null,
+   "external_id": "demo-00275"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-05-15",
+   "description": "POSTO EXEMPLO COMBUSTIVEL",
+   "amount": -216.76,
+   "pluggy_category": null,
+   "external_id": "demo-00276"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-05-15",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -117.28,
+   "pluggy_category": null,
+   "external_id": "demo-00277"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-05-15",
+   "description": "CONTA DE LUZ ENERGIA EXEMPLO",
+   "amount": -149.83,
+   "pluggy_category": "Eletricidade",
+   "external_id": "demo-00278"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-05-16",
+   "description": "COMPRA NO DEBITO DROGARIA EXEMPLO",
+   "amount": -39.18,
+   "pluggy_category": "Farmácia",
+   "external_id": "demo-00279"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-05-19",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -217.18,
+   "pluggy_category": null,
+   "external_id": "demo-00280"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-05-20",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -381.95,
+   "pluggy_category": null,
+   "external_id": "demo-00281"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-05-21",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -341.47,
+   "pluggy_category": null,
+   "external_id": "demo-00282"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-05-22",
+   "description": "IFOOD *PIZZARIA OMEGA",
+   "amount": -105.73,
+   "pluggy_category": null,
+   "external_id": "demo-00283"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-05-23",
+   "description": "COMPRA NO DEBITO DROGARIA EXEMPLO",
+   "amount": -109.39,
+   "pluggy_category": "Farmácia",
+   "external_id": "demo-00284"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-05-25",
+   "description": "RESTAURANTE SABOR CASEIRO",
+   "amount": -68.26,
+   "pluggy_category": null,
+   "external_id": "demo-00285"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-05-25",
+   "description": "UBER *TRIP",
+   "amount": -23.96,
+   "pluggy_category": null,
+   "external_id": "demo-00286"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-05-26",
+   "description": "UBER *TRIP",
+   "amount": -52.72,
+   "pluggy_category": null,
+   "external_id": "demo-00287"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-05-26",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -100.33,
+   "pluggy_category": null,
+   "external_id": "demo-00288"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-05-27",
+   "description": "IFOOD *PIZZARIA OMEGA",
+   "amount": -79.69,
+   "pluggy_category": null,
+   "external_id": "demo-00289"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-05-31",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -67.65,
+   "pluggy_category": null,
+   "external_id": "demo-00290"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-06-01",
+   "description": "UBER *TRIP",
+   "amount": -26.33,
+   "pluggy_category": null,
+   "external_id": "demo-00291"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-06-02",
+   "description": "COMPRA NO DEBITO DROGARIA EXEMPLO",
+   "amount": -128.28,
+   "pluggy_category": "Farmácia",
+   "external_id": "demo-00292"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-06-03",
+   "description": "RESTAURANTE SABOR CASEIRO",
+   "amount": -50.81,
+   "pluggy_category": null,
+   "external_id": "demo-00293"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-06-05",
+   "description": "SALARIO EMPRESA EXEMPLO LTDA",
+   "amount": 6500.0,
+   "pluggy_category": "Renda",
+   "external_id": "demo-00294"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-06-06",
+   "description": "PIX ENVIADO ALUGUEL IMOVEL EXEMPLO",
+   "amount": -1800.0,
+   "pluggy_category": null,
+   "external_id": "demo-00295"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-06-07",
+   "description": "COMPRA NO DEBITO DROGARIA EXEMPLO",
+   "amount": -70.63,
+   "pluggy_category": "Farmácia",
+   "external_id": "demo-00296"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-06-08",
+   "description": "LANCHONETE DELTA",
+   "amount": -109.84,
+   "pluggy_category": null,
+   "external_id": "demo-00297"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-06-08",
+   "description": "PAGAMENTO FATURA CARTAO EXEMPLO",
+   "amount": -1463.72,
+   "pluggy_category": null,
+   "external_id": "demo-00298"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-06-09",
+   "description": "PAGAMENTO RECEBIDO",
+   "amount": 1463.72,
+   "pluggy_category": null,
+   "external_id": "demo-00299"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-06-09",
+   "description": "POSTO EXEMPLO COMBUSTIVEL",
+   "amount": -198.56,
+   "pluggy_category": null,
+   "external_id": "demo-00300"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-06-09",
+   "description": "RESTAURANTE SABOR CASEIRO",
+   "amount": -38.15,
+   "pluggy_category": null,
+   "external_id": "demo-00301"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-06-10",
+   "description": "LOJA BETA 03/12",
+   "amount": -289.9,
+   "pluggy_category": "Compras",
+   "external_id": "demo-00302"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-06-10",
+   "description": "RESTAURANTE SABOR CASEIRO",
+   "amount": -61.39,
+   "pluggy_category": null,
+   "external_id": "demo-00303"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-06-11",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -206.68,
+   "pluggy_category": null,
+   "external_id": "demo-00304"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-06-12",
+   "description": "STREAMING ALFA",
+   "amount": -39.9,
+   "pluggy_category": "Streaming de vídeo",
+   "external_id": "demo-00305"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-06-12",
+   "description": "UBER *TRIP",
+   "amount": -30.72,
+   "pluggy_category": null,
+   "external_id": "demo-00306"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-06-13",
+   "description": "UBER *TRIP",
+   "amount": -54.8,
+   "pluggy_category": null,
+   "external_id": "demo-00307"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-06-14",
+   "description": "POSTO EXEMPLO COMBUSTIVEL",
+   "amount": -188.89,
+   "pluggy_category": null,
+   "external_id": "demo-00308"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-06-14",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -96.28,
+   "pluggy_category": null,
+   "external_id": "demo-00309"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-06-15",
+   "description": "RESTAURANTE SABOR CASEIRO",
+   "amount": -92.11,
+   "pluggy_category": null,
+   "external_id": "demo-00310"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-06-15",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -366.68,
+   "pluggy_category": null,
+   "external_id": "demo-00311"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-06-15",
+   "description": "CONTA DE LUZ ENERGIA EXEMPLO",
+   "amount": -158.59,
+   "pluggy_category": "Eletricidade",
+   "external_id": "demo-00312"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-06-16",
+   "description": "UBER *TRIP",
+   "amount": -52.11,
+   "pluggy_category": null,
+   "external_id": "demo-00313"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-06-17",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -208.28,
+   "pluggy_category": null,
+   "external_id": "demo-00314"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-06-18",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -324.43,
+   "pluggy_category": null,
+   "external_id": "demo-00315"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-06-19",
+   "description": "UBER *TRIP",
+   "amount": -37.83,
+   "pluggy_category": null,
+   "external_id": "demo-00316"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-06-20",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -358.35,
+   "pluggy_category": null,
+   "external_id": "demo-00317"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-06-21",
+   "description": "RESTAURANTE SABOR CASEIRO",
+   "amount": -64.41,
+   "pluggy_category": null,
+   "external_id": "demo-00318"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-06-23",
+   "description": "LANCHONETE DELTA",
+   "amount": -76.55,
+   "pluggy_category": null,
+   "external_id": "demo-00319"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-06-23",
+   "description": "UBER *TRIP",
+   "amount": -47.26,
+   "pluggy_category": null,
+   "external_id": "demo-00320"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-06-24",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -141.76,
+   "pluggy_category": null,
+   "external_id": "demo-00321"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-06-25",
+   "description": "UBER *TRIP",
+   "amount": -50.39,
+   "pluggy_category": null,
+   "external_id": "demo-00322"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-06-25",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -334.4,
+   "pluggy_category": null,
+   "external_id": "demo-00323"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-06-28",
+   "description": "UBER *TRIP",
+   "amount": -55.09,
+   "pluggy_category": null,
+   "external_id": "demo-00324"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-06-29",
+   "description": "UBER *TRIP",
+   "amount": -35.44,
+   "pluggy_category": null,
+   "external_id": "demo-00325"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-07-01",
+   "description": "UBER *TRIP",
+   "amount": -34.73,
+   "pluggy_category": null,
+   "external_id": "demo-00326"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-07-02",
+   "description": "UBER *TRIP",
+   "amount": -17.49,
+   "pluggy_category": null,
+   "external_id": "demo-00327"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-07-02",
+   "description": "COMPRA NO DEBITO DROGARIA EXEMPLO",
+   "amount": -65.49,
+   "pluggy_category": "Farmácia",
+   "external_id": "demo-00328"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-07-05",
+   "description": "UBER *TRIP",
+   "amount": -57.49,
+   "pluggy_category": null,
+   "external_id": "demo-00329"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-07-05",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -45.38,
+   "pluggy_category": null,
+   "external_id": "demo-00330"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-07-05",
+   "description": "SALARIO EMPRESA EXEMPLO LTDA",
+   "amount": 6500.0,
+   "pluggy_category": "Renda",
+   "external_id": "demo-00331"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-07-06",
+   "description": "POSTO EXEMPLO COMBUSTIVEL",
+   "amount": -181.1,
+   "pluggy_category": null,
+   "external_id": "demo-00332"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-07-06",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -186.7,
+   "pluggy_category": null,
+   "external_id": "demo-00333"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-07-06",
+   "description": "PIX ENVIADO ALUGUEL IMOVEL EXEMPLO",
+   "amount": -1800.0,
+   "pluggy_category": null,
+   "external_id": "demo-00334"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-07-07",
+   "description": "LANCHONETE DELTA",
+   "amount": -56.05,
+   "pluggy_category": null,
+   "external_id": "demo-00335"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-07-07",
+   "description": "UBER *TRIP",
+   "amount": -34.32,
+   "pluggy_category": null,
+   "external_id": "demo-00336"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-07-08",
+   "description": "UBER *TRIP",
+   "amount": -24.3,
+   "pluggy_category": null,
+   "external_id": "demo-00337"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-07-08",
+   "description": "PAGAMENTO FATURA CARTAO EXEMPLO",
+   "amount": -1600.48,
+   "pluggy_category": null,
+   "external_id": "demo-00338"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-07-09",
+   "description": "LANCHONETE DELTA",
+   "amount": -51.43,
+   "pluggy_category": null,
+   "external_id": "demo-00339"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-07-09",
+   "description": "PAGAMENTO RECEBIDO",
+   "amount": 1600.48,
+   "pluggy_category": null,
+   "external_id": "demo-00340"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-07-10",
+   "description": "LOJA BETA 04/12",
+   "amount": -289.9,
+   "pluggy_category": "Compras",
+   "external_id": "demo-00341"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-07-11",
+   "description": "LANCHONETE DELTA",
+   "amount": -48.97,
+   "pluggy_category": null,
+   "external_id": "demo-00342"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-07-12",
+   "description": "STREAMING ALFA",
+   "amount": -39.9,
+   "pluggy_category": "Streaming de vídeo",
+   "external_id": "demo-00343"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-07-13",
+   "description": "RESTAURANTE SABOR CASEIRO",
+   "amount": -69.68,
+   "pluggy_category": null,
+   "external_id": "demo-00344"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-07-15",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -252.29,
+   "pluggy_category": null,
+   "external_id": "demo-00345"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-07-15",
+   "description": "CONTA DE LUZ ENERGIA EXEMPLO",
+   "amount": -141.08,
+   "pluggy_category": "Eletricidade",
+   "external_id": "demo-00346"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-07-18",
+   "description": "COMPRA NO DEBITO DROGARIA EXEMPLO",
+   "amount": -104.52,
+   "pluggy_category": "Farmácia",
+   "external_id": "demo-00347"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-07-18",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -45.43,
+   "pluggy_category": null,
+   "external_id": "demo-00348"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-07-20",
+   "description": "UBER *TRIP",
+   "amount": -29.71,
+   "pluggy_category": null,
+   "external_id": "demo-00349"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-07-20",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -282.46,
+   "pluggy_category": null,
+   "external_id": "demo-00350"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-07-24",
+   "description": "UBER *TRIP",
+   "amount": -41.08,
+   "pluggy_category": null,
+   "external_id": "demo-00351"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-07-24",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -87.24,
+   "pluggy_category": null,
+   "external_id": "demo-00352"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-07-25",
+   "description": "UBER *TRIP",
+   "amount": -58.26,
+   "pluggy_category": null,
+   "external_id": "demo-00353"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-07-27",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -212.75,
+   "pluggy_category": null,
+   "external_id": "demo-00354"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-07-28",
+   "description": "UBER *TRIP",
+   "amount": -46.48,
+   "pluggy_category": null,
+   "external_id": "demo-00355"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-07-29",
+   "description": "UBER *TRIP",
+   "amount": -49.33,
+   "pluggy_category": null,
+   "external_id": "demo-00356"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-07-31",
+   "description": "POSTO EXEMPLO COMBUSTIVEL",
+   "amount": -207.87,
+   "pluggy_category": null,
+   "external_id": "demo-00357"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-07-31",
+   "description": "COMPRA NO DEBITO DROGARIA EXEMPLO",
+   "amount": -121.56,
+   "pluggy_category": "Farmácia",
+   "external_id": "demo-00358"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-08-03",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -300.89,
+   "pluggy_category": null,
+   "external_id": "demo-00359"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-08-05",
+   "description": "SALARIO EMPRESA EXEMPLO LTDA",
+   "amount": 6500.0,
+   "pluggy_category": "Renda",
+   "external_id": "demo-00360"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-08-06",
+   "description": "UBER *TRIP",
+   "amount": -34.31,
+   "pluggy_category": null,
+   "external_id": "demo-00361"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-08-06",
+   "description": "PIX ENVIADO ALUGUEL IMOVEL EXEMPLO",
+   "amount": -1800.0,
+   "pluggy_category": null,
+   "external_id": "demo-00362"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-08-07",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -276.49,
+   "pluggy_category": null,
+   "external_id": "demo-00363"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-08-08",
+   "description": "PAGAMENTO FATURA CARTAO EXEMPLO",
+   "amount": -1338.09,
+   "pluggy_category": null,
+   "external_id": "demo-00364"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-08-09",
+   "description": "PAGAMENTO RECEBIDO",
+   "amount": 1338.09,
+   "pluggy_category": null,
+   "external_id": "demo-00365"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-08-09",
+   "description": "UBER *TRIP",
+   "amount": -51.64,
+   "pluggy_category": null,
+   "external_id": "demo-00366"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-08-10",
+   "description": "LOJA BETA 05/12",
+   "amount": -289.9,
+   "pluggy_category": "Compras",
+   "external_id": "demo-00367"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-08-12",
+   "description": "LANCHONETE DELTA",
+   "amount": -31.55,
+   "pluggy_category": null,
+   "external_id": "demo-00368"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-08-12",
+   "description": "STREAMING ALFA",
+   "amount": -39.9,
+   "pluggy_category": "Streaming de vídeo",
+   "external_id": "demo-00369"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-08-13",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -74.23,
+   "pluggy_category": null,
+   "external_id": "demo-00370"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-08-14",
+   "description": "IFOOD *PIZZARIA OMEGA",
+   "amount": -57.42,
+   "pluggy_category": null,
+   "external_id": "demo-00371"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-08-15",
+   "description": "POSTO EXEMPLO COMBUSTIVEL",
+   "amount": -206.98,
+   "pluggy_category": null,
+   "external_id": "demo-00372"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-08-15",
+   "description": "CONTA DE LUZ ENERGIA EXEMPLO",
+   "amount": -156.47,
+   "pluggy_category": "Eletricidade",
+   "external_id": "demo-00373"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-08-16",
+   "description": "UBER *TRIP",
+   "amount": -40.44,
+   "pluggy_category": null,
+   "external_id": "demo-00374"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-08-17",
+   "description": "UBER *TRIP",
+   "amount": -27.47,
+   "pluggy_category": null,
+   "external_id": "demo-00375"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-08-18",
+   "description": "LANCHONETE DELTA",
+   "amount": -103.12,
+   "pluggy_category": null,
+   "external_id": "demo-00376"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-08-18",
+   "description": "UBER *TRIP",
+   "amount": -23.78,
+   "pluggy_category": null,
+   "external_id": "demo-00377"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-08-19",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -332.41,
+   "pluggy_category": null,
+   "external_id": "demo-00378"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-08-20",
+   "description": "UBER *TRIP",
+   "amount": -56.86,
+   "pluggy_category": null,
+   "external_id": "demo-00379"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-08-21",
+   "description": "UBER *TRIP",
+   "amount": -25.39,
+   "pluggy_category": null,
+   "external_id": "demo-00380"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-08-21",
+   "description": "COMPRA NO DEBITO DROGARIA EXEMPLO",
+   "amount": -127.73,
+   "pluggy_category": "Farmácia",
+   "external_id": "demo-00381"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-08-22",
+   "description": "RESTAURANTE SABOR CASEIRO",
+   "amount": -66.18,
+   "pluggy_category": null,
+   "external_id": "demo-00382"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-08-22",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -362.36,
+   "pluggy_category": null,
+   "external_id": "demo-00383"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-08-23",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -266.16,
+   "pluggy_category": null,
+   "external_id": "demo-00384"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-08-24",
+   "description": "UBER *TRIP",
+   "amount": -33.64,
+   "pluggy_category": null,
+   "external_id": "demo-00385"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-08-25",
+   "description": "POSTO EXEMPLO COMBUSTIVEL",
+   "amount": -216.82,
+   "pluggy_category": null,
+   "external_id": "demo-00386"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-08-29",
+   "description": "COMPRA NO DEBITO DROGARIA EXEMPLO",
+   "amount": -111.95,
+   "pluggy_category": "Farmácia",
+   "external_id": "demo-00387"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-08-29",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -81.61,
+   "pluggy_category": null,
+   "external_id": "demo-00388"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-08-30",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -413.78,
+   "pluggy_category": null,
+   "external_id": "demo-00389"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-09-04",
+   "description": "UBER *TRIP",
+   "amount": -47.45,
+   "pluggy_category": null,
+   "external_id": "demo-00390"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-09-05",
+   "description": "SALARIO EMPRESA EXEMPLO LTDA",
+   "amount": 6500.0,
+   "pluggy_category": "Renda",
+   "external_id": "demo-00391"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-09-06",
+   "description": "UBER *TRIP",
+   "amount": -25.27,
+   "pluggy_category": null,
+   "external_id": "demo-00392"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-09-06",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -166.03,
+   "pluggy_category": null,
+   "external_id": "demo-00393"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-09-06",
+   "description": "PIX ENVIADO ALUGUEL IMOVEL EXEMPLO",
+   "amount": -1800.0,
+   "pluggy_category": null,
+   "external_id": "demo-00394"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-09-07",
+   "description": "UBER *TRIP",
+   "amount": -40.3,
+   "pluggy_category": null,
+   "external_id": "demo-00395"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-09-07",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -373.92,
+   "pluggy_category": null,
+   "external_id": "demo-00396"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-09-08",
+   "description": "IFOOD *PIZZARIA OMEGA",
+   "amount": -71.63,
+   "pluggy_category": null,
+   "external_id": "demo-00397"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-09-08",
+   "description": "PAGAMENTO FATURA CARTAO EXEMPLO",
+   "amount": -1305.4,
+   "pluggy_category": null,
+   "external_id": "demo-00398"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-09-09",
+   "description": "PAGAMENTO RECEBIDO",
+   "amount": 1305.4,
+   "pluggy_category": null,
+   "external_id": "demo-00399"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-09-09",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -304.96,
+   "pluggy_category": null,
+   "external_id": "demo-00400"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-09-10",
+   "description": "LOJA BETA 06/12",
+   "amount": -289.9,
+   "pluggy_category": "Compras",
+   "external_id": "demo-00401"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-09-11",
+   "description": "UBER *TRIP",
+   "amount": -48.49,
+   "pluggy_category": null,
+   "external_id": "demo-00402"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-09-11",
+   "description": "COMPRA NO DEBITO DROGARIA EXEMPLO",
+   "amount": -78.99,
+   "pluggy_category": "Farmácia",
+   "external_id": "demo-00403"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-09-11",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -141.36,
+   "pluggy_category": null,
+   "external_id": "demo-00404"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-09-12",
+   "description": "STREAMING ALFA",
+   "amount": -39.9,
+   "pluggy_category": "Streaming de vídeo",
+   "external_id": "demo-00405"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-09-12",
+   "description": "COMPRA NO DEBITO DROGARIA EXEMPLO",
+   "amount": -59.86,
+   "pluggy_category": "Farmácia",
+   "external_id": "demo-00406"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-09-12",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -38.91,
+   "pluggy_category": null,
+   "external_id": "demo-00407"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-09-15",
+   "description": "CONTA DE LUZ ENERGIA EXEMPLO",
+   "amount": -151.61,
+   "pluggy_category": "Eletricidade",
+   "external_id": "demo-00408"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-09-16",
+   "description": "RESTAURANTE SABOR CASEIRO",
+   "amount": -33.84,
+   "pluggy_category": null,
+   "external_id": "demo-00409"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-09-16",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -400.0,
+   "pluggy_category": null,
+   "external_id": "demo-00410"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-09-18",
+   "description": "POSTO EXEMPLO COMBUSTIVEL",
+   "amount": -162.66,
+   "pluggy_category": null,
+   "external_id": "demo-00411"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-09-18",
+   "description": "RESTAURANTE SABOR CASEIRO",
+   "amount": -63.42,
+   "pluggy_category": null,
+   "external_id": "demo-00412"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-09-18",
+   "description": "UBER *TRIP",
+   "amount": -40.65,
+   "pluggy_category": null,
+   "external_id": "demo-00413"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-09-21",
+   "description": "RESTAURANTE SABOR CASEIRO",
+   "amount": -54.09,
+   "pluggy_category": null,
+   "external_id": "demo-00414"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-09-22",
+   "description": "UBER *TRIP",
+   "amount": -59.06,
+   "pluggy_category": null,
+   "external_id": "demo-00415"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-09-23",
+   "description": "IFOOD *PIZZARIA OMEGA",
+   "amount": -60.06,
+   "pluggy_category": null,
+   "external_id": "demo-00416"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-09-23",
+   "description": "POSTO EXEMPLO COMBUSTIVEL",
+   "amount": -154.55,
+   "pluggy_category": null,
+   "external_id": "demo-00417"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-09-23",
+   "description": "UBER *TRIP",
+   "amount": -51.97,
+   "pluggy_category": null,
+   "external_id": "demo-00418"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-09-23",
+   "description": "COMPRA NO DEBITO DROGARIA EXEMPLO",
+   "amount": -49.97,
+   "pluggy_category": "Farmácia",
+   "external_id": "demo-00419"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-09-24",
+   "description": "UBER *TRIP",
+   "amount": -26.22,
+   "pluggy_category": null,
+   "external_id": "demo-00420"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-09-25",
+   "description": "IFOOD *PIZZARIA OMEGA",
+   "amount": -75.44,
+   "pluggy_category": null,
+   "external_id": "demo-00421"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-09-25",
+   "description": "UBER *TRIP",
+   "amount": -29.32,
+   "pluggy_category": null,
+   "external_id": "demo-00422"
+  },
+  {
+   "conta": "corrente",
+   "date": "2026-09-28",
+   "description": "COMPRA NO DEBITO MERCADO EXEMPLO",
+   "amount": -67.96,
+   "pluggy_category": null,
+   "external_id": "demo-00423"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-09-30",
+   "description": "LANCHONETE DELTA",
+   "amount": -119.68,
+   "pluggy_category": null,
+   "external_id": "demo-00424"
+  },
+  {
+   "conta": "cartao",
+   "date": "2026-09-30",
+   "description": "UBER *TRIP",
+   "amount": -26.51,
+   "pluggy_category": null,
+   "external_id": "demo-00425"
+  }
+ ]
+}

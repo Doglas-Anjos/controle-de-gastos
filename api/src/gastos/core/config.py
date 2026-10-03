@@ -2,11 +2,11 @@
 
 Tudo que e segredo ou especifico da maquina entra aqui e so aqui; nenhum outro modulo le os.environ.
 """
+
 from __future__ import annotations
 
 from pathlib import Path
 
-from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 RAIZ = Path(__file__).resolve().parents[4]
@@ -50,7 +50,11 @@ class Settings(BaseSettings):
     @property
     def extra_sensiveis(self) -> set[str]:
         """Valores que nunca podem aparecer em log ou payload externo; usado pelos testes de redacao."""
-        return {v for v in (self.pluggy_client_id, self.pluggy_client_secret, self.openai_api_key, *self.item_ids) if v}
+        return {
+            v
+            for v in (self.pluggy_client_id, self.pluggy_client_secret, self.openai_api_key, *self.item_ids)
+            if v
+        }
 
 
 settings = Settings()

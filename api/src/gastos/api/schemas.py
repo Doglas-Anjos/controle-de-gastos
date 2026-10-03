@@ -1,0 +1,153 @@
+"""Contrato da API (Pydantic). O frontend tipa contra estes modelos; mude aqui antes do router ou da tela.
+
+Nenhum schema expoe raw_json, external_id de transacao, ids de item/conta da Pluggy ou credenciais.
+"""
+
+from __future__ import annotations
+
+from datetime import date, datetime
+
+from pydantic import BaseModel, Field
+
+
+class AccountOut(BaseModel):
+    id: int
+    bank: str
+    name: str
+    type: str  # checking | credit | savings
+    source: str  # pluggy | ofx | csv
+    last_sync_at: datetime | None = None
+
+
+class CategoryOut(BaseModel):
+    id: int
+    name: str
+    kind: str  # fixo | variavel | receita | transferencia
+    parent_id: int | None = None
+
+
+class TransactionOut(BaseModel):
+    id: int
+    account_id: int
+    date: date
+    description: str
+    amount: float  # negativo = gasto
+    category: CategoryOut | None
+    category_source: str  # override | regra | pluggy | nenhuma
+    excluded: bool = False
+    installment: str | None = None  # "3/12"
+    bill_month: str | None = None
+    recurrence_id: int | None = None
+
+
+class Page(BaseModel):
+    items: list[TransactionOut]
+    total: int
+    page: int
+    page_size: int
+
+
+class MonthlyByCategory(BaseModel):
+    month: str  # YYYY-MM
+    category: CategoryOut | None
+    total: float  # gasto positivo
+
+
+class SummaryOut(BaseModel):
+    months: list[str]
+    by_category: list[MonthlyByCategory]
+    total_by_month: dict[str, float]
+    income_by_month: dict[str, float]
+
+
+class RecurrenceOut(BaseModel):
+    id: int
+    merchant: str  # merchant_norm
+    account: AccountOut
+    kind: str  # assinatura | parcela | detectada
+    periodicity: str  # semanal | mensal | anual
+    expected_amount: float
+    expected_day: int | None
+    next_due: date | None
+    ends_at: date | None
+    occurrences: int
+    confidence: float
+    active: bool
+    user_decision: str | None  # confirmada | descartada | None
+    category: CategoryOut | None
+
+
+class RecurrenceDecision(BaseModel):
+    decision: str = Field(pattern="^(confirmada|descartada)$")
+
+
+class ForecastLine(BaseModel):
+    month: str
+    category: CategoryOut | None
+    amount: float
+    low: float
+    high: float
+    method: str  # recorrencia | mediana3 | sazonal
+
+
+class ForecastOut(BaseModel):
+    horizon_months: int
+    lines: list[ForecastLine]
+    total_by_month: dict[str, float]
+
+
+class RuleIn(BaseModel):
+    pattern: str
+    category_id: int
+    priority: int = 100
+
+
+class RuleOut(RuleIn):
+    id: int
+
+
+class OverrideIn(BaseModel):
+    category_id: int | None = None
+    exclude: bool = False
+    note: str | None = None
+
+
+class ImportResult(BaseModel):
+    files: int
+    accounts_created: int
+    transactions_new: int
+    transactions_updated: int
+    errors: list[str] = []
+
+
+class SyncResult(BaseModel):
+    items: int
+    accounts: int
+    transactions_new: int
+    transactions_updated: int
+    errors: list[str] = []
+
+
+class Tip(BaseModel):
+    titulo: str
+    categoria: str | None
+    economia_estimada_mensal: float | None
+    acao: str
+    confianca: float = Field(ge=0, le=1)
+
+
+class InsightsOut(BaseModel):
+    resumo: str
+    dicas: list[Tip]
+    alertas: list[str]
+    gerado_em: datetime
+    cache: bool = False
+
+
+class QuestionIn(BaseModel):
+    pergunta: str = Field(min_length=3, max_length=2000)
+
+
+class AnswerOut(BaseModel):
+    resposta: str
+    gerado_em: datetime

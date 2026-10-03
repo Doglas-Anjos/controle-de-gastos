@@ -6,7 +6,7 @@ Controle financeiro pessoal. Repositorio **publico**; dados do usuario ficam so 
 - `api/`: FastAPI, Python 3.11, SQLAlchemy 2.0, SQLite. Venv em `api/.venv`.
   - testes: `cd api && .venv/Scripts/python -m pytest -q`
   - servidor: `cd api && .venv/Scripts/python -m uvicorn gastos.api.main:app --reload`
-  - CLI: `gastos sync | import <pasta> | demo-seed | recorrencias | previsao`
+  - CLI: `gastos sync | import <pasta> | demo-seed | recalcular`
 - `web/`: Next.js 16 (app router), TypeScript, Tailwind 4, recharts, vitest.
   - `cd web && npx tsc --noEmit && npx vitest run`
 - Tudo junto: `docker compose up`.

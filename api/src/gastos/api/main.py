@@ -1,4 +1,5 @@
 """Aplicacao FastAPI. Routers sao registrados aqui; cada router vive em gastos/api/<recurso>.py."""
+
 from __future__ import annotations
 
 from contextlib import asynccontextmanager
@@ -28,3 +29,19 @@ app.add_middleware(
 @app.get("/health")
 def health() -> dict:
     return {"ok": True, "pluggy": settings.pluggy_configurado, "openai": settings.openai_configurado}
+
+
+from gastos.api.routers import (  # noqa: E402
+    accounts,
+    analytics,
+    categories,
+    imports,
+    insights,
+    overrides,
+    rules,
+    sync,
+    transactions,
+)
+
+for _r in (accounts, categories, transactions, analytics, insights, imports, sync, rules, overrides):
+    app.include_router(_r.router)

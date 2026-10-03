@@ -1,4 +1,5 @@
 """Banco em memoria por teste. Nenhum teste toca data/ nem rede."""
+
 from __future__ import annotations
 
 import pytest

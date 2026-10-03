@@ -37,3 +37,8 @@ pythonpath = ["src"]
 [tool.ruff]
 line-length = 110
 target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "SIM"]
+# B008: `Depends(...)` como default e o idioma do FastAPI/Typer
+ignore = ["B008"]
