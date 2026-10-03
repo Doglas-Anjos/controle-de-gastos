@@ -10,11 +10,11 @@ from gastos.domain.seed import (
 )
 
 
-def test_semeia_21_categorias_com_kind_e_e_idempotente(sessao):
+def test_semeia_22_categorias_com_kind_e_e_idempotente(sessao):
     semear_categorias(sessao)
     semear_categorias(sessao)
     cats = {c.name: c.kind for c in sessao.scalars(select(Category))}
-    assert len(cats) == 21 == len(CATEGORIAS_BASE) + len(SUBCATEGORIAS_BASE)
+    assert len(cats) == 22 == len(CATEGORIAS_BASE) + len(SUBCATEGORIAS_BASE)
     assert cats["Moradia"] == "fixo" and cats["Mercado"] == "variavel"
     assert cats["Transferencia"] == "transferencia" and cats["Receita"] == "receita"
     por_nome = {c.name: c for c in sessao.scalars(select(Category))}
@@ -43,6 +43,7 @@ def test_mapeia_pagamento_de_fatura_investimento_automatico_e_universidade():
     assert mapear_categoria_pluggy("Supermarkets") == "Mercado"
     assert mapear_categoria_pluggy("Fixed income") == "Renda fixa"
     assert mapear_categoria_pluggy("Salary") == "Salario"
+    assert mapear_categoria_pluggy("Loans and financing") == "Emprestimos"
 
 
 def test_regra_retirada_e_apagada_no_proximo_seed(sessao):

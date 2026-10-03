@@ -28,6 +28,7 @@ CATEGORIAS_BASE = {
     "Compras": "variavel",
     "Viagem": "variavel",
     "Impostos e taxas": "fixo",
+    "Emprestimos": "fixo",  # parcela de emprestimo, financiamento, consignado
     "Investimentos": "transferencia",
     "Transferencia": "transferencia",
     "Receita": "receita",
@@ -57,6 +58,7 @@ REGRAS_BASE = [
         "Contas e servicos",
     ),
     (r"\b(?:aluguel|condominio|iptu)\b", "Moradia"),
+    (r"\b(?:emprestimo|financiamento|consignado|crediario)\b", "Emprestimos"),
     # "Pagamento recebido" e o credito da fatura no cartao: e o dinheiro saindo da conta, nao receita.
     (r"\b(?:pagamento recebido|pag(?:amento|to)\.? ?(?:de |da )?fatura)\b", "Transferencia"),
     (r"\b(?:salario|provento|folha de pagamento)\b", "Salario"),
@@ -193,6 +195,7 @@ _PLUGGY = {
         "accommodation",
         "airport and airlines",
     ],
+    "Emprestimos": ["emprestimos", "emprestimos e financiamentos", "loans and financing", "loans"],
     "Impostos e taxas": [
         "impostos",
         "taxas bancarias",

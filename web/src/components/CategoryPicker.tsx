@@ -10,7 +10,7 @@ const SEM = "Sem categoria";
 const ICONE: Record<string, IconName> = {
   Moradia: "home", "Contas e servicos": "bolt", Assinaturas: "film", Alimentacao: "food", Mercado: "cart",
   Transporte: "car", Saude: "heart", Educacao: "book", Lazer: "smile", Compras: "tag", Viagem: "plane",
-  "Impostos e taxas": "receipt", Investimentos: "coins", "Renda fixa": "receipt", "Renda variavel": "trend", Cripto: "bitcoin",
+  "Impostos e taxas": "receipt", Emprestimos: "percent", Investimentos: "coins", "Renda fixa": "receipt", "Renda variavel": "trend", Cripto: "bitcoin",
   Transferencia: "swap", Receita: "wallet", Salario: "briefcase", Bolsa: "cap", [SEM]: "question",
 };
 // Subcategoria sem icone proprio usa o da mae; categoria do usuario sem mae cai no generico.
