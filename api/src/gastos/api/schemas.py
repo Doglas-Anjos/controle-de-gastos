@@ -46,6 +46,7 @@ class TransactionOut(BaseModel):
     date: date
     description: str
     description_norm: str = ""  # base para "criar regra para parecidas" na tela
+    similar: int = 0  # outros lancamentos com a mesma description_norm (para oferecer a regra)
     amount: float  # negativo = gasto
     category: CategoryOut | None
     category_source: str  # override | regra | pluggy | nenhuma

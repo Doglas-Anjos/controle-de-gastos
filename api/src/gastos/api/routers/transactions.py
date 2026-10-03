@@ -43,6 +43,15 @@ def listar(
         txs = [t for t in txs if (efetivas[t.id][0] is not None and efetivas[t.id][0].id == category_id)]
     total = len(txs)
     fatia = txs[(page - 1) * page_size : page * page_size]
+    # parecidas = mesma descricao normalizada em qualquer mes/conta: e o alcance que a regra teria
+    normas = {t.description_norm for t in fatia}
+    iguais = dict(
+        sessao.execute(
+            select(Transaction.description_norm, func.count())
+            .where(Transaction.description_norm.in_(normas))
+            .group_by(Transaction.description_norm)
+        ).all()
+    )
     items = []
     for t in fatia:
         cat, fonte, excluida = efetivas[t.id]
@@ -53,6 +62,7 @@ def listar(
                 date=t.date,
                 description=t.description,
                 description_norm=t.description_norm,
+                similar=iguais.get(t.description_norm, 1) - 1,
                 amount=t.amount,
                 category=categoria_out(cat),
                 category_source=fonte,

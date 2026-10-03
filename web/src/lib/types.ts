@@ -5,7 +5,7 @@ export interface AccountOut { id: number; bank: string; name: string; type: stri
 export interface CategoryOut { id: number; name: string; kind: string; parent_id: number | null }
 export interface CategoryIn { name: string; kind?: string; parent_id?: number | null }
 export interface TransactionOut {
-  id: number; account_id: number; date: string; description: string; description_norm: string; amount: number
+  id: number; account_id: number; date: string; description: string; description_norm: string; similar: number; amount: number
   category: CategoryOut | null
   category_source: "override" | "regra" | "pluggy" | "nenhuma" | string
   excluded: boolean; installment: string | null; bill_month: string | null; recurrence_id: number | null

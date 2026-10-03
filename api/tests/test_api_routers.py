@@ -69,6 +69,15 @@ def test_regras(http, sessao):
     assert http.get("/rules").json() == []
 
 
+def test_similar_conta_mesma_descricao_normalizada(http):
+    _upload(http)
+    itens = http.get("/transactions?page_size=500").json()["items"]
+    por_norma: dict[str, int] = {}
+    for t in itens:
+        por_norma[t["description_norm"]] = por_norma.get(t["description_norm"], 0) + 1
+    assert all(t["similar"] == por_norma[t["description_norm"]] - 1 for t in itens)
+
+
 def test_override(http):
     _upload(http)
     assert http.put("/transactions/1/override", json={"exclude": True, "note": "n"}).json()["exclude"] is True

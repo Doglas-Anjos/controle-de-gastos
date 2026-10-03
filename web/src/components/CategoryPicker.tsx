@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useId, useRef, useState, type KeyboardEvent } from "react";
+import { createPortal } from "react-dom";
 import { categoryColor } from "@/lib/colors";
 import { catLabel } from "@/lib/format";
 import type { CategoryOut } from "@/lib/types";
@@ -47,8 +48,10 @@ function arvore(categorias: CategoryOut[], kind: string): CategoryOut[] {
   return do_kind.filter((c) => c.parent_id === null || !do_kind.some((p) => p.id === c.parent_id)).sort(porNome).flatMap((m) => [m, ...filhas(m.id)]);
 }
 
-// Substitui o <select> nativo, que nao aceita icone nem cor nas opcoes. Menu em position:fixed para nao
-// ser cortado pela tabela com overflow; fecha ao rolar, clicar fora ou Escape. Setas + Enter navegam.
+// Substitui o <select> nativo, que nao aceita icone nem cor nas opcoes. Menu em position:fixed num portal
+// no body: dentro da arvore, qualquer ancestral com backdrop-filter/transform (a barra sticky de filtros)
+// viraria a referencia do fixed e o menu abriria deslocado; a tabela com overflow tambem o cortaria.
+// Fecha ao rolar a pagina, clicar fora ou Escape. Setas + Enter navegam.
 export function CategoryPicker({ categories, value, onChange, allLabel, placeholder, id, ariaLabel, disabled, compact }: {
   categories: CategoryOut[]; value: number | ""; onChange: (id: number | "") => void;
   allLabel?: string; placeholder?: string; id?: string; ariaLabel?: string; disabled?: boolean; compact?: boolean;
@@ -78,7 +81,10 @@ export function CategoryPicker({ categories, value, onChange, allLabel, placehol
   const escolher = (c: Opcao) => { onChange(c ? c.id : ""); setOpen(false); };
   useEffect(() => {
     if (!open) return;
-    const fora = (e: MouseEvent) => { if (!root.current?.contains(e.target as Node)) setOpen(false); };
+    const fora = (e: MouseEvent) => {
+      const alvo = e.target as Node;
+      if (!root.current?.contains(alvo) && !lista.current?.contains(alvo)) setOpen(false);
+    };
     // Rolagem da pagina desalinha o menu fixo, entao ele fecha; rolagem dentro da propria lista nao.
     const rolou = (e: Event) => { if (!lista.current?.contains(e.target as Node)) setOpen(false); };
     const fechar = () => setOpen(false);
@@ -113,7 +119,7 @@ export function CategoryPicker({ categories, value, onChange, allLabel, placehol
         </span>
         <Icon name="down" size={14} className="shrink-0 text-muted" />
       </button>
-      {open && (
+      {open && createPortal(
         <ul ref={lista} role="listbox" id={listId} aria-label={ariaLabel} style={{ top: pos.acima ? undefined : pos.top, bottom: pos.acima ? window.innerHeight - pos.top + 40 : undefined, left: pos.left }}
           className="fixed z-40 max-h-80 w-64 overflow-auto rounded-[12px] border border-line bg-surface p-1 shadow-[0_12px_32px_-8px_rgba(0,0,0,0.35)]">
           {grupos.map((g) => (
@@ -136,7 +142,8 @@ export function CategoryPicker({ categories, value, onChange, allLabel, placehol
               </ul>
             </li>
           ))}
-        </ul>
+        </ul>,
+        document.body,
       )}
     </div>
   );

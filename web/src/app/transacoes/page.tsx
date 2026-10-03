@@ -124,14 +124,20 @@ function Lista({ inicial }: { inicial: string }) {
   };
   const restaurar = (t: TransactionOut) => (manual(t) !== null ? putOverride(t.id, { category_id: manual(t), exclude: false }) : deleteOverride(t.id));
   // Regra a partir da transacao: a descricao normalizada inteira, escapada e ancorada, para pegar so o
-  // mesmo comerciante ou pessoa. Prioridade 1 porque a decisao explicita vence as regras base.
-  const regraParecidas = (t: TransactionOut, id: number): Acao | undefined => t.description_norm ? {
-    label: "Aplicar às parecidas",
-    run: () => createRule({ pattern: `^${escapeRegex(t.description_norm)}$`, category_id: id, priority: 1 })
-      .then(() => toast("Regra criada: vale para todos os lançamentos com essa descrição")),
-  } : undefined;
+  // mesmo comerciante ou pessoa. Prioridade 1 porque a decisao explicita vence as regras base. Depois a
+  // propria transacao volta para "automatica" (a regra ja a cobre), e o botao some da linha.
+  const aplicarParecidas = (t: TransactionOut) => {
+    const id = t.category?.id;
+    if (!id || !t.description_norm) return;
+    run(t, async () => {
+      await createRule({ pattern: `^${escapeRegex(t.description_norm)}$`, category_id: id, priority: 1 });
+      await (t.excluded ? putOverride(t.id, { category_id: null, exclude: true }) : deleteOverride(t.id));
+    }, `${catLabel(t.category?.name)} aplicada a ${t.similar + 1} lançamentos. A regra vale para as próximas importações.`);
+  };
   const setCategoria = (t: TransactionOut, id: number) =>
-    run(t, () => putOverride(t.id, { category_id: id, exclude: t.excluded }), `Categoria alterada para ${catLabel(cats.find((c) => c.id === id)?.name)}`, regraParecidas(t, id));
+    run(t, () => putOverride(t.id, { category_id: id, exclude: t.excluded }), t.similar > 0
+      ? `Categoria alterada. Há ${t.similar} ${t.similar === 1 ? "lançamento parecido" : "lançamentos parecidos"}: use "Aplicar" na linha para levar junto.`
+      : `Categoria alterada para ${catLabel(cats.find((c) => c.id === id)?.name)}`);
   const excluir = (t: TransactionOut) =>
     run(t, () => putOverride(t.id, { category_id: manual(t), exclude: true }), "Transação excluída dos totais", { label: "Desfazer", run: () => restaurar(t) });
   const voltarAuto = (t: TransactionOut) =>
@@ -216,6 +222,13 @@ function Lista({ inicial }: { inicial: string }) {
                             {origem && <><Icon name={origem.icon} size={14} /><span className="sr-only">{origem.text}</span></>}
                           </span>
                         </div>
+                        {t.category_source === "override" && t.similar > 0 && t.category && (
+                          <button type="button" disabled={busy === t.id} onClick={() => aplicarParecidas(t)}
+                            className="mt-1 inline-flex items-center gap-1 rounded-[6px] bg-accent-soft px-1.5 py-0.5 text-xs font-medium text-accent-text hover:bg-accent/20"
+                            title="Cria uma regra: todo lançamento com esta descrição recebe esta categoria">
+                            <Icon name="rules" size={12} />Aplicar a {t.similar} {t.similar === 1 ? "parecido" : "parecidos"}
+                          </button>
+                        )}
                       </td>
                       <td className={`whitespace-nowrap px-2 py-2.5 text-right font-medium tabular-nums ${t.excluded ? "text-muted line-through" : t.amount > 0 ? "text-accent-text" : "text-ink"}`}>
                         {t.amount > 0 ? "+" : ""}{formatBRL(t.amount)}
