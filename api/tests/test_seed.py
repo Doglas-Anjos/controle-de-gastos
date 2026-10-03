@@ -10,11 +10,11 @@ from gastos.domain.seed import (
 )
 
 
-def test_semeia_22_categorias_com_kind_e_e_idempotente(sessao):
+def test_semeia_27_categorias_com_kind_e_e_idempotente(sessao):
     semear_categorias(sessao)
     semear_categorias(sessao)
     cats = {c.name: c.kind for c in sessao.scalars(select(Category))}
-    assert len(cats) == 22 == len(CATEGORIAS_BASE) + len(SUBCATEGORIAS_BASE)
+    assert len(cats) == 27 == len(CATEGORIAS_BASE) + len(SUBCATEGORIAS_BASE)
     assert cats["Moradia"] == "fixo" and cats["Mercado"] == "variavel"
     assert cats["Transferencia"] == "transferencia" and cats["Receita"] == "receita"
     por_nome = {c.name: c for c in sessao.scalars(select(Category))}
@@ -44,6 +44,19 @@ def test_mapeia_pagamento_de_fatura_investimento_automatico_e_universidade():
     assert mapear_categoria_pluggy("Fixed income") == "Renda fixa"
     assert mapear_categoria_pluggy("Salary") == "Salario"
     assert mapear_categoria_pluggy("Loans and financing") == "Emprestimos"
+    assert mapear_categoria_pluggy("Taxi and ride-hailing") == "Aplicativos"
+    assert mapear_categoria_pluggy("Gas stations") == "Combustivel"
+    assert mapear_categoria_pluggy("Transportation") == "Locomocao"
+
+
+def test_categoria_renomeada_mantem_id_e_vira_mae(sessao):
+    antiga = Category(name="Transporte", kind="variavel")
+    sessao.add(antiga)
+    sessao.commit()
+    semear_categorias(sessao)
+    por_nome = {c.name: c for c in sessao.scalars(select(Category))}
+    assert "Transporte" not in por_nome and por_nome["Locomocao"].id == antiga.id
+    assert por_nome["Combustivel"].parent_id == antiga.id
 
 
 def test_regra_retirada_e_apagada_no_proximo_seed(sessao):

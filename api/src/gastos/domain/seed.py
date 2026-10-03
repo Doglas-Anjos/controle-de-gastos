@@ -21,7 +21,7 @@ CATEGORIAS_BASE = {
     "Assinaturas": "fixo",
     "Alimentacao": "variavel",
     "Mercado": "variavel",
-    "Transporte": "variavel",
+    "Locomocao": "variavel",
     "Saude": "variavel",
     "Educacao": "fixo",
     "Lazer": "variavel",
@@ -42,7 +42,14 @@ SUBCATEGORIAS_BASE = {
     "Renda fixa": "Investimentos",
     "Renda variavel": "Investimentos",
     "Cripto": "Investimentos",
+    "Aplicativos": "Locomocao",  # Uber, 99
+    "Combustivel": "Locomocao",
+    "Estacionamento e pedagio": "Locomocao",
+    "Transporte publico": "Locomocao",
+    "Manutencao do carro": "Locomocao",
 }
+# Categoria base que mudou de nome: renomeada no banco do usuario mantendo id, regras e overrides.
+CATEGORIAS_RENOMEADAS = {"Transporte": "Locomocao"}
 
 # Ordem = prioridade (menor vence). As especificas vem antes das genericas: "uber eats" antes de "uber",
 # "mercado livre" antes de "mercado". \b evita casar pedaco de palavra ("tim" em "timbo", "raia" em "praia").
@@ -50,7 +57,10 @@ REGRAS_BASE = [
     (r"\b(?:uber ?eats|ifood|rappi|restaurante|lanchonete|padaria|pizzaria)\b", "Alimentacao"),
     (r"\b(?:netflix|spotify|prime video|disney|hbo|globoplay|youtube premium|deezer)\b", "Assinaturas"),
     (r"\b(?:mercado ?livre|amazon|shopee|aliexpress|magalu)\b", "Compras"),
-    (r"\b(?:uber|99 ?pop|99app|posto|combustivel|shell|ipiranga)\b", "Transporte"),
+    (r"\b(?:uber|99 ?pop|99app|99 ?taxi|cabify|indrive)\b", "Aplicativos"),
+    (r"\b(?:posto|combustivel|gasolina|etanol|shell|ipiranga|petrobras)\b", "Combustivel"),
+    (r"\b(?:estacionamento|zona azul|pedagio|sem parar|conectcar|veloe)\b", "Estacionamento e pedagio"),
+    (r"\b(?:metro|onibus|bilhete unico|cptm|brt)\b", "Transporte publico"),
     (r"\b(?:mercado|supermercado|atacad\w*|carrefour|assai|pao de acucar)\b", "Mercado"),
     (r"\b(?:farmacia|drogaria|drogasil|raia)\b", "Saude"),
     (
@@ -75,6 +85,7 @@ REGRAS_RETIRADAS = {
     r"\b(?:rendimento|salario|pagamento recebido)\b",
     r"\b(?:rendimento|salario|provento)\b",
     r"\b(?:aplicacao|resgate|tesouro|cdb)\b",
+    r"\b(?:uber|99 ?pop|99app|posto|combustivel|shell|ipiranga)\b",
 }
 
 # Chaves sem acento e em minusculas (ver _chave). Inclui os nomes em ingles que a API devolve sem traducao.
@@ -93,26 +104,17 @@ _PLUGGY = {
         "coffee",
         "fast food",
     ],
-    "Transporte": [
-        "transporte",
-        "taxi e transporte privado",
-        "postos de gasolina",
-        "estacionamentos",
-        "transporte publico",
+    "Locomocao": ["transporte", "locomocao", "transportation"],
+    "Aplicativos": ["taxi e transporte privado", "taxi and ride-hailing"],
+    "Combustivel": ["postos de gasolina", "combustivel", "gas stations", "gas"],
+    "Estacionamento e pedagio": ["estacionamentos", "pedagios", "parking", "tolls"],
+    "Transporte publico": ["transporte publico", "onibus", "public transportation", "bus"],
+    "Manutencao do carro": [
         "automotivo",
         "manutencao de veiculos",
-        "pedagios",
-        "transportation",
-        "gas stations",
-        "gas",
-        "taxi and ride-hailing",
-        "parking",
         "automotive",
         "vehicle maintenance",
         "vehicle ownership taxes and fees",
-        "tolls",
-        "bus",
-        "public transportation",
     ],
     "Lazer": [
         "lazer",
@@ -251,6 +253,10 @@ def semear_categorias(sessao: Session) -> dict[str, int]:
     """Cria o que faltar das categorias e regras base. Regra e identificada pelo padrao: se o usuario
     apagou ou mudou a categoria de uma, ela volta so se o padrao nao existir mais."""
     cats = {c.name: c for c in sessao.scalars(select(Category))}
+    for antigo, novo in CATEGORIAS_RENOMEADAS.items():
+        if antigo in cats and novo not in cats:
+            cats[antigo].name = novo
+            cats[novo] = cats.pop(antigo)
     novas = 0
     for nome, kind in CATEGORIAS_BASE.items():
         if nome not in cats:

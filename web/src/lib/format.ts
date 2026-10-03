@@ -68,6 +68,8 @@ const ACENTOS: Record<string, string> = {
   "Alimentacao": "Alimentação", "Saude": "Saúde", "Educacao": "Educação",
   "Transferencia": "Transferência", "Contas e servicos": "Contas e serviços",
   "Salario": "Salário", "Renda variavel": "Renda variável", "Emprestimos": "Empréstimos",
+  "Locomocao": "Locomoção", "Combustivel": "Combustível", "Estacionamento e pedagio": "Estacionamento e pedágio",
+  "Transporte publico": "Transporte público", "Manutencao do carro": "Manutenção do carro",
 };
 export const catLabel = (name: string | null | undefined) => (name ? ACENTOS[name] ?? name : "Sem categoria");
 

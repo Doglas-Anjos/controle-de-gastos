@@ -9,7 +9,8 @@ import { input } from "./ui";
 const SEM = "Sem categoria";
 const ICONE: Record<string, IconName> = {
   Moradia: "home", "Contas e servicos": "bolt", Assinaturas: "film", Alimentacao: "food", Mercado: "cart",
-  Transporte: "car", Saude: "heart", Educacao: "book", Lazer: "smile", Compras: "tag", Viagem: "plane",
+  Locomocao: "car", Aplicativos: "phone", Combustivel: "fuel", "Estacionamento e pedagio": "parking",
+  "Transporte publico": "bus", "Manutencao do carro": "wrench", Saude: "heart", Educacao: "book", Lazer: "smile", Compras: "tag", Viagem: "plane",
   "Impostos e taxas": "receipt", Emprestimos: "percent", Investimentos: "coins", "Renda fixa": "receipt", "Renda variavel": "trend", Cripto: "bitcoin",
   Transferencia: "swap", Receita: "wallet", Salario: "briefcase", Bolsa: "cap", [SEM]: "question",
 };
