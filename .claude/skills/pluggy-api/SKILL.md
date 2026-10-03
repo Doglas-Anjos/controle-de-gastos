@@ -28,8 +28,13 @@ Fonte viva: MCP `pluggy-docs` (sem chave) ou https://docs.pluggy.ai/pt/reference
 | `GET /categories` | 50+ categorias PT-BR com `id`, `description`, `parentId` |
 
 ## Campos de transacao -> `transactions`
-- `id` -> `external_id`; `date` (ISO) -> `date`; `description` -> `description`; `amount` -> `amount`
-  (Pluggy: positivo = credito, negativo = debito; manter o sinal como veio);
+- `id` -> `external_id`; `date` (ISO) -> `date`; `description` -> `description`;
+- **sinal vem do `type`, nunca do `amount`**: em conta `BANK` a Pluggy manda debito negativo, mas em conta
+  `CREDIT` manda compra (`DEBIT`) **positiva** e pagamento da fatura (`CREDIT`) **negativo** (confirmado nos
+  dados reais, 2026). `_registro` grava `amount = -abs` para DEBIT e `+abs` para CREDIT; `reprocessar_pluggy`
+  reaplica isso ao `raw_json` das linhas antigas a cada sync;
+- no cartao, `type=CREDIT` com `operationType` `PAGAMENTO`/`PAGAMENTO_FATURA` e a fatura sendo paga:
+  `pluggy_category` vira `Credit card payment` (seed mapeia para Transferencia). `ESTORNO` fica como veio;
 - `type` (`DEBIT`/`CREDIT`) -> `type`; `category` / `categoryId` -> `pluggy_category`;
 - `creditCardMetadata.installmentNumber` / `.totalInstallments` -> `installment_n` / `installment_total`;
   `creditCardMetadata.billId` + fatura -> `bill_month`;

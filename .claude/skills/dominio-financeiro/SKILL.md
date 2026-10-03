@@ -17,8 +17,11 @@ Guardar `installment_n` e `installment_total` quando o regex `(\d{1,2})\s*/\s*(\
 
 ## Categoria efetiva (`categorize.py`)
 Prioridade: `transaction_overrides.category_id` > primeira `category_rules` por `priority` cujo regex casa em `description_norm` ou `description` > mapeamento de `pluggy_category` (sem acento/caixa) > `Sem categoria`. Regex das regras: case-insensitive; as regras seed usam `` para nao casar pedaco de palavra.
-Gasto (totais, recorrencia, previsao) = `amount < 0`, nao excluida e categoria fora de kind `transferencia` (Investimentos, Transferencia).
-`exclude=true` no override tira a transacao de totais, recorrencias e previsao (ex.: transferencia entre contas proprias). Transferencias entre contas do proprio usuario sao detectadas quando ha par (saida em A, entrada em B) com mesmo valor em ate 2 dias: marcar categoria `Transferencia` (kind `transferencia`) e excluir dos totais.
+Gasto (totais, recorrencia, previsao) = `amount < 0`, nao excluida e categoria fora de kind `transferencia` (Investimentos, Transferencia) e fora de kind `receita`.
+Receita (resumo) = `amount > 0`, nao excluida, categoria fora de kind `transferencia`. Por isso pagamento de fatura ("Pagamento recebido" no cartao, `Credit card payment` na Pluggy) e mapeado para Transferencia, nunca para Receita: a compra ja contou no cartao.
+`exclude=true` no override tira a transacao de totais, recorrencias e previsao (ex.: transferencia entre contas proprias). Transferencias entre contas do proprio usuario sao detectadas quando ha par (saida em A, entrada em B) com mesmo valor em ate 2 dias: marcar categoria `Transferencia` (kind `transferencia`) e excluir dos totais. O override automatico (`note = auto:transferencia interna`) e removido no recalculo seguinte se o par deixar de existir (valor corrigido por re-sync); o manual nunca e tocado.
+Regra seed que deixa de valer entra em `REGRAS_RETIRADAS` e e apagada no proximo seed, senao continua vencendo em bancos antigos.
+"Sem categoria" e cobrada no painel: `/summary` devolve `uncategorized {count, total}` dos gastos da janela, e a tela de transacoes aceita `?cat=<id>`. Ao trocar a categoria de uma transacao a tela oferece "Aplicar as parecidas": cria regra `^<description_norm escapada>$` com priority 1 (decisao explicita vence as regras base).
 
 Categorias base (seed), `kind` entre parenteses: Moradia (fixo), Contas e servicos (fixo), Assinaturas (fixo), Alimentacao (variavel), Mercado (variavel), Transporte (variavel), Saude (variavel), Educacao (fixo), Lazer (variavel), Compras (variavel), Viagem (variavel), Impostos e taxas (fixo), Investimentos (transferencia), Transferencia (transferencia), Receita (receita), Sem categoria (variavel).
 

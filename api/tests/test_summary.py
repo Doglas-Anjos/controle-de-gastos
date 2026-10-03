@@ -41,6 +41,7 @@ def test_resumo_por_categoria_e_mes(sessao):
         ("2026-06", "Mercado"): 300.0,
         ("2026-06", "Sem categoria"): 40.0,
     }
+    assert r["uncategorized"] == {"count": 1, "total": 40.0}
 
 
 def test_override_exclude_tira_do_resumo(sessao):

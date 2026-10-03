@@ -39,6 +39,7 @@ class TransactionOut(BaseModel):
     account_id: int
     date: date
     description: str
+    description_norm: str = ""  # base para "criar regra para parecidas" na tela
     amount: float  # negativo = gasto
     category: CategoryOut | None
     category_source: str  # override | regra | pluggy | nenhuma
@@ -61,11 +62,17 @@ class MonthlyByCategory(BaseModel):
     total: float  # gasto positivo
 
 
+class Uncategorized(BaseModel):
+    count: int
+    total: float
+
+
 class SummaryOut(BaseModel):
     months: list[str]
     by_category: list[MonthlyByCategory]
     total_by_month: dict[str, float]
     income_by_month: dict[str, float]
+    uncategorized: Uncategorized  # gastos da janela ainda em "Sem categoria", para o painel cobrar
 
 
 class RecurrenceOut(BaseModel):

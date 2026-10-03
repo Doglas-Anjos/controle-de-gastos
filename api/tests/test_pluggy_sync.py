@@ -8,7 +8,7 @@ from sqlalchemy import select
 
 from gastos.domain.models import Account, Transaction, TransactionOverride
 from gastos.ingest.pluggy_client import PluggyClient
-from gastos.ingest.pluggy_sync import sincronizar
+from gastos.ingest.pluggy_sync import reprocessar_pluggy, sincronizar
 
 BASE = "https://pluggy.test"
 FIX = Path(__file__).parent / "fixtures" / "pluggy"
@@ -105,3 +105,50 @@ def test_item_com_login_error_vira_erro_e_nao_derruba(sessao, client, httpx_mock
     r = sincronizar(sessao, client, [ruim, ITEM], None)
     assert r["items"] == 0 and len(r["errors"]) == 2
     assert "LOGIN_ERROR" in r["errors"][0] and ruim not in " ".join(r["errors"])
+
+
+def test_cartao_inverte_sinal_e_marca_pagamento_de_fatura(sessao, client, httpx_mock):
+    # No cartao a API manda compra (DEBIT) positiva e pagamento da fatura (CREDIT) negativo
+    pag = _j("transactions_page2.json")
+    compra = {**pag["results"][0], "accountId": CARTAO, "amount": 39.9}
+    compra["id"] = "00000000-0000-4000-8000-000000000014"
+    fatura = {
+        **compra,
+        "id": "00000000-0000-4000-8000-000000000015",
+        "amount": -300.0,
+        "type": "CREDIT",
+        "operationType": "PAGAMENTO_FATURA",
+        "category": "Transfers",
+        "creditCardMetadata": None,
+    }
+    _mock(httpx_mock, cartao={"results": [compra, fatura], "next": None})
+    sincronizar(sessao, client, [ITEM], date.today() - timedelta(days=10))
+    no_cartao = sessao.scalars(select(Transaction).where(Transaction.account.has(type="credit")))
+    txs = {t.external_id[-2:]: t for t in no_cartao}
+    assert txs["14"].amount == -39.9 and txs["14"].type == "DEBIT"
+    assert txs["15"].amount == 300.0 and txs["15"].pluggy_category == "Credit card payment"
+    # conta corrente mantem o sinal que veio
+    assert sessao.scalar(select(Transaction.amount).where(Transaction.account.has(type="checking"))) < 0
+
+
+def test_reprocessar_corrige_sinal_de_sync_antigo(sessao):
+    conta = Account(source="pluggy", bank="Banco Exemplo", type="credit", name="Cartao", external_id="c1")
+    sessao.add(conta)
+    sessao.flush()
+    raw = {"id": "t1", "amount": 50.0, "type": "DEBIT", "date": "2026-09-01T00:00:00.000Z"}
+    sessao.add(
+        Transaction(
+            account_id=conta.id,
+            external_id="t1",
+            date=date(2026, 9, 1),
+            description="LOJA",
+            description_norm="loja",
+            amount=50.0,
+            type="DEBIT",
+            raw_json=raw,
+        )
+    )
+    sessao.commit()
+    assert reprocessar_pluggy(sessao) == 1
+    assert sessao.scalar(select(Transaction.amount)) == -50.0
+    assert reprocessar_pluggy(sessao) == 0  # idempotente

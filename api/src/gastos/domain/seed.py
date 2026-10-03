@@ -47,20 +47,29 @@ REGRAS_BASE = [
         "Contas e servicos",
     ),
     (r"\b(?:aluguel|condominio|iptu)\b", "Moradia"),
-    (r"\b(?:rendimento|salario|pagamento recebido)\b", "Receita"),
+    # "Pagamento recebido" e o credito da fatura no cartao: e o dinheiro saindo da conta, nao receita.
+    (r"\b(?:pagamento recebido|pag(?:amento|to)\.? ?(?:de |da )?fatura)\b", "Transferencia"),
+    (r"\b(?:rendimento|salario|provento)\b", "Receita"),
     (r"\b(?:aplicacao|resgate|tesouro|cdb)\b", "Investimentos"),
 ]
+# Padroes que ja foram seed e deixaram de valer: apagados de bancos antigos, senao continuam vencendo.
+REGRAS_RETIRADAS = {r"\b(?:rendimento|salario|pagamento recebido)\b"}
 
 # Chaves sem acento e em minusculas (ver _chave). Inclui os nomes em ingles que a API devolve sem traducao.
 _PLUGGY = {
-    "Mercado": ["supermercado", "mercado", "groceries"],
+    "Mercado": ["supermercado", "supermercados", "mercado", "groceries", "supermarkets"],
     "Alimentacao": [
         "alimentacao",
         "restaurantes",
         "delivery de comida",
+        "bares",
+        "cafeterias",
         "food and drinks",
         "eating out",
         "food delivery",
+        "bars",
+        "coffee",
+        "fast food",
     ],
     "Transporte": [
         "transporte",
@@ -68,11 +77,32 @@ _PLUGGY = {
         "postos de gasolina",
         "estacionamentos",
         "transporte publico",
+        "automotivo",
+        "manutencao de veiculos",
+        "pedagios",
         "transportation",
         "gas stations",
+        "gas",
         "taxi and ride-hailing",
+        "parking",
+        "automotive",
+        "vehicle maintenance",
+        "vehicle ownership taxes and fees",
+        "tolls",
+        "bus",
+        "public transportation",
     ],
-    "Lazer": ["lazer", "entretenimento", "leisure", "entertainment"],
+    "Lazer": [
+        "lazer",
+        "entretenimento",
+        "cinema",
+        "academias",
+        "leisure",
+        "entertainment",
+        "gyms and fitness centers",
+        "games",
+        "sports",
+    ],
     "Assinaturas": [
         "servicos digitais",
         "streaming de video",
@@ -81,7 +111,19 @@ _PLUGGY = {
         "video streaming",
         "music streaming",
     ],
-    "Saude": ["saude", "farmacia", "health", "pharmacy"],
+    "Saude": [
+        "saude",
+        "farmacia",
+        "medicos",
+        "hospitais",
+        "plano de saude",
+        "health",
+        "pharmacy",
+        "doctors",
+        "hospital",
+        "health insurance",
+        "dentist",
+    ],
     "Contas e servicos": [
         "servicos",
         "telecomunicacoes",
@@ -93,10 +135,35 @@ _PLUGGY = {
         "telecommunications",
         "electricity",
         "water",
+        "mobile",
+        "celular",
+        "telefonia",
     ],
-    "Moradia": ["moradia", "aluguel", "housing", "rent"],
-    "Educacao": ["educacao", "education"],
-    "Compras": ["compras", "compras online", "eletronicos", "vestuario", "shopping", "online shopping"],
+    "Moradia": ["moradia", "aluguel", "condominio", "housing", "rent", "condominium"],
+    "Educacao": [
+        "educacao",
+        "universidade",
+        "escola",
+        "cursos",
+        "education",
+        "university",
+        "school",
+        "courses",
+    ],
+    "Compras": [
+        "compras",
+        "compras online",
+        "eletronicos",
+        "vestuario",
+        "livraria",
+        "utensilios domesticos",
+        "shopping",
+        "online shopping",
+        "electronics",
+        "clothing",
+        "bookstore",
+        "houseware",
+    ],
     "Viagem": [
         "viagem",
         "viagens",
@@ -106,10 +173,46 @@ _PLUGGY = {
         "accommodation",
         "airport and airlines",
     ],
-    "Impostos e taxas": ["impostos", "taxas bancarias", "tarifas bancarias", "taxes", "bank fees"],
-    "Receita": ["renda", "salario", "income", "salary"],
-    "Transferencia": ["transferencia mesma titularidade", "same person transfer"],
-    "Investimentos": ["investimentos", "investments"],
+    "Impostos e taxas": [
+        "impostos",
+        "taxas bancarias",
+        "tarifas bancarias",
+        "iof",
+        "imposto de renda",
+        "taxes",
+        "bank fees",
+        "tax on financial operations",
+        "income taxes",
+    ],
+    "Receita": [
+        "renda",
+        "salario",
+        "rendimentos",
+        "juros e dividendos",
+        "income",
+        "salary",
+        "proceeds interests and dividends",
+        "proceeds, interests and dividends",
+    ],
+    # Pagamento de fatura e transferencia entre contas proprias: dinheiro mudando de bolso, nem gasto
+    # nem receita (a compra ja contou no cartao).
+    "Transferencia": [
+        "transferencia mesma titularidade",
+        "pagamento de cartao de credito",
+        "pagamento de cartao",
+        "same person transfer",
+        "credit card payment",
+    ],
+    "Investimentos": [
+        "investimentos",
+        "investimento automatico",
+        "renda fixa",
+        "renda variavel",
+        "investments",
+        "automatic investment",
+        "fixed income",
+        "variable income",
+    ],
 }
 PLUGGY_PARA_BASE = {chave: base for base, chaves in _PLUGGY.items() for chave in chaves}
 
@@ -136,6 +239,9 @@ def semear_categorias(sessao: Session) -> dict[str, int]:
             novas += 1
     sessao.flush()
 
+    for r in sessao.scalars(select(CategoryRule).where(CategoryRule.pattern.in_(REGRAS_RETIRADAS))):
+        sessao.delete(r)
+    sessao.flush()
     padroes = set(sessao.scalars(select(CategoryRule.pattern)))
     regras = 0
     for i, (padrao, nome) in enumerate(REGRAS_BASE, 1):

@@ -4,7 +4,7 @@ export interface PluggyItemOut { id: number; connector_name: string | null; stat
 export interface AccountOut { id: number; bank: string; name: string; type: string; source: string; last_sync_at: string | null; hint?: string | null }
 export interface CategoryOut { id: number; name: string; kind: string; parent_id: number | null }
 export interface TransactionOut {
-  id: number; account_id: number; date: string; description: string; amount: number
+  id: number; account_id: number; date: string; description: string; description_norm: string; amount: number
   category: CategoryOut | null
   category_source: "override" | "regra" | "pluggy" | "nenhuma" | string
   excluded: boolean; installment: string | null; bill_month: string | null; recurrence_id: number | null
@@ -14,6 +14,7 @@ export interface MonthlyByCategory { month: string; category: CategoryOut | null
 export interface SummaryOut {
   months: string[]; by_category: MonthlyByCategory[]
   total_by_month: Record<string, number>; income_by_month: Record<string, number>
+  uncategorized: { count: number; total: number }
 }
 export type RecurrenceKind = "assinatura" | "parcela" | "detectada"
 export interface RecurrenceOut {

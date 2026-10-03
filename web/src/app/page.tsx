@@ -32,6 +32,9 @@ export default function Home() {
   const futuras = comDatas.filter((r) => r.next_due! >= hoje);
   const upcoming = (futuras.length ? futuras : comDatas).slice(0, 6);
   const pendentes = recs.filter(isPending);
+  // Atalho para categorizar: id da "Sem categoria" e o mes mais recente em que ela aparece.
+  const semLinhas = (s?.by_category ?? []).filter((x) => x.category?.name === "Sem categoria");
+  const semCategoria = { id: semLinhas[0]?.category?.id ?? "", mes: semLinhas.map((x) => x.month).sort().at(-1) ?? cur };
   const loadingSum = sum.loading && !s;
   const loadingRec = rec.loading && !rec.data;
 
@@ -57,13 +60,26 @@ export default function Home() {
                 ? { text: "gastou mais", tone: "danger", icon: "up" }
                 : { text: "gastou menos", tone: "accent", icon: "down" }}
               hint={prev ? `${formatMonth(prev)}: ${formatBRL(before)}` : undefined} />
-            <Kpi loading={loadingSum} label="Receita do mês" value={formatBRL(cur ? s?.income_by_month[cur] ?? 0 : 0)}
-              hint={cur && s ? `Saldo do mês: ${formatBRL((s.income_by_month[cur] ?? 0) - total)}` : undefined} />
+            <Kpi loading={loadingSum} label={cur ? `Receita em ${formatMonth(cur)}` : "Receita do mês"} value={formatBRL(cur ? s?.income_by_month[cur] ?? 0 : 0)}
+              hint={cur && s ? (emAndamento && a
+                ? `Mês em andamento · ${formatMonth(a)}: ${formatBRL(s.income_by_month[a] ?? 0)}`
+                : `Saldo do mês: ${formatBRL((s.income_by_month[cur] ?? 0) - total)}`) : undefined} />
             <Kpi loading={loadingRec} label="Recorrente no cartão" value={formatBRL(split.card.total)}
               hint={<span className="inline-flex items-center gap-1"><Icon name="card" size={12} style={{ color: PAY_COLOR.card }} />{splitHint(split.card)}</span>} />
             <Kpi loading={loadingRec} label="Recorrente fora do cartão" value={formatBRL(split.bank.total)}
               hint={<span className="inline-flex items-center gap-1"><Icon name="bank" size={12} style={{ color: PAY_COLOR.bank }} />{splitHint(split.bank)}</span>} />
           </div>
+
+          {s && s.uncategorized.count > 0 && (
+            <div className="flex flex-wrap items-center gap-3 rounded-[14px] bg-warn-soft px-4 py-3 text-sm">
+              <Icon name="alert" size={18} className="shrink-0 text-warn-text" />
+              <p className="min-w-0 flex-1 text-ink-2">
+                <span className="font-medium text-ink">{s.uncategorized.count} {s.uncategorized.count === 1 ? "lançamento" : "lançamentos"} sem categoria</span>
+                {" "}somando {formatBRL(s.uncategorized.total)} nos últimos 12 meses. Categorize para o painel refletir o que você realmente gasta.
+              </p>
+              <Link href={`/transacoes?cat=${semCategoria.id}&mes=${semCategoria.mes}`} className={btn2}><Icon name="rules" size={16} />Categorizar</Link>
+            </div>
+          )}
 
           <Explorer />
 

@@ -135,6 +135,11 @@ def recategorizar_tudo(sessao: Session) -> dict[str, int]:
                 )
             )
             novos += 1
+    # Par automatico que deixou de existir (sinal corrigido, transacao atualizada) sai junto, senao a
+    # transacao fica excluida dos totais para sempre por uma heuristica que ja nao vale.
+    for o in overrides.values():
+        if o.note == NOTA_TRANSFERENCIA and o.transaction_id not in pares:
+            sessao.delete(o)
     sessao.commit()
 
     fontes = Counter(fonte for _, fonte, _ in categorias_efetivas(sessao, txs).values())

@@ -11,15 +11,23 @@ from gastos.domain.categorize import categoria_out, categorias_efetivas, eh_gast
 from gastos.domain.forecast import mes_str
 from gastos.domain.models import Transaction
 from gastos.domain.recurrence import somar_meses
+from gastos.domain.seed import SEM_CATEGORIA
 
 
 def resumo_mensal(sessao: Session, meses: int = 12) -> dict:
     """Ultimos `meses` meses terminando no mes da transacao mais recente (meses vazios aparecem com 0).
     Gasto segue eh_gasto (sem excluidas nem kind=transferencia). Receita = entradas nao excluidas fora de
     kind=transferencia, para resgate de investimento e pagamento de fatura nao inflarem a renda."""
+    vazio = {"count": 0, "total": 0.0}
     ultima = sessao.scalar(select(func.max(Transaction.date)))
     if ultima is None:
-        return {"months": [], "by_category": [], "total_by_month": {}, "income_by_month": {}}
+        return {
+            "months": [],
+            "by_category": [],
+            "total_by_month": {},
+            "income_by_month": {},
+            "uncategorized": vazio,
+        }
     inicio = somar_meses(ultima.replace(day=1), -(meses - 1))
     lista = [mes_str(somar_meses(inicio, k)) for k in range(meses)]
 
@@ -27,6 +35,7 @@ def resumo_mensal(sessao: Session, meses: int = 12) -> dict:
     efetivas = categorias_efetivas(sessao, txs)
     gastos, cats = defaultdict(float), {}
     receita = dict.fromkeys(lista, 0.0)
+    sem = dict(vazio)
     for t in txs:
         cat, _, excluida = efetivas[t.id]
         m = mes_str(t.date)
@@ -34,6 +43,9 @@ def resumo_mensal(sessao: Session, meses: int = 12) -> dict:
             chave = cat.id if cat else None
             cats[chave] = cat
             gastos[(m, chave)] -= t.amount
+            if cat is None or cat.name == SEM_CATEGORIA:
+                sem["count"] += 1
+                sem["total"] -= t.amount
         elif t.amount > 0 and not excluida and (cat is None or cat.kind != "transferencia"):
             receita[m] += t.amount
 
@@ -49,4 +61,5 @@ def resumo_mensal(sessao: Session, meses: int = 12) -> dict:
         "by_category": by_category,
         "total_by_month": {m: round(v, 2) for m, v in total.items()},
         "income_by_month": {m: round(v, 2) for m, v in receita.items()},
+        "uncategorized": {"count": sem["count"], "total": round(sem["total"], 2)},
     }

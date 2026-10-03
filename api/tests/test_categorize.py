@@ -1,7 +1,7 @@
 from datetime import date
 from types import SimpleNamespace as NS
 
-from sqlalchemy import select
+from sqlalchemy import func, select
 
 from gastos.domain.categorize import (
     categoria_efetiva,
@@ -118,3 +118,16 @@ def test_override_manual_nao_e_sobrescrito(sessao):
     recategorizar_tudo(sessao)
     o = sessao.get(TransactionOverride, t.id)
     assert (o.category_id, o.exclude, o.note) == (lazer.id, False, "minha")
+
+
+def test_par_automatico_e_desfeito_quando_o_par_deixa_de_existir(sessao):
+    carregar(sessao, _dados_transferencia())
+    semear_categorias(sessao)
+    recategorizar_tudo(sessao)
+    assert sessao.scalar(select(func.count()).select_from(TransactionOverride)) == 2
+    # um re-sync muda o valor de um lado (ex.: sinal corrigido): o par nao existe mais
+    t = sessao.scalar(select(Transaction).where(Transaction.description == "PAGAMENTO RECEBIDO"))
+    t.amount = -1500.0
+    sessao.commit()
+    assert recategorizar_tudo(sessao)["transferencias"] == 0
+    assert sessao.scalar(select(func.count()).select_from(TransactionOverride)) == 0

@@ -4,9 +4,10 @@ import { useEffect, useRef, useState } from "react";
 import { Icon, type IconName } from "@/components/Icon";
 import { useToast } from "@/components/Toast";
 import { Async, btn, btn2, btnGhost, Chip, EmptyState, iconBtn, input, PageHeader, Panel, Skeleton } from "@/components/ui";
-import { deleteOverride, getAccounts, getCategories, getSummary, getTransactions, putOverride } from "@/lib/api";
+import { createRule, deleteOverride, getAccounts, getCategories, getSummary, getTransactions, putOverride } from "@/lib/api";
 import { categoryColor } from "@/lib/colors";
 import { catLabel, currentMonth, formatBRL, formatDayMonth, formatMonthLong, shiftMonth } from "@/lib/format";
+import { escapeRegex } from "@/lib/regex";
 import type { TransactionOut } from "@/lib/types";
 import { useApi } from "@/lib/useApi";
 import { useDebounced } from "@/lib/useDebounced";
@@ -85,7 +86,11 @@ function Lista({ inicial }: { inicial: string }) {
     u.searchParams.set("mes", month);
     window.history.replaceState(window.history.state, "", u);
   }, [month]);
-  const [cat, setCat] = useState<number | "">("");
+  // ?cat=<id> abre ja filtrado (o painel manda para ca o "sem categoria").
+  const [cat, setCat] = useState<number | "">(() => {
+    const c = Number(new URLSearchParams(window.location.search).get("cat"));
+    return c > 0 ? c : "";
+  });
   const [acc, setAcc] = useState<number | "">("");
   const [busca, setBusca] = useState("");
   const q = useDebounced(busca.trim());
@@ -104,11 +109,12 @@ function Lista({ inicial }: { inicial: string }) {
 
   // PUT substitui o override inteiro: sempre reenvia o que ja existia (categoria manual e exclusao).
   const manual = (t: TransactionOut) => (t.category_source === "override" ? t.category?.id ?? null : null);
-  const run = async (t: TransactionOut, fn: () => Promise<unknown>, ok: string, undo?: () => Promise<unknown>) => {
+  type Acao = { label: string; run: () => Promise<unknown> };
+  const run = async (t: TransactionOut, fn: () => Promise<unknown>, ok: string, acao?: Acao) => {
     setBusy(t.id);
     try {
       await fn();
-      toast(ok, undo && { action: { label: "Desfazer", run: () => undo().then(tx.reload, (e: Error) => toast(e.message, { tone: "error" })) } });
+      toast(ok, acao && { action: { label: acao.label, run: () => acao.run().then(tx.reload, (e: Error) => toast(e.message, { tone: "error" })) } });
       tx.reload();
     } catch (e) {
       toast((e as Error).message, { tone: "error" });
@@ -117,10 +123,17 @@ function Lista({ inicial }: { inicial: string }) {
     }
   };
   const restaurar = (t: TransactionOut) => (manual(t) !== null ? putOverride(t.id, { category_id: manual(t), exclude: false }) : deleteOverride(t.id));
+  // Regra a partir da transacao: a descricao normalizada inteira, escapada e ancorada, para pegar so o
+  // mesmo comerciante ou pessoa. Prioridade 1 porque a decisao explicita vence as regras base.
+  const regraParecidas = (t: TransactionOut, id: number): Acao | undefined => t.description_norm ? {
+    label: "Aplicar às parecidas",
+    run: () => createRule({ pattern: `^${escapeRegex(t.description_norm)}$`, category_id: id, priority: 1 })
+      .then(() => toast("Regra criada: vale para todos os lançamentos com essa descrição")),
+  } : undefined;
   const setCategoria = (t: TransactionOut, id: number) =>
-    run(t, () => putOverride(t.id, { category_id: id, exclude: t.excluded }), `Categoria alterada para ${catLabel(cats.find((c) => c.id === id)?.name)}`);
+    run(t, () => putOverride(t.id, { category_id: id, exclude: t.excluded }), `Categoria alterada para ${catLabel(cats.find((c) => c.id === id)?.name)}`, regraParecidas(t, id));
   const excluir = (t: TransactionOut) =>
-    run(t, () => putOverride(t.id, { category_id: manual(t), exclude: true }), "Transação excluída dos totais", () => restaurar(t));
+    run(t, () => putOverride(t.id, { category_id: manual(t), exclude: true }), "Transação excluída dos totais", { label: "Desfazer", run: () => restaurar(t) });
   const voltarAuto = (t: TransactionOut) =>
     run(t, () => (t.excluded ? putOverride(t.id, { category_id: null, exclude: true }) : deleteOverride(t.id)), "Categoria automática restaurada");
 

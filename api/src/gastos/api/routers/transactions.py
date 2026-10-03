@@ -52,6 +52,7 @@ def listar(
                 account_id=t.account_id,
                 date=t.date,
                 description=t.description,
+                description_norm=t.description_norm,
                 amount=t.amount,
                 category=categoria_out(cat),
                 category_source=fonte,

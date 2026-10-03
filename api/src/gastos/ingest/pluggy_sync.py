@@ -10,7 +10,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from gastos.core.config import settings
-from gastos.domain.models import PluggyItem
+from gastos.domain.models import Account, PluggyItem, Transaction
 from gastos.ingest.bancos import inferir_banco, montar_hint
 from gastos.ingest.pluggy_client import PluggyClient, PluggyError
 from gastos.ingest.upsert import obter_ou_criar_conta, upsert_transacoes
@@ -27,22 +27,52 @@ def _tipo_conta(conta: dict) -> str | None:
     return None
 
 
-def _registro(t: dict, meses_fatura: dict[str, str]) -> dict:
+PAGAMENTO_CARTAO = "Credit card payment"  # categoria da Pluggy; mapeada para Transferencia no seed
+_OPERACAO_PAGAMENTO = {"PAGAMENTO", "PAGAMENTO_FATURA"}
+
+
+def _registro(t: dict, meses_fatura: dict[str, str], cartao: bool = False) -> dict:
+    """Sinal vem do `type`, nao do `amount`: em conta BANK a Pluggy manda debito negativo, mas em conta
+    CREDIT manda compra (DEBIT) positiva e pagamento da fatura (CREDIT) negativo. Aqui tudo vira
+    "negativo = saida". No cartao, entrada com operationType de pagamento e a fatura sendo paga: recebe
+    a categoria "Credit card payment" (kind transferencia) para nao contar como receita."""
     meta = t.get("creditCardMetadata") or {}
     valor = float(t["amount"])
+    tipo = t.get("type") or ("DEBIT" if valor < 0 else "CREDIT")
+    categoria = t.get("category")
+    if cartao and tipo == "CREDIT" and t.get("operationType") in _OPERACAO_PAGAMENTO:
+        categoria = PAGAMENTO_CARTAO
     return {
         "external_id": t["id"],
         "date": date.fromisoformat(t["date"][:10]),
         "description": t.get("description") or "",
-        "amount": valor,
-        "type": t.get("type") or ("DEBIT" if valor < 0 else "CREDIT"),
+        "amount": -abs(valor) if tipo == "DEBIT" else abs(valor),
+        "type": tipo,
         "status": t.get("status") or "POSTED",
-        "pluggy_category": t.get("category"),
+        "pluggy_category": categoria,
         "installment_n": meta.get("installmentNumber"),
         "installment_total": meta.get("totalInstallments"),
         "bill_month": meses_fatura.get(meta.get("billId")),
         "raw_json": t,
     }
+
+
+def reprocessar_pluggy(sessao: Session) -> int:
+    """Reaplica `_registro` ao raw_json guardado: corrige sinal e categoria de pagamento de fatura nas
+    transacoes sincronizadas antes de a regra existir, sem backfill na API (a janela do sync e curta).
+    bill_month fica como esta porque a fatura nao esta no raw_json. Devolve quantas mudaram."""
+    stmt = (
+        select(Transaction).join(Account).where(Account.source == "pluggy", Transaction.raw_json.is_not(None))
+    )
+    n = 0
+    for t in sessao.scalars(stmt):
+        r = _registro(t.raw_json, {}, t.account.type == "credit")
+        novo = (r["amount"], r["type"], r["pluggy_category"])
+        if novo != (t.amount, t.type, t.pluggy_category):
+            t.amount, t.type, t.pluggy_category = novo
+            n += 1
+    sessao.commit()
+    return n
 
 
 def itens_para_sync(sessao: Session) -> list[str]:
@@ -89,7 +119,10 @@ def sincronizar(sessao: Session, client: PluggyClient, item_ids: list[str], desd
                     faturas = {
                         b["id"]: b["dueDate"][:7] for b in client.bills(conta["id"]) if b.get("dueDate")
                     }
-                registros = [_registro(t, faturas) for t in client.transactions(conta["id"], ini, hoje)]
+                registros = [
+                    _registro(t, faturas, tipo == "credit")
+                    for t in client.transactions(conta["id"], ini, hoje)
+                ]
                 n, a = upsert_transacoes(sessao, acct, registros)
                 acct.last_sync_at = datetime.now(UTC).replace(tzinfo=None)
                 sessao.commit()
@@ -103,6 +136,7 @@ def sincronizar(sessao: Session, client: PluggyClient, item_ids: list[str], desd
                 reg.status = "ERRO"
                 sessao.commit()
             res["errors"].append(f"{rotulo}: {e}")
+    reprocessar_pluggy(sessao)
     log.info(
         "sync: %d itens, %d contas, %d novas, %d atualizadas, %d erros",
         res["items"],
