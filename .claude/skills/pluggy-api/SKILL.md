@@ -23,7 +23,7 @@ Fonte viva: MCP `pluggy-docs` (sem chave) ou https://docs.pluggy.ai/pt/reference
 |---|---|
 | `GET /items/{id}` | status da conexao (`status`: UPDATED, OUTDATED, LOGIN_ERROR, WAITING_USER_INPUT...) |
 | `GET /accounts?itemId=` | contas do item. `type`: `BANK` ou `CREDIT`. `subtype`: CHECKING_ACCOUNT, SAVINGS_ACCOUNT, CREDIT_CARD |
-| `GET /transactions?accountId=&from=YYYY-MM-DD&to=YYYY-MM-DD&page=&pageSize=500` | paginado (`results`, `page`, `totalPages`). Janela de ate 90 dias por chamada |
+| `GET /v2/transactions?accountId=&dateFrom=YYYY-MM-DD&dateTo=YYYY-MM-DD` | cursor: resposta `{results, next}`; `next` e a query string pronta da proxima pagina (`GET /v2/transactions{next}`), `null` no fim. **O antigo `GET /transactions` (page/totalPages) responde 410 desde 2026; nao use** |
 | `GET /bills?accountId=` | faturas do cartao. `totalAmount` da fatura fechada e **autoritativo** (vale mais que a soma das transacoes) |
 | `GET /categories` | 50+ categorias PT-BR com `id`, `description`, `parentId` |
 

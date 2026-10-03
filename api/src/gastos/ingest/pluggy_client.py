@@ -8,12 +8,11 @@ from __future__ import annotations
 
 import time
 from collections.abc import Iterator
-from datetime import date, timedelta
+from datetime import date
 
 import httpx
 
 _VALIDADE_S = 110 * 60
-_JANELA_DIAS = 90
 
 
 class PluggyError(Exception):
@@ -76,29 +75,19 @@ class PluggyClient:
     def accounts(self, item_id: str) -> list[dict]:
         return self._get("/accounts", "/accounts", {"itemId": item_id})["results"]
 
-    def transactions(self, account_id: str, from_: date, to: date, page_size: int = 500) -> Iterator[dict]:
-        """A API limita a janela a 90 dias por chamada; fatiamos aqui para o chamador nao se preocupar."""
-        ini = from_
-        while ini <= to:
-            fim = min(ini + timedelta(days=_JANELA_DIAS - 1), to)
-            pagina = 1
-            while True:
-                d = self._get(
-                    "/transactions",
-                    "/transactions",
-                    {
-                        "accountId": account_id,
-                        "from": ini.isoformat(),
-                        "to": fim.isoformat(),
-                        "page": pagina,
-                        "pageSize": page_size,
-                    },
-                )
-                yield from d["results"]
-                if pagina >= d.get("totalPages", 1):
-                    break
-                pagina += 1
-            ini = fim + timedelta(days=1)
+    def transactions(self, account_id: str, from_: date, to: date) -> Iterator[dict]:
+        """GET /v2/transactions com paginacao por cursor. O antigo GET /transactions (page/totalPages)
+        responde 410 desde 2026. `next` ja vem como query string pronta ("?accountId=...&after=..."):
+        basta anexar ao caminho; null encerra."""
+        d = self._get(
+            "/v2/transactions",
+            "/v2/transactions",
+            {"accountId": account_id, "dateFrom": from_.isoformat(), "dateTo": to.isoformat()},
+        )
+        yield from d["results"]
+        while d.get("next"):
+            d = self._get(f"/v2/transactions{d['next']}", "/v2/transactions")
+            yield from d["results"]
 
     def bills(self, account_id: str) -> list[dict]:
         return self._get("/bills", "/bills", {"accountId": account_id})["results"]

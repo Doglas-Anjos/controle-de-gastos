@@ -49,24 +49,24 @@ def test_renova_apos_110_min(httpx_mock, client):
     assert [r.method for r in httpx_mock.get_requests()].count("POST") == 2
 
 
-def test_transactions_pagina_e_fatia_em_90_dias(httpx_mock, client):
+def test_transactions_v2_segue_cursor_next(httpx_mock, client):
     _auth(httpx_mock)
     httpx_mock.add_response(
-        url=re.compile(rf"{BASE}/transactions\?.*page=1"),
-        json={"results": [{"id": "a"}], "page": 1, "totalPages": 2},
+        url=re.compile(rf"{BASE}/v2/transactions\?(?!.*after=)"),
+        json={"results": [{"id": "a"}], "next": "?accountId=acc&after=c2"},
         is_reusable=True,
     )
     httpx_mock.add_response(
-        url=re.compile(rf"{BASE}/transactions\?.*page=2"),
-        json={"results": [{"id": "b"}], "page": 2, "totalPages": 2},
+        url=f"{BASE}/v2/transactions?accountId=acc&after=c2",
+        json={"results": [{"id": "b"}], "next": None},
         is_reusable=True,
     )
-    out = list(client.transactions("acc", date(2026, 1, 1), date(2026, 6, 1), page_size=50))
-    assert len(out) == 4  # 152 dias = 2 janelas x 2 paginas x 1 item
-    trans = [r for r in httpx_mock.get_requests() if "/transactions" in r.url.path]
-    assert len(trans) == 4
-    assert trans[0].url.params["from"] == "2026-01-01" and trans[0].url.params["to"] == "2026-03-31"
-    assert trans[2].url.params["from"] == "2026-04-01" and trans[0].url.params["pageSize"] == "50"
+    out = list(client.transactions("acc", date(2026, 1, 1), date(2026, 6, 1)))
+    assert [t["id"] for t in out] == ["a", "b"]
+    trans = [r for r in httpx_mock.get_requests() if r.url.path == "/v2/transactions"]
+    assert len(trans) == 2
+    assert trans[0].url.params["dateFrom"] == "2026-01-01" and trans[0].url.params["dateTo"] == "2026-06-01"
+    assert trans[1].url.params["after"] == "c2" and "dateFrom" not in trans[1].url.params
 
 
 def test_erro_nao_vaza_segredo(httpx_mock, client):

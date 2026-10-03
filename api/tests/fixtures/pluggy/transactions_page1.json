@@ -1,3 +1,35 @@
-{"total":3,"totalPages":2,"page":1,"results":[
-{"id":"00000000-0000-4000-8000-000000000011","description":"MERCADO EXEMPLO","descriptionRaw":null,"currencyCode":"BRL","amount":-152.3,"date":"2026-09-20T00:00:00.000Z","category":"Supermarkets","categoryId":"01010000","balance":null,"accountId":"00000000-0000-4000-8000-000000000002","providerCode":null,"status":"POSTED","paymentData":null,"type":"DEBIT","creditCardMetadata":null},
-{"id":"00000000-0000-4000-8000-000000000012","description":"SALARIO EMPRESA EXEMPLO","currencyCode":"BRL","amount":3500.0,"date":"2026-09-25T00:00:00.000Z","category":"Salary","categoryId":"01000000","accountId":"00000000-0000-4000-8000-000000000002","status":"POSTED","type":"CREDIT","creditCardMetadata":null}]}
+{
+"results": [
+{
+"id": "00000000-0000-4000-8000-000000000011",
+"description": "MERCADO EXEMPLO",
+"descriptionRaw": null,
+"currencyCode": "BRL",
+"amount": -152.3,
+"date": "2026-09-20T00:00:00.000Z",
+"category": "Supermarkets",
+"categoryId": "01010000",
+"balance": null,
+"accountId": "00000000-0000-4000-8000-000000000002",
+"providerCode": null,
+"status": "POSTED",
+"paymentData": null,
+"type": "DEBIT",
+"creditCardMetadata": null
+},
+{
+"id": "00000000-0000-4000-8000-000000000012",
+"description": "SALARIO EMPRESA EXEMPLO",
+"currencyCode": "BRL",
+"amount": 3500.0,
+"date": "2026-09-25T00:00:00.000Z",
+"category": "Salary",
+"categoryId": "01000000",
+"accountId": "00000000-0000-4000-8000-000000000002",
+"status": "POSTED",
+"type": "CREDIT",
+"creditCardMetadata": null
+}
+],
+"next": "?accountId=00000000-0000-4000-8000-000000000002&after=cursor-pagina-2"
+}

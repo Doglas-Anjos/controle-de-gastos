@@ -33,15 +33,20 @@ def _mock(httpx_mock, cartao=None):
     httpx_mock.add_response(url=re.compile(rf"{BASE}/items/"), json=_j("item.json"), is_reusable=True)
     httpx_mock.add_response(url=re.compile(rf"{BASE}/accounts"), json=_j("accounts.json"), is_reusable=True)
     httpx_mock.add_response(url=re.compile(rf"{BASE}/bills"), json=_j("bills.json"), is_reusable=True)
-    for n in (1, 2):
-        httpx_mock.add_response(
-            url=re.compile(rf"{BASE}/transactions\?.*{BANCO}.*page={n}"),
-            json=_j(f"transactions_page{n}.json"),
-            is_reusable=True,
-        )
+    # v2: primeira pagina sem `after`; a segunda e chamada com a query string devolvida em `next`
     httpx_mock.add_response(
-        url=re.compile(rf"{BASE}/transactions\?.*{CARTAO}"),
-        json=cartao or {"results": [], "page": 1, "totalPages": 1},
+        url=re.compile(rf"{BASE}/v2/transactions\?(?!.*after=).*{BANCO}"),
+        json=_j("transactions_page1.json"),
+        is_reusable=True,
+    )
+    httpx_mock.add_response(
+        url=re.compile(rf"{BASE}/v2/transactions\?accountId={BANCO}&after=cursor-pagina-2"),
+        json=_j("transactions_page2.json"),
+        is_reusable=True,
+    )
+    httpx_mock.add_response(
+        url=re.compile(rf"{BASE}/v2/transactions\?.*{CARTAO}"),
+        json=cartao or {"results": [], "next": None},
         is_reusable=True,
     )
 
@@ -67,14 +72,18 @@ def test_sync_completo_e_idempotente(sessao, client, httpx_mock):
 def test_janela_padrao_primeiro_sync_90_dias(sessao, client, httpx_mock):
     _mock(httpx_mock)
     sincronizar(sessao, client, [ITEM], None)
-    de = min(r.url.params["from"] for r in httpx_mock.get_requests() if r.url.path == "/transactions")
+    de = min(
+        r.url.params["dateFrom"]
+        for r in httpx_mock.get_requests()
+        if r.url.path == "/v2/transactions" and "dateFrom" in r.url.params  # paginas via `next` nao repetem
+    )
     assert de == (date.today() - timedelta(days=90)).isoformat()
 
 
 def test_cartao_mapeia_fatura(sessao, client, httpx_mock):
     pag = _j("transactions_page2.json")
     pag["results"][0]["accountId"] = CARTAO
-    pag["totalPages"] = 1
+    pag["next"] = None
     pag["results"][0]["id"] = "00000000-0000-4000-8000-000000000014"
     _mock(httpx_mock, cartao=pag)
     sincronizar(sessao, client, [ITEM], date.today() - timedelta(days=10))
