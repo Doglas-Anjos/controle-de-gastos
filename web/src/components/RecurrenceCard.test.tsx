@@ -27,3 +27,9 @@ test("sem botoes quando ja decidida", () => {
   expect(screen.queryByText("Confirmar")).toBeNull();
   expect(screen.getByText("87%")).toBeTruthy();
 });
+
+test("parcela mostra progresso pago/total", () => {
+  render(<RecurrenceCard rec={{ ...rec, kind: "parcela", occurrences: 6, next_due: "2026-04-10", ends_at: "2026-09-10" }} />);
+  expect(screen.getByText("6/12")).toBeTruthy();
+  expect(screen.getByRole("meter").getAttribute("aria-valuenow")).toBe("50");
+});

@@ -6,6 +6,25 @@ marca como recorrentes), projeta os proximos meses e pede dicas de economia a um
 
 > Seus dados ficam na sua maquina. O codigo e publico; o `.env` e a pasta `data/` nunca sobem para o git.
 
+![Visao geral](docs/screenshots/visao-geral.png)
+
+<details>
+<summary>Mais telas (dados sinteticos do modo demo)</summary>
+
+| Transacoes | Recorrencias |
+|---|---|
+| ![Transacoes](docs/screenshots/transacoes.png) | ![Recorrencias](docs/screenshots/recorrencias.png) |
+
+| Previsao | Dicas |
+|---|---|
+| ![Previsao](docs/screenshots/previsao.png) | ![Dicas](docs/screenshots/dicas.png) |
+
+| Importar | Tema escuro |
+|---|---|
+| ![Importar](docs/screenshots/importar.png) | ![Tema escuro](docs/screenshots/visao-geral-escuro.png) |
+
+</details>
+
 ## Como funciona
 
 ```
@@ -46,8 +65,10 @@ OFX / CSV exportados ───────┘          │
 ## Estado
 
 - Backend: ingestao OFX/CSV e Pluggy, categorias em camadas, recorrencias, previsao e dicas, com 74 testes.
-- Frontend: 7 telas (visao geral, transacoes, recorrencias, previsao, dicas, importar, regras).
-- Ainda sem screenshots; serao gerados a partir do modo demo.
+- Frontend: 7 telas (visao geral, transacoes, recorrencias, previsao, dicas, importar, regras), tema claro
+  e escuro, responsivo.
+- Screenshots em `docs/screenshots/`, gerados do modo demo com Playwright
+  (`npx playwright screenshot --viewport-size=1440,900 http://localhost:3000/ docs/screenshots/visao-geral.png`).
 
 ## Privacidade e LGPD
 

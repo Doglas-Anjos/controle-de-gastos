@@ -10,9 +10,15 @@ export const metadata: Metadata = {
   description: "Controle financeiro pessoal",
 };
 
+// Aplica o tema salvo antes da primeira pintura para nao piscar claro/escuro.
+const THEME_SCRIPT = `try{var t=localStorage.getItem("tema");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}`;
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="pt-BR" className={`${geist.variable} antialiased`}>
+    <html lang="pt-BR" className={`${geist.variable} antialiased`} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
+      </head>
       <body><Shell>{children}</Shell></body>
     </html>
   );
