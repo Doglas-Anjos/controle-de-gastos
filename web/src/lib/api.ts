@@ -48,7 +48,8 @@ export const deleteCategory = (id: number) => req<unknown>(`/categories/${id}`, 
 export const updateAccount = (id: number, body: { bank?: string; name?: string }) =>
   req<T.AccountOut>(`/accounts/${id}`, json("PUT", body));
 export const getTransactions = (p: {
-  month?: string; category_id?: number | ""; account_id?: number | ""; q?: string; page?: number; page_size?: number
+  month?: string; date_from?: string; date_to?: string; category_id?: number | ""; account_id?: number | ""
+  q?: string; page?: number; page_size?: number
 }) => req<T.Page>("/transactions" + qs(p));
 export const putOverride = (id: number, body: T.OverrideIn) => req<unknown>(`/transactions/${id}/override`, json("PUT", body));
 export const deleteOverride = (id: number) => req<unknown>(`/transactions/${id}/override`, { method: "DELETE" });

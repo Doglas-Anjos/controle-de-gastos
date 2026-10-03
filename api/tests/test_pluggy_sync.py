@@ -121,12 +121,21 @@ def test_cartao_inverte_sinal_e_marca_pagamento_de_fatura(sessao, client, httpx_
         "category": "Transfers",
         "creditCardMetadata": None,
     }
-    _mock(httpx_mock, cartao={"results": [compra, fatura], "next": None})
+    dolar = {
+        **compra,
+        "id": "00000000-0000-4000-8000-000000000016",
+        "amount": 24.52,
+        "currencyCode": "USD",
+        "amountInAccountCurrency": 131.07,
+        "creditCardMetadata": None,
+    }
+    _mock(httpx_mock, cartao={"results": [compra, fatura, dolar], "next": None})
     sincronizar(sessao, client, [ITEM], date.today() - timedelta(days=10))
     no_cartao = sessao.scalars(select(Transaction).where(Transaction.account.has(type="credit")))
     txs = {t.external_id[-2:]: t for t in no_cartao}
     assert txs["14"].amount == -39.9 and txs["14"].type == "DEBIT"
     assert txs["15"].amount == 300.0 and txs["15"].pluggy_category == "Credit card payment"
+    assert txs["16"].amount == -131.07  # compra em dolar entra pelo valor em reais
     # conta corrente mantem o sinal que veio
     assert sessao.scalar(select(Transaction.amount).where(Transaction.account.has(type="checking"))) < 0
 

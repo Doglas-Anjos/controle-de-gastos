@@ -131,3 +131,23 @@ def test_par_automatico_e_desfeito_quando_o_par_deixa_de_existir(sessao):
     sessao.commit()
     assert recategorizar_tudo(sessao)["transferencias"] == 0
     assert sessao.scalar(select(func.count()).select_from(TransactionOverride)) == 0
+
+
+def test_mesma_titularidade_casa_nome_do_titular_em_pix_e_ted(sessao, monkeypatch):
+    from gastos.domain.categorize import detectar_mesma_titularidade, settings
+
+    def tx(i, desc, cat):
+        return NS(id=i, description=desc, description_norm=desc.lower(), pluggy_category=cat)
+
+    txs = [
+        tx(1, "PIX RECEBIDO MARIA DA SILVA EXEMPLO", "Transfers"),
+        tx(2, "TED MARIA SILVA EXEMPLO", None),
+        tx(3, "LOJA MARIA SILVA EXEMPLO", "Shopping"),
+        tx(4, "PIX ENVIADO JOAO EXEMPLO", "Transfer - PIX"),
+    ]
+    assert detectar_mesma_titularidade(txs, ["Maria Silva Exemplo"]) == {1, 2}
+    assert detectar_mesma_titularidade(txs, []) == set()
+    monkeypatch.setattr(settings, "gastos_titular", "Maria Silva Exemplo")
+    carregar(sessao, _dados_transferencia())
+    semear_categorias(sessao)
+    assert "mesma_titularidade" in recategorizar_tudo(sessao)

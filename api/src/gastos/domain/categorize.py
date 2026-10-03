@@ -13,7 +13,9 @@ from functools import lru_cache
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
+from gastos.core.config import settings
 from gastos.domain.models import Category, CategoryRule, Transaction, TransactionOverride
+from gastos.domain.normalize import _sem_acento
 from gastos.domain.seed import SEM_CATEGORIA, mapear_categoria_pluggy, semear_categorias
 
 NOTA_TRANSFERENCIA = "auto:transferencia interna"
@@ -95,6 +97,31 @@ def detectar_transferencias_internas(transacoes) -> set[int]:
     return pares
 
 
+_TRANSFERENCIA_TXT = re.compile(r"\b(?:pix|ted|doc|transf\w*)\b", re.IGNORECASE)
+
+
+def detectar_mesma_titularidade(transacoes, nomes: list[str]) -> set[int]:
+    """Ids de Pix/TED cuja contraparte e o proprio titular: dinheiro indo para outra conta dele (num
+    banco nao conectado, ou conectado mas sem par no prazo). Casa quando todas as palavras com 3+
+    letras de um nome configurado aparecem inteiras na descricao normalizada, em qualquer ordem,
+    porque cada banco escreve o nome de um jeito (com ou sem o nome do meio). Exige pista de
+    transferencia no texto ou na categoria da Pluggy para um comerciante homonimo nao entrar."""
+    chaves = [{p for p in _sem_acento(n).lower().split() if len(p) >= 3} for n in nomes]
+    chaves = [c for c in chaves if c]
+    if not chaves:
+        return set()
+    achados = set()
+    for t in transacoes:
+        pluggy = (t.pluggy_category or "").lower()
+        if not (_TRANSFERENCIA_TXT.search(t.description or "") or "transfer" in pluggy):
+            continue
+        bruta = _sem_acento(t.description or "").lower()
+        palavras = set((t.description_norm or "").split()) | set(bruta.split())
+        if any(c <= palavras for c in chaves):
+            achados.add(t.id)
+    return achados
+
+
 def _contexto(sessao: Session):
     overrides = {o.transaction_id: o for o in sessao.scalars(select(TransactionOverride))}
     regras = list(sessao.scalars(select(CategoryRule).order_by(CategoryRule.priority, CategoryRule.id)))
@@ -125,7 +152,8 @@ def recategorizar_tudo(sessao: Session) -> dict[str, int]:
     overrides = {o.transaction_id: o for o in sessao.scalars(select(TransactionOverride))}
     candidatas = [t for t in txs if t.id not in overrides or overrides[t.id].note == NOTA_TRANSFERENCIA]
 
-    pares = detectar_transferencias_internas(candidatas)
+    proprias = detectar_mesma_titularidade(candidatas, settings.nomes_titular)
+    pares = detectar_transferencias_internas(candidatas) | proprias
     novos = 0
     for tid in pares:
         if tid not in overrides:
@@ -146,6 +174,7 @@ def recategorizar_tudo(sessao: Session) -> dict[str, int]:
     return {
         "transacoes": len(txs),
         "transferencias": len(pares),
+        "mesma_titularidade": len(proprias),
         "overrides_novos": novos,
         **{f: fontes.get(f, 0) for f in ("override", "regra", "pluggy", "nenhuma")},
     }

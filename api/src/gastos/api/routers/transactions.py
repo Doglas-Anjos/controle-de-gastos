@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from datetime import date
+
 from fastapi import APIRouter, Depends, Query
 from sqlalchemy import func, or_, select
 from sqlalchemy.orm import Session
@@ -18,6 +20,8 @@ router = APIRouter()
 @router.get("/transactions", response_model=Page)
 def listar(
     month: str | None = Query(None, pattern=r"^\d{4}-\d{2}$"),
+    date_from: date | None = None,
+    date_to: date | None = None,
     category_id: int | None = None,
     account_id: int | None = None,
     q: str | None = None,
@@ -26,7 +30,13 @@ def listar(
     sessao: Session = Depends(get_session),
 ):
     stmt = select(Transaction)
-    if month:
+    # dia ou periodo (date_from/date_to) tem precedencia sobre o mes; so um lado tambem vale
+    if date_from or date_to:
+        if date_from:
+            stmt = stmt.where(Transaction.date >= date_from)
+        if date_to:
+            stmt = stmt.where(Transaction.date <= date_to)
+    elif month:
         stmt = stmt.where(func.strftime("%Y-%m", Transaction.date) == month)
     if account_id:
         stmt = stmt.where(Transaction.account_id == account_id)

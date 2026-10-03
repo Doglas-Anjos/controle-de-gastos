@@ -34,10 +34,13 @@ _OPERACAO_PAGAMENTO = {"PAGAMENTO", "PAGAMENTO_FATURA"}
 def _registro(t: dict, meses_fatura: dict[str, str], cartao: bool = False) -> dict:
     """Sinal vem do `type`, nao do `amount`: em conta BANK a Pluggy manda debito negativo, mas em conta
     CREDIT manda compra (DEBIT) positiva e pagamento da fatura (CREDIT) negativo. Aqui tudo vira
-    "negativo = saida". No cartao, entrada com operationType de pagamento e a fatura sendo paga: recebe
-    a categoria "Credit card payment" (kind transferencia) para nao contar como receita."""
+    "negativo = saida", sempre em BRL. No cartao, entrada com operationType de pagamento e a fatura
+    sendo paga: recebe a categoria "Credit card payment" (kind transferencia) para nao contar como receita."""
     meta = t.get("creditCardMetadata") or {}
-    valor = float(t["amount"])
+    # Compra internacional vem com amount na moeda original (USD) e amountInAccountCurrency em BRL;
+    # o painel e todo em BRL, entao o valor na moeda da conta vence sempre que existir.
+    em_reais = t.get("amountInAccountCurrency")
+    valor = float(em_reais if em_reais is not None else t["amount"])
     tipo = t.get("type") or ("DEBIT" if valor < 0 else "CREDIT")
     categoria = t.get("category")
     if cartao and tipo == "CREDIT" and t.get("operationType") in _OPERACAO_PAGAMENTO:

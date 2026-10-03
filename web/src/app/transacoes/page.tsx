@@ -1,12 +1,13 @@
 "use client";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import { AccountPicker } from "@/components/AccountPicker";
 import { CategoryPicker } from "@/components/CategoryPicker";
 import { Icon, type IconName } from "@/components/Icon";
 import { useToast } from "@/components/Toast";
-import { Async, btn, btn2, btnGhost, Chip, EmptyState, iconBtn, input, PageHeader, Panel, Skeleton } from "@/components/ui";
+import { Async, btn, btn2, btnGhost, Chip, EmptyState, iconBtn, input, PageHeader, Panel, Segmented, Skeleton } from "@/components/ui";
 import { createRule, deleteOverride, getAccounts, getCategories, getSummary, getTransactions, putOverride } from "@/lib/api";
-import { catLabel, currentMonth, formatBRL, formatDayMonth, formatMonthLong, shiftMonth } from "@/lib/format";
+import { catLabel, currentMonth, formatBRL, formatDate, formatDayMonth, formatMonthLong, shiftMonth, today } from "@/lib/format";
 import { escapeRegex } from "@/lib/regex";
 import type { TransactionOut } from "@/lib/types";
 import { useApi } from "@/lib/useApi";
@@ -42,6 +43,9 @@ function MonthPicker({ value, onChange }: { value: string; onChange: (m: string)
 }
 
 const MES_RE = /^\d{4}-(0[1-9]|1[0-2])$/;
+type Modo = "mes" | "dia" | "faixa";
+const MODOS: { key: Modo; label: string }[] = [{ key: "mes", label: "Mês" }, { key: "dia", label: "Dia" }, { key: "faixa", label: "Período" }];
+const somaDias = (iso: string, n: number) => { const d = new Date(`${iso}T12:00:00`); d.setDate(d.getDate() + n); return d.toISOString().slice(0, 10); };
 
 // Mes inicial: ?mes=YYYY-MM da URL; senao o mes atual se ele tiver transacoes; senao o ultimo mes com
 // transacoes (/summary termina nele), para a primeira tela nao abrir vazia quando o extrato e antigo.
@@ -79,11 +83,17 @@ export default function Transacoes() {
 function Lista({ inicial }: { inicial: string }) {
   const toast = useToast();
   const [month, setMonth] = useState(inicial);
+  // Padrao e por mes; dia e periodo sao filtros avulsos que nao vao para a URL.
+  const [modo, setModo] = useState<Modo>("mes");
+  const [dia, setDia] = useState(today());
+  const [faixa, setFaixa] = useState({ de: `${currentMonth()}-01`, ate: today() });
   // Reflete o mes na URL (sem nova entrada no historico) para compartilhar e recarregar no mesmo mes.
+  // ?cat= (vindo do painel) e consumido uma vez e sai da URL: recarregar volta a "Todas as categorias".
   useEffect(() => {
     const u = new URL(window.location.href);
-    if (u.searchParams.get("mes") === month) return;
+    if (u.searchParams.get("mes") === month && !u.searchParams.has("cat")) return;
     u.searchParams.set("mes", month);
+    u.searchParams.delete("cat");
     window.history.replaceState(window.history.state, "", u);
   }, [month]);
   // ?cat=<id> abre ja filtrado (o painel manda para ca o "sem categoria").
@@ -95,17 +105,19 @@ function Lista({ inicial }: { inicial: string }) {
   const [busca, setBusca] = useState("");
   const q = useDebounced(busca.trim());
   // Pagina volta a 1 quando qualquer filtro muda, sem um segundo fetch com a pagina antiga.
-  const filtros = `${month}|${cat}|${acc}|${q}`;
+  const periodo = modo === "mes" ? { month } : modo === "dia" ? { date_from: dia, date_to: dia } : { date_from: faixa.de || undefined, date_to: faixa.ate || undefined };
+  const rotuloPeriodo = modo === "mes" ? formatMonthLong(month) : modo === "dia" ? formatDate(dia) : `${faixa.de ? formatDate(faixa.de) : "início"} a ${faixa.ate ? formatDate(faixa.ate) : "hoje"}`;
+  const filtros = `${JSON.stringify(periodo)}|${cat}|${acc}|${q}`;
   const [pg, setPg] = useState({ filtros, n: 1 });
   const page = pg.filtros === filtros ? pg.n : 1;
   const setPage = (n: number) => setPg({ filtros, n });
   const [busy, setBusy] = useState<number>();
   const cats = useApi(getCategories).data ?? [];
   const accs = useApi(getAccounts).data ?? [];
-  const tx = useApi(() => getTransactions({ month, category_id: cat, account_id: acc, q, page, page_size: SIZE }), [month, cat, acc, q, page]);
+  const tx = useApi(() => getTransactions({ ...periodo, category_id: cat, account_id: acc, q, page, page_size: SIZE }), [filtros, page]);
   const total = tx.data?.total ?? 0;
   const pages = Math.max(1, Math.ceil(total / SIZE));
-  const filtrado = cat !== "" || acc !== "" || q !== "";
+  const filtrado = cat !== "" || acc !== "" || q !== "" || modo !== "mes";
 
   // PUT substitui o override inteiro: sempre reenvia o que ja existia (categoria manual e exclusao).
   const manual = (t: TransactionOut) => (t.category_source === "override" ? t.category?.id ?? null : null);
@@ -143,7 +155,7 @@ function Lista({ inicial }: { inicial: string }) {
   const voltarAuto = (t: TransactionOut) =>
     run(t, () => (t.excluded ? putOverride(t.id, { category_id: null, exclude: true }) : deleteOverride(t.id)), "Categoria automática restaurada");
 
-  const limpar = () => { setCat(""); setAcc(""); setBusca(""); };
+  const limpar = () => { setCat(""); setAcc(""); setBusca(""); setModo("mes"); };
 
   return (
     <>
@@ -151,18 +163,36 @@ function Lista({ inicial }: { inicial: string }) {
 
       <div className="sticky top-14 z-20 -mx-4 mb-4 border-b border-line bg-bg/95 px-4 py-3 backdrop-blur md:top-0 md:mx-0 md:rounded-[14px] md:border md:bg-surface md:px-3">
         <div className="flex flex-wrap items-center gap-2">
-          <div className="flex items-center rounded-[10px] border border-line bg-surface">
-            <button className={iconBtn} aria-label="Mês anterior" onClick={() => setMonth(shiftMonth(month, -1))}><Icon name="left" size={16} /></button>
-            <MonthPicker value={month} onChange={setMonth} />
-            <button className={iconBtn} aria-label="Próximo mês" onClick={() => setMonth(shiftMonth(month, 1))}><Icon name="right" size={16} /></button>
-          </div>
+          <Segmented<Modo> value={modo} onChange={setModo} items={MODOS} label="Tipo de período" />
+          {modo === "mes" && (
+            <div className="flex items-center rounded-[10px] border border-line bg-surface">
+              <button className={iconBtn} aria-label="Mês anterior" onClick={() => setMonth(shiftMonth(month, -1))}><Icon name="left" size={16} /></button>
+              <MonthPicker value={month} onChange={setMonth} />
+              <button className={iconBtn} aria-label="Próximo mês" onClick={() => setMonth(shiftMonth(month, 1))}><Icon name="right" size={16} /></button>
+            </div>
+          )}
+          {modo === "dia" && (
+            <div className="flex items-center rounded-[10px] border border-line bg-surface">
+              <button className={iconBtn} aria-label="Dia anterior" onClick={() => setDia(somaDias(dia, -1))}><Icon name="left" size={16} /></button>
+              <input type="date" aria-label="Dia" className="h-9 bg-transparent px-1 text-sm text-ink focus:outline-none" value={dia} max={today()}
+                onChange={(e) => e.target.value && setDia(e.target.value)} />
+              <button className={iconBtn} aria-label="Próximo dia" disabled={dia >= today()} onClick={() => setDia(somaDias(dia, 1))}><Icon name="right" size={16} /></button>
+            </div>
+          )}
+          {modo === "faixa" && (
+            <div className="flex items-center gap-1 rounded-[10px] border border-line bg-surface px-2 text-sm text-muted">
+              <label className="flex items-center gap-1">de<input type="date" className="h-9 bg-transparent px-1 text-sm text-ink focus:outline-none" value={faixa.de} max={faixa.ate || undefined}
+                onChange={(e) => setFaixa((f) => ({ ...f, de: e.target.value }))} /></label>
+              <label className="flex items-center gap-1">até<input type="date" className="h-9 bg-transparent px-1 text-sm text-ink focus:outline-none" value={faixa.ate} min={faixa.de || undefined}
+                onChange={(e) => setFaixa((f) => ({ ...f, ate: e.target.value }))} /></label>
+            </div>
+          )}
           <div className="min-w-0 flex-1 sm:w-56 sm:flex-none">
             <CategoryPicker categories={cats} value={cat} onChange={setCat} allLabel="Todas as categorias" ariaLabel="Categoria" />
           </div>
-          <select aria-label="Conta" className={`${input} min-w-0 flex-1 sm:flex-none`} value={acc} onChange={(e) => setAcc(e.target.value ? Number(e.target.value) : "")}>
-            <option value="">Todas as contas</option>
-            {accs.map((a) => <option key={a.id} value={a.id}>{a.bank} · {a.name}</option>)}
-          </select>
+          <div className="min-w-0 flex-1 sm:w-64 sm:flex-none">
+            <AccountPicker accounts={accs} value={acc} onChange={setAcc} />
+          </div>
           <label className="relative min-w-[180px] flex-1">
             <span className="sr-only">Buscar na descrição</span>
             <Icon name="search" size={16} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted" />
@@ -180,9 +210,9 @@ function Lista({ inicial }: { inicial: string }) {
               Tente outro termo de busca ou remova a categoria e a conta selecionadas.
             </EmptyState>
           ) : (
-            <EmptyState icon="upload" title={`Nenhuma transação em ${formatMonthLong(month)}`}
+            <EmptyState icon="upload" title={`Nenhuma transação em ${rotuloPeriodo}`}
               action={<Link href="/importar" className={btn}><Icon name="upload" size={16} />Importar extratos</Link>}>
-              Importe um arquivo OFX ou CSV deste mês, sincronize pelo Open Finance ou navegue para outro mês com as setas.
+              Importe um arquivo OFX ou CSV deste período, sincronize pelo Open Finance ou navegue para outro período.
             </EmptyState>
           ))}>
           <div className={`overflow-x-auto transition-opacity duration-150 ${tx.loading ? "opacity-60" : ""}`}>

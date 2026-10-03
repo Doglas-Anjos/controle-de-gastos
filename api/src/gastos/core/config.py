@@ -26,10 +26,17 @@ class Settings(BaseSettings):
 
     gastos_db_path: str = "data/gastos.db"
     cors_origins: str = "http://localhost:3000"
+    # Nome(s) do titular, separados por virgula. Pix/TED entre contas proprias em bancos diferentes
+    # chegam com o proprio nome como contraparte; e assim que viram transferencia, nao receita/gasto.
+    gastos_titular: str = ""
 
     @property
     def item_ids(self) -> list[str]:
         return [i.strip() for i in self.pluggy_item_ids.split(",") if i.strip()]
+
+    @property
+    def nomes_titular(self) -> list[str]:
+        return [n.strip() for n in self.gastos_titular.split(",") if n.strip()]
 
     @property
     def db_url(self) -> str:

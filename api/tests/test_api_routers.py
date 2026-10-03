@@ -117,3 +117,16 @@ def test_rota_aplicar_acoes_da_ia(http):
     r = http.post("/insights/aplicar", json={"acoes": [acao]})
     assert r.status_code == 200 and r.json()["categorias_criadas"] == 1
     assert http.post("/insights/aplicar", json={"acoes": []}).status_code == 422
+
+
+def test_filtro_por_dia_e_periodo(http):
+    _upload(http)
+    todas = http.get("/transactions?page_size=500").json()["items"]
+    dia = todas[0]["date"]
+    so_dia = http.get(f"/transactions?date_from={dia}&date_to={dia}&page_size=500").json()["items"]
+    assert so_dia and all(t["date"] == dia for t in so_dia)
+    ate = http.get(f"/transactions?date_to={dia}&page_size=500").json()["items"]
+    assert all(t["date"] <= dia for t in ate) and len(ate) >= len(so_dia)
+    # periodo vence o mes
+    r = http.get(f"/transactions?month=1999-01&date_from={dia}&date_to={dia}").json()
+    assert r["total"] == len(so_dia)

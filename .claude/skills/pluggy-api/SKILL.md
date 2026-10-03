@@ -33,6 +33,8 @@ Fonte viva: MCP `pluggy-docs` (sem chave) ou https://docs.pluggy.ai/pt/reference
   `CREDIT` manda compra (`DEBIT`) **positiva** e pagamento da fatura (`CREDIT`) **negativo** (confirmado nos
   dados reais, 2026). `_registro` grava `amount = -abs` para DEBIT e `+abs` para CREDIT; `reprocessar_pluggy`
   reaplica isso ao `raw_json` das linhas antigas a cada sync;
+- compra internacional: `amount` vem na moeda original (`currencyCode` USD) e `amountInAccountCurrency` em
+  BRL; `_registro` usa sempre `amountInAccountCurrency` quando existe (o painel e todo em BRL);
 - no cartao, `type=CREDIT` com `operationType` `PAGAMENTO`/`PAGAMENTO_FATURA` e a fatura sendo paga:
   `pluggy_category` vira `Credit card payment` (seed mapeia para Transferencia). `ESTORNO` fica como veio;
 - `type` (`DEBIT`/`CREDIT`) -> `type`; `category` / `categoryId` -> `pluggy_category`;
