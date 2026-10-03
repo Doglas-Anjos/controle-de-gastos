@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { AccountPicker } from "@/components/AccountPicker";
 import { CategoryPicker } from "@/components/CategoryPicker";
+import { DateRangePicker, somaDias } from "@/components/DateRangePicker";
 import { Icon, type IconName } from "@/components/Icon";
 import { useToast } from "@/components/Toast";
 import { Async, btn, btn2, btnGhost, Chip, EmptyState, iconBtn, input, PageHeader, Panel, Segmented, Skeleton } from "@/components/ui";
@@ -45,7 +46,6 @@ function MonthPicker({ value, onChange }: { value: string; onChange: (m: string)
 const MES_RE = /^\d{4}-(0[1-9]|1[0-2])$/;
 type Modo = "mes" | "dia" | "faixa";
 const MODOS: { key: Modo; label: string }[] = [{ key: "mes", label: "Mês" }, { key: "dia", label: "Dia" }, { key: "faixa", label: "Período" }];
-const somaDias = (iso: string, n: number) => { const d = new Date(`${iso}T12:00:00`); d.setDate(d.getDate() + n); return d.toISOString().slice(0, 10); };
 
 // Mes inicial: ?mes=YYYY-MM da URL; senao o mes atual se ele tiver transacoes; senao o ultimo mes com
 // transacoes (/summary termina nele), para a primeira tela nao abrir vazia quando o extrato e antigo.
@@ -172,20 +172,14 @@ function Lista({ inicial }: { inicial: string }) {
             </div>
           )}
           {modo === "dia" && (
-            <div className="flex items-center rounded-[10px] border border-line bg-surface">
+            <div className="flex items-center gap-1">
               <button className={iconBtn} aria-label="Dia anterior" onClick={() => setDia(somaDias(dia, -1))}><Icon name="left" size={16} /></button>
-              <input type="date" aria-label="Dia" className="h-9 bg-transparent px-1 text-sm text-ink focus:outline-none" value={dia} max={today()}
-                onChange={(e) => e.target.value && setDia(e.target.value)} />
+              <DateRangePicker single value={{ de: dia, ate: dia }} onChange={(f) => setDia(f.de)} />
               <button className={iconBtn} aria-label="Próximo dia" disabled={dia >= today()} onClick={() => setDia(somaDias(dia, 1))}><Icon name="right" size={16} /></button>
             </div>
           )}
           {modo === "faixa" && (
-            <div className="flex items-center gap-1 rounded-[10px] border border-line bg-surface px-2 text-sm text-muted">
-              <label className="flex items-center gap-1">de<input type="date" className="h-9 bg-transparent px-1 text-sm text-ink focus:outline-none" value={faixa.de} max={faixa.ate || undefined}
-                onChange={(e) => setFaixa((f) => ({ ...f, de: e.target.value }))} /></label>
-              <label className="flex items-center gap-1">até<input type="date" className="h-9 bg-transparent px-1 text-sm text-ink focus:outline-none" value={faixa.ate} min={faixa.de || undefined}
-                onChange={(e) => setFaixa((f) => ({ ...f, ate: e.target.value }))} /></label>
-            </div>
+            <DateRangePicker value={faixa} onChange={setFaixa} />
           )}
           <div className="min-w-0 flex-1 sm:w-56 sm:flex-none">
             <CategoryPicker categories={cats} value={cat} onChange={setCat} allLabel="Todas as categorias" ariaLabel="Categoria" />

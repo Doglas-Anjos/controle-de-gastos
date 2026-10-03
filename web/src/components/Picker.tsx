@@ -1,54 +1,31 @@
 "use client";
-import { useEffect, useId, useRef, useState, type KeyboardEvent, type ReactNode } from "react";
+import { useEffect, useId, useState, type KeyboardEvent, type ReactNode, type RefObject } from "react";
 import { createPortal } from "react-dom";
 import { Icon } from "./Icon";
 import { input } from "./ui";
+import { usePopover } from "./usePopover";
 
 export type PickerItem = { key: number | ""; text: string; icon: ReactNode; extra?: string; sub?: boolean };
 export type PickerGroup = { label: string; items: PickerItem[] };
 
-// Substitui o <select> nativo, que nao aceita icone nem cor nas opcoes. Menu em position:fixed num portal
-// no body: dentro da arvore, qualquer ancestral com backdrop-filter/transform (a barra sticky de filtros)
-// viraria a referencia do fixed e o menu abriria deslocado; a tabela com overflow tambem o cortaria.
-// Fecha ao rolar a pagina, clicar fora ou Escape. Setas + Enter navegam.
+// Substitui o <select> nativo, que nao aceita icone nem cor nas opcoes (posicionamento em usePopover).
+// Setas + Enter navegam; Escape fecha.
 export function Picker({ groups, value, onChange, trigger, id, ariaLabel, disabled, compact, muted }: {
   groups: PickerGroup[]; value: number | ""; onChange: (key: number | "") => void;
   trigger: { icon: ReactNode; text: string; extra?: string };
   id?: string; ariaLabel?: string; disabled?: boolean; compact?: boolean; muted?: boolean;
 }) {
-  const [open, setOpen] = useState(false);
+  const { open, setOpen, abrir: abrirPainel, root, panel: lista, style } = usePopover();
   const [foco, setFoco] = useState(0);
-  const [pos, setPos] = useState({ top: 0, left: 0, acima: false });
-  const root = useRef<HTMLDivElement>(null);
-  const lista = useRef<HTMLUListElement>(null);
   const listId = useId();
   const planos = groups.flatMap((g) => g.items);
 
-  const abrir = () => {
-    const r = root.current?.getBoundingClientRect();
-    if (r) setPos({ top: r.bottom + 4, left: r.left, acima: window.innerHeight - r.bottom < 340 });
-    setFoco(Math.max(0, planos.findIndex((c) => c.key === value)));
-    setOpen(true);
-  };
+  const abrir = () => { setFoco(Math.max(0, planos.findIndex((c) => c.key === value))); abrirPainel(); };
   const escolher = (c: PickerItem | undefined) => { if (c) onChange(c.key); setOpen(false); };
-  useEffect(() => {
-    if (!open) return;
-    const fora = (e: MouseEvent) => {
-      const alvo = e.target as Node;
-      if (!root.current?.contains(alvo) && !lista.current?.contains(alvo)) setOpen(false);
-    };
-    // Rolagem da pagina desalinha o menu fixo, entao ele fecha; rolagem dentro da propria lista nao.
-    const rolou = (e: Event) => { if (!lista.current?.contains(e.target as Node)) setOpen(false); };
-    const fechar = () => setOpen(false);
-    document.addEventListener("mousedown", fora);
-    window.addEventListener("scroll", rolou, true);
-    window.addEventListener("resize", fechar);
-    return () => { document.removeEventListener("mousedown", fora); window.removeEventListener("scroll", rolou, true); window.removeEventListener("resize", fechar); };
-  }, [open]);
   // Opcao focada pelo teclado entra na area visivel da lista (no hover ja esta visivel: nao rola).
   useEffect(() => {
     if (open) lista.current?.querySelector<HTMLElement>('[data-foco="true"]')?.scrollIntoView?.({ block: "nearest" }); // jsdom nao implementa
-  }, [open, foco]);
+  }, [open, foco, lista]);
   const onKey = (e: KeyboardEvent<HTMLDivElement>) => {
     if (e.key === "Escape") { setOpen(false); return; }
     if (!open) { if (["ArrowDown", "ArrowUp"].includes(e.key)) { e.preventDefault(); abrir(); } return; }
@@ -71,7 +48,7 @@ export function Picker({ groups, value, onChange, trigger, id, ariaLabel, disabl
         <Icon name="down" size={14} className="shrink-0 text-muted" />
       </button>
       {open && createPortal(
-        <ul ref={lista} role="listbox" id={listId} aria-label={ariaLabel} style={{ top: pos.acima ? undefined : pos.top, bottom: pos.acima ? window.innerHeight - pos.top + 40 : undefined, left: pos.left }}
+        <ul ref={lista as RefObject<HTMLUListElement>} role="listbox" id={listId} aria-label={ariaLabel} style={style}
           className="fixed z-40 max-h-80 w-72 overflow-auto rounded-[12px] border border-line bg-surface p-1 shadow-[0_12px_32px_-8px_rgba(0,0,0,0.35)]">
           {groups.map((g, gi) => (
             <li key={g.label || `g${gi}`} role="presentation">
