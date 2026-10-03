@@ -59,6 +59,19 @@ def test_categoria_renomeada_mantem_id_e_vira_mae(sessao):
     assert por_nome["Combustivel"].parent_id == antiga.id
 
 
+def test_categoria_renomeada_e_fundida_quando_as_duas_existem(sessao):
+    semear_categorias(sessao)
+    nova = sessao.scalar(select(Category).where(Category.name == "Locomocao"))
+    velha = Category(name="Transporte", kind="variavel")
+    sessao.add(velha)
+    sessao.flush()
+    sessao.add(CategoryRule(pattern="onibus", category_id=velha.id, priority=1))
+    sessao.commit()
+    semear_categorias(sessao)
+    assert sessao.scalar(select(Category).where(Category.name == "Transporte")) is None
+    assert sessao.scalar(select(CategoryRule).where(CategoryRule.pattern == "onibus")).category_id == nova.id
+
+
 def test_regra_retirada_e_apagada_no_proximo_seed(sessao):
     semear_categorias(sessao)
     cat = sessao.scalar(select(Category).where(Category.name == "Receita"))

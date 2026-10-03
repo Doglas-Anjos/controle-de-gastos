@@ -249,14 +249,34 @@ def mapear_categoria_pluggy(nome_pluggy: str | None) -> str | None:
     return PLUGGY_PARA_BASE.get(_chave(nome_pluggy)) if nome_pluggy else None
 
 
+def _mesclar(sessao: Session, antiga: Category, nova: Category) -> None:
+    """Move tudo que aponta para a categoria antiga (regras, overrides, recorrencias, filhas) para a
+    nova e apaga a antiga. Previsao e derivada: apagada, volta no proximo recalculo."""
+    from gastos.domain.models import Forecast, Recurrence, TransactionOverride  # evita import circular
+
+    for modelo in (CategoryRule, TransactionOverride, Recurrence):
+        for obj in sessao.scalars(select(modelo).where(modelo.category_id == antiga.id)):
+            obj.category_id = nova.id
+    for filha in sessao.scalars(select(Category).where(Category.parent_id == antiga.id)):
+        filha.parent_id = nova.id
+    for f in sessao.scalars(select(Forecast).where(Forecast.category_id == antiga.id)):
+        sessao.delete(f)
+    sessao.delete(antiga)
+
+
 def semear_categorias(sessao: Session) -> dict[str, int]:
     """Cria o que faltar das categorias e regras base. Regra e identificada pelo padrao: se o usuario
     apagou ou mudou a categoria de uma, ela volta so se o padrao nao existir mais."""
     cats = {c.name: c for c in sessao.scalars(select(Category))}
     for antigo, novo in CATEGORIAS_RENOMEADAS.items():
-        if antigo in cats and novo not in cats:
+        if antigo not in cats:
+            continue
+        if novo in cats:  # as duas existem (um processo antigo recriou a velha): funde na nova
+            _mesclar(sessao, cats.pop(antigo), cats[novo])
+        else:
             cats[antigo].name = novo
             cats[novo] = cats.pop(antigo)
+    sessao.flush()
     novas = 0
     for nome, kind in CATEGORIAS_BASE.items():
         if nome not in cats:
