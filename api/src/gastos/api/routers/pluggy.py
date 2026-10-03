@@ -8,10 +8,10 @@ from pydantic import BaseModel
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from gastos.api.schemas import ConnectTokenOut, PluggyItemIn, PluggyItemOut
+from gastos.api.schemas import AccountOut, ConnectTokenOut, PluggyItemIn, PluggyItemOut
 from gastos.core.config import settings
 from gastos.core.db import get_session
-from gastos.domain.models import PluggyItem
+from gastos.domain.models import Account, PluggyItem
 from gastos.domain.pipeline import recalcular
 from gastos.ingest.pluggy_client import PluggyClient, PluggyError
 from gastos.ingest.pluggy_sync import sincronizar
@@ -27,13 +27,20 @@ def _client() -> PluggyClient:
     return PluggyClient(settings.pluggy_base_url, settings.pluggy_client_id, settings.pluggy_client_secret)
 
 
-def _out(p: PluggyItem) -> PluggyItemOut:
+def _contas(sessao: Session, item_id: str) -> list[AccountOut]:
+    """As contas sao o que identifica a conexao para o usuario (o conector MeuPluggy nao diz o banco)."""
+    q = select(Account).where(Account.pluggy_item_id == item_id).order_by(Account.type, Account.id)
+    return [AccountOut.model_validate(a, from_attributes=True) for a in sessao.scalars(q)]
+
+
+def _out(p: PluggyItem, sessao: Session) -> PluggyItemOut:
     return PluggyItemOut(
         id=p.id,
         connector_name=p.connector_name,
         status=p.status,
         source="widget",
         created_at=p.created_at,
+        accounts=_contas(sessao, p.item_id),
     )
 
 
@@ -66,16 +73,16 @@ def salvar_item(dados: PluggyItemIn, sessao: Session = Depends(get_session)):
             client.close()
         recalcular(sessao)
         sessao.refresh(p)
-    return _out(p)
+    return _out(p, sessao)
 
 
 @router.get("/items", response_model=list[PluggyItemOut])
 def listar_itens(sessao: Session = Depends(get_session)):
     doenv = [
-        PluggyItemOut(id=-n, connector_name=None, status=None, source="env")
-        for n, _ in enumerate(settings.item_ids, 1)
+        PluggyItemOut(id=-n, connector_name=None, status=None, source="env", accounts=_contas(sessao, iid))
+        for n, iid in enumerate(settings.item_ids, 1)
     ]
-    return [*(_out(p) for p in sessao.scalars(select(PluggyItem).order_by(PluggyItem.id))), *doenv]
+    return [*(_out(p, sessao) for p in sessao.scalars(select(PluggyItem).order_by(PluggyItem.id))), *doenv]
 
 
 @router.delete("/items/{id}", status_code=204)

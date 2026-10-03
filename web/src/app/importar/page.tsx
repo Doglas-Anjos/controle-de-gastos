@@ -5,7 +5,7 @@ import { Icon } from "@/components/Icon";
 import { PluggyItems } from "@/components/PluggyItems";
 import { useToast } from "@/components/Toast";
 import { btn, btn2, ErrorBox, iconBtn, PageHeader, Panel } from "@/components/ui";
-import { addPluggyItem, ApiError, createConnectToken, deletePluggyItem, getHealth, getPluggyItems, syncPluggy, uploadFiles } from "@/lib/api";
+import { addPluggyItem, ApiError, createConnectToken, deletePluggyItem, getHealth, getPluggyItems, syncPluggy, updateAccount, uploadFiles } from "@/lib/api";
 import type { ImportResult, SyncResult } from "@/lib/types";
 import { useApi } from "@/lib/useApi";
 
@@ -107,6 +107,15 @@ export default function Importar() {
       toast((e as Error).message, { tone: "error" });
     }
   };
+  const renomear = async (accountId: number, bank: string) => {
+    try {
+      await updateAccount(accountId, { bank });
+      toast(`Conta marcada como ${bank}`);
+      itens.reload();
+    } catch (e) {
+      toast((e as Error).message, { tone: "error" });
+    }
+  };
   const remover = async (id: number) => {
     try {
       await deletePluggyItem(id);
@@ -185,7 +194,7 @@ export default function Importar() {
             <div className="space-y-3">
               {itens.error && <ErrorBox message={itens.error} />}
               {itens.data && itens.data.length > 0 ? (
-                <PluggyItems items={itens.data} onRemove={remover} />
+                <PluggyItems items={itens.data} onRemove={remover} onRename={renomear} />
               ) : (
                 !itens.loading && !itens.error && <p className="text-sm text-ink-2">Nenhum banco conectado ainda.</p>
               )}

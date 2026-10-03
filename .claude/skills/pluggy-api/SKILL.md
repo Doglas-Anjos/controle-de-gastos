@@ -48,3 +48,10 @@ Fonte viva: MCP `pluggy-docs` (sem chave) ou https://docs.pluggy.ai/pt/reference
 - Ao concluir, o front envia o `item.id` para `POST /pluggy/items`; ele fica na tabela `pluggy_items` (so no banco local, nunca devolvido pela API; a lista usa id interno).
 - O sync usa a uniao de `PLUGGY_ITEM_IDS` (.env) com `pluggy_items`, sem duplicar (`itens_para_sync`). Status e nome do conector dos itens do widget sao gravados a cada sync.
 - Bancos reais pelo widget exigem plano pago da Pluggy; no plano gratis so o conector sandbox funciona. Para bancos reais gratis, siga o fluxo Meu Pluggy + `PLUGGY_ITEM_IDS`.
+
+## Origem do banco em itens MeuPluggy
+- Um item do conector MeuPluggy chega com `connector.name = "MeuPluggy"` e a API nao diz a instituicao de origem. `ingest/bancos.py` infere o banco pelas pistas da conta (`name`, `marketingName`: NuConta, Conta Inter, Itau Uniclass, Ourocard...) e monta um `hint` (marketingName, bandeira+nivel do cartao ou "final 1234"). Sem pista, o banco fica "Banco" e a tela pede para o usuario informar.
+- `Account.pluggy_item_id` agrupa as contas por conexao (so no banco local); `GET /pluggy/items` devolve as contas de cada conexao, e e por elas que o usuario reconhece o banco.
+- `PUT /accounts/{id}` renomeia banco/nome e marca `user_named`; o sync nunca sobrescreve uma conta renomeada.
+- Nunca armazenar `owner` nem `taxNumber` da conta (dados pessoais).
+

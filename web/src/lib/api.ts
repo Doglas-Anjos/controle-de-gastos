@@ -43,6 +43,8 @@ function qs(params: Record<string, string | number | boolean | undefined>) {
 export const getHealth = () => req<T.Health>("/health");
 export const getAccounts = () => req<T.AccountOut[]>("/accounts");
 export const getCategories = () => req<T.CategoryOut[]>("/categories");
+export const updateAccount = (id: number, body: { bank?: string; name?: string }) =>
+  req<T.AccountOut>(`/accounts/${id}`, json("PUT", body));
 export const getTransactions = (p: {
   month?: string; category_id?: number | ""; account_id?: number | ""; q?: string; page?: number; page_size?: number
 }) => req<T.Page>("/transactions" + qs(p));

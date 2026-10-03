@@ -79,6 +79,20 @@ def importar(caminho: Path = typer.Argument(RAIZ / "data" / "inbox", help="pasta
     typer.echo(f"{len(arquivos)} arquivos, {contas} contas novas, {novas} novas, {atualizadas} atualizadas")
 
 
+@app.command("contas")
+def contas():
+    """Lista as contas conhecidas (banco, nome, tipo, pista), sem numeros de conta."""
+    from sqlalchemy import select
+
+    from gastos.domain.models import Account
+
+    criar_tabelas()
+    with SessionLocal() as sessao:
+        for a in sessao.scalars(select(Account).order_by(Account.bank, Account.type)):
+            sync = a.last_sync_at.strftime("%d/%m %H:%M") if a.last_sync_at else "-"
+            typer.echo(f"{a.id:>3}  {a.bank:<18} {a.name:<32} {a.type:<9} {a.hint or '':<22} {sync}")
+
+
 @app.command("demo-seed")
 def demo_seed():
     """Popula o banco com dados sinteticos."""

@@ -17,6 +17,7 @@ class AccountOut(BaseModel):
     type: str  # checking | credit | savings
     source: str  # pluggy | ofx | csv
     last_sync_at: datetime | None = None
+    hint: str | None = None  # marketingName, bandeira ou "final 1234"; nunca numero inteiro de conta
 
 
 class AccountUpdate(BaseModel):
@@ -159,6 +160,9 @@ class PluggyItemOut(BaseModel):
     status: str | None  # UPDATED, OUTDATED, LOGIN_ERROR... (ultimo visto no sync)
     source: str  # env | widget
     created_at: datetime | None = None
+    accounts: list[
+        AccountOut
+    ] = []  # contas sincronizadas desta conexao: e assim que o usuario ve qual banco e
     # item_id nunca sai da API: e identificador externo ligado as credenciais do usuario
 
 

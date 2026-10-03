@@ -11,6 +11,7 @@ from sqlalchemy.orm import Session
 
 from gastos.core.config import settings
 from gastos.domain.models import PluggyItem
+from gastos.ingest.bancos import inferir_banco, montar_hint
 from gastos.ingest.pluggy_client import PluggyClient, PluggyError
 from gastos.ingest.upsert import obter_ou_criar_conta, upsert_transacoes
 
@@ -66,14 +67,18 @@ def sincronizar(sessao: Session, client: PluggyClient, item_ids: list[str], desd
                     f"{rotulo}: conexao precisa de atencao ({item['status']}); reconecte no painel da Pluggy"
                 )
                 continue
-            banco = (item.get("connector") or {}).get("name") or "Pluggy"
+            conector = (item.get("connector") or {}).get("name")
             for conta in client.accounts(item_id):
                 tipo = _tipo_conta(conta)
                 if tipo is None:
                     continue
-                acct = obter_ou_criar_conta(
-                    sessao, "pluggy", banco, tipo, conta.get("name") or banco, conta["id"]
-                )
+                banco = inferir_banco(conta, conector)
+                nome = conta.get("name") or banco
+                acct = obter_ou_criar_conta(sessao, "pluggy", banco, tipo, nome, conta["id"])
+                acct.pluggy_item_id = item_id
+                acct.hint = montar_hint(conta)
+                if not acct.user_named:  # renomeada pelo usuario: a inferencia nao sobrescreve
+                    acct.bank, acct.name = banco, nome
                 ini = desde or (
                     acct.last_sync_at.date() - timedelta(days=7)
                     if acct.last_sync_at

@@ -34,6 +34,11 @@ class Account(Base):
     name: Mapped[str] = mapped_column(String(120))
     external_id: Mapped[str | None] = mapped_column(String(80), unique=True)  # id Pluggy ou ACCTID do OFX
     last_sync_at: Mapped[datetime | None] = mapped_column(DateTime)
+    # Conexao Pluggy de origem (so no banco local) e pista para reconhecer a conta quando o conector
+    # e generico (MeuPluggy): marketingName, bandeira do cartao ou "final 1234". Nunca o numero inteiro.
+    pluggy_item_id: Mapped[str | None] = mapped_column(String(80))
+    hint: Mapped[str | None] = mapped_column(String(80))
+    user_named: Mapped[bool] = mapped_column(Boolean, default=False)  # renomeada pelo usuario: sync nao mexe
 
     transactions: Mapped[list[Transaction]] = relationship(back_populates="account")
 
