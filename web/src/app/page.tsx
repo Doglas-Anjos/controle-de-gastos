@@ -1,12 +1,14 @@
 "use client";
 import Link from "next/link";
+import { useState } from "react";
 import { CategoryBars } from "@/components/Charts";
+import { Explorer } from "@/components/Explorer";
 import { Icon } from "@/components/Icon";
-import { Async, btn, btn2, EmptyState, ErrorBox, Kpi, PageHeader, Panel, Skeleton, SkeletonRows } from "@/components/ui";
+import { Async, btn, btn2, EmptyState, ErrorBox, Kpi, PageHeader, Panel, Segmented, Skeleton, SkeletonRows } from "@/components/ui";
 import { getRecurrences, getSummary } from "@/lib/api";
-import { categoryColor } from "@/lib/colors";
+import { categoryColor, PAY_COLOR, PAY_LABEL } from "@/lib/colors";
 import { daysBetween, formatBRL, formatDayMonth, formatMonth, formatMonthLong, formatPercent, formatRelativeDay, merchantLabel, today } from "@/lib/format";
-import { isPending, monthlyCommitted } from "@/lib/recurrence";
+import { byPay, isCard, isPending, splitHint, splitRecorrencias, type PayFilter } from "@/lib/recurrence";
 import { useApi } from "@/lib/useApi";
 
 export default function Home() {
@@ -15,12 +17,18 @@ export default function Home() {
   const s = sum.data;
   const recs = rec.data ?? [];
   const cur = s?.months.at(-1);
-  const prev = s?.months.at(-2);
   const total = cur ? (s?.total_by_month[cur] ?? 0) : 0;
-  const before = prev ? (s?.total_by_month[prev] ?? 0) : 0;
-  const delta = before ? ((total - before) / before) * 100 : null;
   const hoje = today();
-  const comDatas = recs.filter((r) => r.next_due && r.user_decision !== "descartada").sort((a, b) => a.next_due!.localeCompare(b.next_due!));
+  const emAndamento = cur === hoje.slice(0, 7);
+  // Mes em andamento nao se compara com mes cheio: a variacao usa os dois ultimos meses completos.
+  const [a, b] = emAndamento ? [s?.months.at(-2), s?.months.at(-3)] : [cur, s?.months.at(-2)];
+  const totalA = a ? (s?.total_by_month[a] ?? 0) : 0;
+  const before = b ? (s?.total_by_month[b] ?? 0) : 0;
+  const delta = before ? ((totalA - before) / before) * 100 : null;
+  const prev = b;
+  const [pay, setPay] = useState<PayFilter>("todas");
+  const split = splitRecorrencias(recs);
+  const comDatas = byPay(recs, pay).filter((r) => r.next_due && r.user_decision !== "descartada").sort((a, b) => a.next_due!.localeCompare(b.next_due!));
   const futuras = comDatas.filter((r) => r.next_due! >= hoje);
   const upcoming = (futuras.length ? futuras : comDatas).slice(0, 6);
   const pendentes = recs.filter(isPending);
@@ -40,10 +48,10 @@ export default function Home() {
         </Panel>
       ) : (
         <div className="space-y-6">
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-5">
             <Kpi loading={loadingSum} label={cur ? `Gasto em ${formatMonth(cur)}` : "Gasto do mês"} value={formatBRL(total)}
-              hint={cur === hoje.slice(0, 7) ? "Mês em andamento" : undefined} />
-            <Kpi loading={loadingSum} label="Variação vs mês anterior"
+              hint={emAndamento ? "Mês em andamento" : undefined} />
+            <Kpi loading={loadingSum} label={emAndamento && a ? `Variação ${formatMonth(a)} vs anterior` : "Variação vs mês anterior"}
               value={delta === null ? "Sem base" : formatPercent(delta)}
               delta={delta === null || Math.abs(delta) < 0.05 ? undefined : delta > 0
                 ? { text: "gastou mais", tone: "danger", icon: "up" }
@@ -51,9 +59,13 @@ export default function Home() {
               hint={prev ? `${formatMonth(prev)}: ${formatBRL(before)}` : undefined} />
             <Kpi loading={loadingSum} label="Receita do mês" value={formatBRL(cur ? s?.income_by_month[cur] ?? 0 : 0)}
               hint={cur && s ? `Saldo do mês: ${formatBRL((s.income_by_month[cur] ?? 0) - total)}` : undefined} />
-            <Kpi loading={loadingRec} label="Comprometido por mês" value={formatBRL(monthlyCommitted(recs))}
-              hint="Assinaturas, parcelas e recorrências confirmadas" />
+            <Kpi loading={loadingRec} label="Recorrente no cartão" value={formatBRL(split.card.total)}
+              hint={<span className="inline-flex items-center gap-1"><Icon name="card" size={12} style={{ color: PAY_COLOR.card }} />{splitHint(split.card)}</span>} />
+            <Kpi loading={loadingRec} label="Recorrente fora do cartão" value={formatBRL(split.bank.total)}
+              hint={<span className="inline-flex items-center gap-1"><Icon name="bank" size={12} style={{ color: PAY_COLOR.bank }} />{splitHint(split.bank)}</span>} />
           </div>
+
+          <Explorer />
 
           {pendentes.length > 0 && (
             <section className="flex flex-col gap-4 rounded-[14px] border border-warn/40 bg-warn-soft px-5 py-4 sm:flex-row sm:items-center">
@@ -78,7 +90,9 @@ export default function Home() {
               {loadingSum ? <Skeleton className="h-[360px] w-full" /> : s && <CategoryBars summary={s} />}
             </Panel>
 
-            <Panel title="Próximas cobranças" subtitle="Assinaturas, parcelas e recorrências" pad={false}>
+            <Panel title="Próximas cobranças" subtitle="Assinaturas, parcelas e recorrências" pad={false}
+              actions={<Segmented<PayFilter> label="Filtrar cobranças por meio de pagamento" value={pay} onChange={setPay}
+                items={[{ key: "todas", label: "Todas" }, { key: "cartao", label: PAY_LABEL.card }, { key: "conta", label: PAY_LABEL.bank }]} />}>
               <div className="px-5 pb-4 pt-3">
                 <Async loading={loadingRec} error={rec.error} onRetry={rec.reload} skeleton={<SkeletonRows rows={5} />}
                   empty={upcoming.length === 0 && <p className="py-8 text-center text-sm text-muted">Nenhuma cobrança prevista.</p>}>
@@ -95,6 +109,8 @@ export default function Home() {
                             <div className="flex items-center gap-1.5 truncate text-sm font-medium text-ink">
                               <span className="h-2 w-2 shrink-0 rounded-full" style={{ background: categoryColor(r.category) }} />
                               <span className="truncate">{merchantLabel(r.merchant)}</span>
+                              <Icon name={isCard(r) ? "card" : "bank"} size={13} className="shrink-0"
+                                style={{ color: isCard(r) ? PAY_COLOR.card : PAY_COLOR.bank }} aria-label={isCard(r) ? PAY_LABEL.card : PAY_LABEL.bank} />
                             </div>
                             <div className={`text-xs ${dias >= 0 && dias <= 3 ? "text-warn-text" : "text-muted"}`}>{formatRelativeDay(r.next_due!, hoje)}</div>
                           </div>

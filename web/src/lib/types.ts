@@ -37,3 +37,9 @@ export interface SyncResult { items: number; accounts: number; transactions_new:
 export interface Tip { titulo: string; categoria: string | null; economia_estimada_mensal: number | null; acao: string; confianca: number }
 export interface InsightsOut { resumo: string; dicas: Tip[]; alertas: string[]; gerado_em: string; cache: boolean }
 export interface AnswerOut { resposta: string; gerado_em: string }
+export interface ProjectionPoint { month: string; total: number; card: number; bank: number; recurring: number; projected: boolean }
+export interface ProjectionOut {
+  category: CategoryOut | null; months_window: number; horizon: number
+  history: ProjectionPoint[]; projection: ProjectionPoint[]
+  mean: number; median: number; stdev: number; last_month: number; trend_pct: number | null
+}

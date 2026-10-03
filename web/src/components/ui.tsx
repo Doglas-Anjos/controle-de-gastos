@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { Icon, type IconName } from "./Icon";
+import { PAY_COLOR, PAY_LABEL } from "@/lib/colors";
 
 // Classes base. Botoes e campos: raio 10px, 36px de altura; transicao so de cor/transform, 150ms.
 const press = "transition-[background-color,border-color,color,transform] duration-150 ease-out active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50";
@@ -171,5 +172,31 @@ export function Meter({ value, tone = "accent", label: aria }: { value: number; 
       className="h-1.5 w-full overflow-hidden rounded-full bg-surface-2 shadow-[inset_0_0_0_1px_var(--line)]">
       <div className={`h-full rounded-full ${fill}`} style={{ width: `${pct}%` }} />
     </div>
+  );
+}
+
+// Controle segmentado pequeno (filtros de 2 a 4 opcoes).
+export function Segmented<K extends string>({ value, onChange, items, label: aria }: {
+  value: K; onChange: (k: K) => void; items: { key: K; label: string }[]; label: string
+}) {
+  return (
+    <div role="group" aria-label={aria} className="inline-flex rounded-[10px] border border-line bg-surface p-0.5">
+      {items.map((it) => (
+        <button key={it.key} type="button" aria-pressed={it.key === value} onClick={() => onChange(it.key)}
+          className={`h-7 rounded-[8px] px-2.5 text-xs font-medium transition-colors duration-150 ${it.key === value ? "bg-surface-2 text-ink shadow-[inset_0_0_0_1px_var(--line)]" : "text-muted hover:text-ink"}`}>
+          {it.label}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+// Cartao ou conta: cor fixa em todas as telas (ver lib/colors.ts).
+export function PayChip({ card }: { card: boolean }) {
+  return (
+    <span className="inline-flex h-5 items-center gap-1 rounded-full border border-line px-1.5 text-[11px] font-medium text-ink-2">
+      <Icon name={card ? "card" : "bank"} size={11} style={{ color: card ? PAY_COLOR.card : PAY_COLOR.bank }} />
+      {card ? PAY_LABEL.card : PAY_LABEL.bank}
+    </span>
   );
 }

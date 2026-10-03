@@ -52,8 +52,13 @@ def categoria_efetiva(tx, override, regras, categorias_por_nome) -> tuple[Catego
 
 def eh_gasto(amount: float, categoria: Category | None, excluida: bool) -> bool:
     """Saida que conta como gasto: nao excluida e fora de categorias kind=transferencia (Investimentos,
-    Transferencia), que so movem dinheiro entre bolsos do proprio usuario."""
-    return amount < 0 and not excluida and (categoria is None or categoria.kind != "transferencia")
+    Transferencia), que so movem dinheiro entre bolsos do proprio usuario, e fora de kind=receita (uma
+    saida classificada como Receita e estorno ou regra errada; somar como gasto distorce o painel)."""
+    return (
+        amount < 0
+        and not excluida
+        and (categoria is None or categoria.kind not in ("transferencia", "receita"))
+    )
 
 
 def categoria_out(categoria: Category | None) -> dict | None:

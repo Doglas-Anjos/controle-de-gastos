@@ -51,3 +51,13 @@ v2 (quando historico > 24 meses): `statsforecast` AutoETS por categoria, mantend
 
 ## Testes obrigatorios (fixtures sinteticas)
 Assinatura mensal estavel no cartao; parcela 3/12 com fim calculado; Pix mensal com valor igual -> `detectada`; conta de luz mensal com cv alto -> `detectada` confidence baixa; compras aleatorias no mesmo mercado -> nao recorrente; transferencia entre contas proprias -> excluida; previsao com 3 e com 13 meses de historico.
+
+## Explorador por tipo de gasto (`explore.py`)
+- Janela = os ultimos N meses **completos** (3 a 24) antes do mes atual; meses sem gasto entram com 0.
+- Cada mes e dividido em `card` (contas type=credit) x `bank` (demais) e `recurring` (transacoes ligadas a recorrencias nao descartadas) x avulso.
+- Extrapolacao = media simples da janela repetida nos proximos `horizon` meses, campo a campo. E uma lente ("quanto esse tipo de gasto custa em media"), nao o modelo de forecast.py; sem tendencia porque com poucos pontos ruidosos a reta erra mais que a media.
+- Gasto segue `eh_gasto`: saida nao excluida fora de kind `transferencia` **e** fora de kind `receita` (saida classificada como Receita e estorno ou regra errada).
+
+## Painel: cartao x conta
+Recorrencias sao sempre apresentadas separadas por meio de pagamento: **no cartao** (conta type=credit: assinaturas, parcelas e detectadas confirmadas) e **fora do cartao** (Pix, debito, boleto). Nunca somar as duas num numero so sem mostrar as partes.
+

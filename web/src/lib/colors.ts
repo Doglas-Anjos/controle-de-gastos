@@ -6,3 +6,7 @@ export function categoryColor(c: Pick<CategoryOut, "id"> | null | undefined) {
   if (!c) return "var(--series-other)";
   return `var(--series-${((c.id - 1) % 8 + 8) % 8 + 1})`;
 }
+
+// Cartao e conta tem cor fixa em todas as telas, distinta das categorias.
+export const PAY_COLOR = { card: "var(--pay-card)", bank: "var(--pay-bank)" } as const;
+export const PAY_LABEL = { card: "Cartão", bank: "Conta" } as const;

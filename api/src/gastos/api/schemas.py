@@ -19,6 +19,13 @@ class AccountOut(BaseModel):
     last_sync_at: datetime | None = None
 
 
+class AccountUpdate(BaseModel):
+    """Renomear conta/banco quando a origem veio generica (ex.: conector MeuPluggy)."""
+
+    bank: str | None = Field(None, min_length=1, max_length=60)
+    name: str | None = Field(None, min_length=1, max_length=120)
+
+
 class CategoryOut(BaseModel):
     id: int
     name: str
@@ -94,6 +101,31 @@ class ForecastOut(BaseModel):
     horizon_months: int
     lines: list[ForecastLine]
     total_by_month: dict[str, float]
+
+
+class ProjectionPoint(BaseModel):
+    month: str  # YYYY-MM
+    total: float  # gasto positivo
+    card: float  # parte em contas type=credit
+    bank: float  # parte nas demais contas (corrente, poupanca)
+    recurring: float  # parte ligada a recorrencias ativas (qualquer conta)
+    projected: bool = False
+
+
+class ProjectionOut(BaseModel):
+    """Historico mensal de um tipo de gasto (ou do total) e extrapolacao pela media dos ultimos
+    `months_window` meses completos. Serve o explorador do painel."""
+
+    category: CategoryOut | None  # None = todos os gastos
+    months_window: int
+    horizon: int
+    history: list[ProjectionPoint]  # ordem cronologica, so meses completos
+    projection: list[ProjectionPoint]  # projected=True; total/card/bank/recurring = medias da janela
+    mean: float
+    median: float
+    stdev: float
+    last_month: float
+    trend_pct: float | None  # (ultimo mes - media) / media, None se media = 0
 
 
 class RuleIn(BaseModel):

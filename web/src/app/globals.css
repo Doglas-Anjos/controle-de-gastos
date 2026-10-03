@@ -31,6 +31,7 @@
   --series-other: #a9a8a1;
   --grid: #e7e6e0;
   --chart-band: #0f7369;
+  --pay-card: #0f7369; --pay-bank: #5f7894;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -61,6 +62,7 @@
     --series-other: #6b6a65;
     --grid: #2a2b29;
     --chart-band: #3cb3a3;
+    --pay-card: #3cb3a3; --pay-bank: #8aa4c4;
   }
 }
 
@@ -91,6 +93,7 @@
   --series-other: #6b6a65;
   --grid: #2a2b29;
   --chart-band: #3cb3a3;
+  --pay-card: #3cb3a3; --pay-bank: #8aa4c4;
 }
 
 @theme inline {

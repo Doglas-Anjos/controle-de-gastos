@@ -31,6 +31,7 @@ const PATHS = {
   send: "M4 12 20 4l-6 16-3-7z",
   plus: "M12 5v14M5 12h14",
   sparkle: "M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M6 18l2.5-2.5M15.5 8.5 18 6",
+  card: "M3 6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM3 10h18M7 15h3",
   wallet: "M3 7a2 2 0 0 1 2-2h13v4M3 7v11a2 2 0 0 0 2 2h15V9H5a2 2 0 0 1-2-2zM16 14.5h.01",
   lock: "M6 11h12v10H6zM8 11V7a4 4 0 0 1 8 0v4",
 } as const;

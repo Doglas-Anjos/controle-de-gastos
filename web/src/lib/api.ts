@@ -73,3 +73,5 @@ export const addPluggyItem = (item_id: string, connector_name?: string) =>
 export const deletePluggyItem = (id: number) => req<void>(`/pluggy/items/${id}`, { method: "DELETE" });
 export const getInsights = () => req<T.InsightsOut>("/insights");
 export const askQuestion = (pergunta: string) => req<T.AnswerOut>("/insights/perguntar", json("POST", { pergunta }));
+export const getProjection = (p: { category_id?: number | ""; months: number; horizon?: number }) =>
+  req<T.ProjectionOut>("/projection" + qs({ horizon: 3, ...p }));

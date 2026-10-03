@@ -32,3 +32,25 @@ test("nivel de confianca", () => {
   expect(confidenceLevel(0.7)).toBe("média");
   expect(confidenceLevel(0.35)).toBe("baixa");
 });
+
+test("split separa cartao de conta e descreve as contagens", async () => {
+  const { splitRecorrencias, splitHint, byPay } = await import("./recurrence");
+  const conta = { ...base.account, id: 2, type: "checking" as const, name: "Conta" };
+  const recs: RecurrenceOut[] = [
+    base,
+    { ...base, id: 2, kind: "parcela", expected_amount: 100 },
+    { ...base, id: 3, kind: "detectada", user_decision: "confirmada", expected_amount: 1800, account: conta },
+    { ...base, id: 4, kind: "detectada", account: conta }, // pendente: nao compromete
+    { ...base, id: 5, user_decision: "descartada", account: conta },
+  ];
+  const s = splitRecorrencias(recs);
+  expect(s.card.total).toBeCloseTo(140);
+  expect(s.card.count).toBe(2);
+  expect(s.bank.total).toBeCloseTo(1800);
+  expect(splitHint(s.card)).toBe("1 assinatura, 1 parcela");
+  expect(splitHint(s.bank)).toBe("1 detectada");
+  expect(splitHint({ total: 0, count: 0, porKind: { assinatura: 0, parcela: 0, detectada: 0 } })).toBe("Nenhuma recorrência");
+  expect(byPay(recs, "conta").map((r) => r.id)).toEqual([3, 4, 5]);
+  expect(byPay(recs, "cartao")).toHaveLength(2);
+  expect(byPay(recs, "todas")).toHaveLength(5);
+});

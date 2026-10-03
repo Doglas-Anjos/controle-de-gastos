@@ -1,9 +1,9 @@
 import { categoryColor } from "@/lib/colors";
 import { catLabel, formatBRL, formatDayMonth, formatRelativeDay, merchantLabel, PERIODICIDADE } from "@/lib/format";
-import { confidenceLevel, installmentProgress, isPending } from "@/lib/recurrence";
+import { confidenceLevel, installmentProgress, isCard, isPending } from "@/lib/recurrence";
 import type { RecurrenceOut } from "@/lib/types";
 import { Icon } from "./Icon";
-import { btn, btn2, Chip, Meter, type Tone } from "./ui";
+import { btn, btn2, Chip, Meter, PayChip, type Tone } from "./ui";
 
 const NIVEL: Record<ReturnType<typeof confidenceLevel>, Tone> = { alta: "accent", "média": "neutral", baixa: "warn" };
 const SUFIXO: Record<string, string> = { semanal: "/sem", mensal: "/mês", anual: "/ano" };
@@ -19,11 +19,12 @@ export function RecurrenceCard({ rec, onDecide, busy }: {
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
           <h3 className="truncate text-[15px] font-semibold text-ink" title={merchantLabel(rec.merchant)}>{merchantLabel(rec.merchant)}</h3>
-          <div className="mt-1 flex items-center gap-1.5 text-xs text-muted">
+          <div className="mt-1 flex flex-wrap items-center gap-1.5 text-xs text-muted">
             <span className="h-2 w-2 rounded-full" style={{ background: categoryColor(rec.category) }} />
             {catLabel(rec.category?.name)}
             <span aria-hidden="true">·</span>
             {rec.account.bank}
+            <PayChip card={isCard(rec)} />
           </div>
         </div>
         {pending ? <Chip tone="warn">Aguardando decisão</Chip>

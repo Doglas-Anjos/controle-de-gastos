@@ -12,12 +12,14 @@ from gastos.api.schemas import (
     AccountOut,
     ForecastLine,
     ForecastOut,
+    ProjectionOut,
     RecurrenceDecision,
     RecurrenceOut,
     SummaryOut,
 )
 from gastos.core.db import get_session
 from gastos.domain.categorize import categoria_out
+from gastos.domain.explore import projecao
 from gastos.domain.forecast import prever
 from gastos.domain.models import Account, Category, Recurrence
 from gastos.domain.pipeline import recalcular
@@ -89,6 +91,19 @@ def previsao(horizon: int = Query(3, ge=1, le=12), sessao: Session = Depends(get
     return ForecastOut(
         horizon_months=horizon, lines=[ForecastLine(**ln) for ln in linhas], total_by_month=total
     )
+
+
+@router.get("/projection", response_model=ProjectionOut)
+def projection(
+    category_id: int | None = None,
+    months: int = Query(6, ge=3, le=24),
+    horizon: int = Query(3, ge=1, le=12),
+    sessao: Session = Depends(get_session),
+):
+    """Explorador por tipo de gasto: historico mensal e extrapolacao pela media da janela."""
+    if category_id is not None and sessao.get(Category, category_id) is None:
+        raise HTTPException(404, "categoria nao encontrada")
+    return ProjectionOut(**projecao(sessao, date.today(), category_id, months, horizon))
 
 
 @router.post("/recalculate")
