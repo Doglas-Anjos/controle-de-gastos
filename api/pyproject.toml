@@ -2,7 +2,6 @@
 name = "gastos"
 version = "0.1.0"
 description = "Controle financeiro pessoal: Open Finance (Pluggy) + OFX/CSV, recorrencias, previsao e dicas por LLM."
-readme = "../README.md"
 requires-python = ">=3.11"
 dependencies = [
   "fastapi>=0.115",

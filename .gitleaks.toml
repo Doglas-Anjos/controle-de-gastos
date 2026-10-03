@@ -33,4 +33,5 @@ paths = [
 ]
 regexes = [
   '''000\.000\.000-00''',
+  '''sk-xxx''',   # placeholder de chave em testes (mesma convencao de scripts/check_no_personal_data.py)
 ]

@@ -6,9 +6,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with: { fetch-depth: 0 }
-      - uses: gitleaks/gitleaks-action@v2
-        env:
-          GITLEAKS_CONFIG: .gitleaks.toml
+      # binario direto: a action oficial falha com "stderr is not empty" mesmo sem achados
+      - run: |
+          curl -sSL https://github.com/gitleaks/gitleaks/releases/download/v8.24.3/gitleaks_8.24.3_linux_x64.tar.gz | tar xz gitleaks
+          ./gitleaks git --config .gitleaks.toml --redact --exit-code 1 .
   api:
     runs-on: ubuntu-latest
     steps:
