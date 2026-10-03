@@ -1,11 +1,11 @@
 "use client";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import { CategoryPicker } from "@/components/CategoryPicker";
 import { Icon, type IconName } from "@/components/Icon";
 import { useToast } from "@/components/Toast";
 import { Async, btn, btn2, btnGhost, Chip, EmptyState, iconBtn, input, PageHeader, Panel, Skeleton } from "@/components/ui";
 import { createRule, deleteOverride, getAccounts, getCategories, getSummary, getTransactions, putOverride } from "@/lib/api";
-import { categoryColor } from "@/lib/colors";
 import { catLabel, currentMonth, formatBRL, formatDayMonth, formatMonthLong, shiftMonth } from "@/lib/format";
 import { escapeRegex } from "@/lib/regex";
 import type { TransactionOut } from "@/lib/types";
@@ -150,10 +150,9 @@ function Lista({ inicial }: { inicial: string }) {
             <MonthPicker value={month} onChange={setMonth} />
             <button className={iconBtn} aria-label="Próximo mês" onClick={() => setMonth(shiftMonth(month, 1))}><Icon name="right" size={16} /></button>
           </div>
-          <select aria-label="Categoria" className={`${input} min-w-0 flex-1 sm:flex-none`} value={cat} onChange={(e) => setCat(e.target.value ? Number(e.target.value) : "")}>
-            <option value="">Todas as categorias</option>
-            {cats.map((c) => <option key={c.id} value={c.id}>{catLabel(c.name)}</option>)}
-          </select>
+          <div className="min-w-0 flex-1 sm:w-56 sm:flex-none">
+            <CategoryPicker categories={cats} value={cat} onChange={setCat} allLabel="Todas as categorias" ariaLabel="Categoria" />
+          </div>
           <select aria-label="Conta" className={`${input} min-w-0 flex-1 sm:flex-none`} value={acc} onChange={(e) => setAcc(e.target.value ? Number(e.target.value) : "")}>
             <option value="">Todas as contas</option>
             {accs.map((a) => <option key={a.id} value={a.id}>{a.bank} · {a.name}</option>)}
@@ -209,13 +208,10 @@ function Lista({ inicial }: { inicial: string }) {
                       </td>
                       <td className="px-2 py-2.5">
                         <div className="flex items-center gap-2">
-                          <span className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ background: categoryColor(t.category) }} />
-                          <select aria-label={`Categoria de ${t.description}`} disabled={busy === t.id}
-                            className="h-8 min-w-0 flex-1 cursor-pointer rounded-[8px] border border-transparent bg-transparent px-1.5 text-sm text-ink transition-colors duration-150 hover:border-line hover:bg-surface focus:border-accent focus:outline-none"
-                            value={t.category?.id ?? ""} onChange={(e) => e.target.value && setCategoria(t, Number(e.target.value))}>
-                            {!t.category && <option value="" disabled>Sem categoria</option>}
-                            {cats.map((c) => <option key={c.id} value={c.id}>{catLabel(c.name)}</option>)}
-                          </select>
+                          <div className="min-w-0 flex-1">
+                            <CategoryPicker compact categories={cats} value={t.category?.id ?? ""} disabled={busy === t.id}
+                              ariaLabel={`Categoria de ${t.description}`} onChange={(id) => id !== "" && id !== t.category?.id && setCategoria(t, id)} />
+                          </div>
                           <span title={origem?.text} className="w-4 shrink-0 text-muted">
                             {origem && <><Icon name={origem.icon} size={14} /><span className="sr-only">{origem.text}</span></>}
                           </span>

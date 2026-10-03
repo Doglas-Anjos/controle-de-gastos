@@ -3,6 +3,7 @@ export interface Health { ok: boolean; pluggy: boolean; pluggy_credenciais: bool
 export interface PluggyItemOut { id: number; connector_name: string | null; status: string | null; source: "env" | "widget"; created_at: string | null; accounts: AccountOut[] }
 export interface AccountOut { id: number; bank: string; name: string; type: string; source: string; last_sync_at: string | null; hint?: string | null }
 export interface CategoryOut { id: number; name: string; kind: string; parent_id: number | null }
+export interface CategoryIn { name: string; kind?: string; parent_id?: number | null }
 export interface TransactionOut {
   id: number; account_id: number; date: string; description: string; description_norm: string; amount: number
   category: CategoryOut | null

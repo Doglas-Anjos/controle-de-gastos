@@ -43,6 +43,8 @@ function qs(params: Record<string, string | number | boolean | undefined>) {
 export const getHealth = () => req<T.Health>("/health");
 export const getAccounts = () => req<T.AccountOut[]>("/accounts");
 export const getCategories = () => req<T.CategoryOut[]>("/categories");
+export const createCategory = (c: T.CategoryIn) => req<T.CategoryOut>("/categories", json("POST", c));
+export const deleteCategory = (id: number) => req<unknown>(`/categories/${id}`, { method: "DELETE" });
 export const updateAccount = (id: number, body: { bank?: string; name?: string }) =>
   req<T.AccountOut>(`/accounts/${id}`, json("PUT", body));
 export const getTransactions = (p: {

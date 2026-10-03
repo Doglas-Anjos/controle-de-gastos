@@ -2,10 +2,11 @@
 import { useEffect, useMemo, useState } from "react";
 import { Bar, CartesianGrid, Cell, ComposedChart, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { Icon } from "@/components/Icon";
-import { Async, EmptyState, Panel, Segmented, Skeleton, input, label as labelCls } from "@/components/ui";
+import { CategoryPicker } from "@/components/CategoryPicker";
+import { Async, EmptyState, Panel, Segmented, Skeleton, label as labelCls } from "@/components/ui";
 import { getCategories, getProjection } from "@/lib/api";
 import { PAY_COLOR, PAY_LABEL } from "@/lib/colors";
-import { catLabel, formatBRL, formatBRLCompact, formatMonth, formatMonthLong, formatPercent } from "@/lib/format";
+import { formatBRL, formatBRLCompact, formatMonth, formatMonthLong, formatPercent } from "@/lib/format";
 import type { ProjectionOut, ProjectionPoint } from "@/lib/types";
 import { useApi } from "@/lib/useApi";
 
@@ -130,10 +131,10 @@ export function Explorer() {
       <div className="mb-4 flex flex-wrap items-end gap-3">
         <div className="flex flex-col gap-1">
           <label htmlFor="explorer-cat" className={labelCls}>Tipo de gasto</label>
-          <select id="explorer-cat" className={`${input} min-w-48`} value={prefs.cat} onChange={(e) => setPrefs((s) => ({ ...s, cat: e.target.value === "" ? "" : Number(e.target.value) }))}>
-            <option value="">Todos os gastos</option>
-            {categorias.map((c) => <option key={c.id} value={c.id}>{catLabel(c.name)}</option>)}
-          </select>
+          <div className="w-52">
+            <CategoryPicker id="explorer-cat" categories={categorias} value={prefs.cat} allLabel="Todos os gastos"
+              onChange={(cat) => setPrefs((s) => ({ ...s, cat }))} />
+          </div>
         </div>
         <div className="flex flex-col gap-1">
           <span className={labelCls}>Média de</span>

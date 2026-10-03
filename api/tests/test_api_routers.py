@@ -81,3 +81,22 @@ def test_override(http):
 def test_sync_sem_credencial_409(http, monkeypatch):
     monkeypatch.setattr(settings, "pluggy_client_id", "")
     assert http.post("/sync").status_code == 409
+
+
+def test_categorias_cria_subcategoria_e_apaga(http):
+    cats = {c["name"]: c for c in http.get("/categories").json()}
+    r = http.post("/categories", json={"name": " Academia ", "parent_id": cats["Saude"]["id"]})
+    assert r.status_code == 201
+    assert (r.json()["name"], r.json()["kind"], r.json()["parent_id"]) == (
+        "Academia",
+        "variavel",
+        cats["Saude"]["id"],
+    )
+    assert http.post("/categories", json={"name": "academia", "kind": "fixo"}).status_code == 409
+    assert http.post("/categories", json={"name": "Neta", "parent_id": r.json()["id"]}).status_code == 422
+    assert http.post("/categories", json={"name": "Solta", "kind": "errado"}).status_code == 422
+    assert http.post("/categories", json={"name": "Orfa", "parent_id": 9999}).status_code == 404
+    assert http.delete(f"/categories/{cats['Saude']['id']}").status_code == 409  # tem filha e regra seed
+    assert http.delete(f"/categories/{r.json()['id']}").status_code == 204
+    assert http.delete(f"/categories/{cats['Sem categoria']['id']}").status_code == 409
+    assert http.delete("/categories/9999").status_code == 404

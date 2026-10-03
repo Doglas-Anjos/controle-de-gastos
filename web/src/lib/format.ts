@@ -67,6 +67,7 @@ export const formatPercent = (v: number, digits = 1) =>
 const ACENTOS: Record<string, string> = {
   "Alimentacao": "Alimentação", "Saude": "Saúde", "Educacao": "Educação",
   "Transferencia": "Transferência", "Contas e servicos": "Contas e serviços",
+  "Salario": "Salário", "Renda variavel": "Renda variável",
 };
 export const catLabel = (name: string | null | undefined) => (name ? ACENTOS[name] ?? name : "Sem categoria");
 

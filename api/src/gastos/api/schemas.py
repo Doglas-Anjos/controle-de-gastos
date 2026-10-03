@@ -34,6 +34,12 @@ class CategoryOut(BaseModel):
     parent_id: int | None = None
 
 
+class CategoryIn(BaseModel):
+    name: str = Field(min_length=1, max_length=60)
+    kind: str | None = None  # obrigatorio sem parent_id; com parent_id e herdado
+    parent_id: int | None = None
+
+
 class TransactionOut(BaseModel):
     id: int
     account_id: int

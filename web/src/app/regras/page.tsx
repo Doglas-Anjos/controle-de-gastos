@@ -1,5 +1,7 @@
 "use client";
 import { useState } from "react";
+import { CategoriesPanel } from "@/components/CategoriesPanel";
+import { CategoryPicker } from "@/components/CategoryPicker";
 import { Icon } from "@/components/Icon";
 import { useToast } from "@/components/Toast";
 import { Async, btn, btn2, EmptyState, iconBtn, input, label, PageHeader, Panel, SkeletonRows } from "@/components/ui";
@@ -12,9 +14,10 @@ import { useApi } from "@/lib/useApi";
 export default function Regras() {
   const toast = useToast();
   const rules = useApi(getRules);
-  const cats = useApi(getCategories).data ?? [];
+  const catsApi = useApi(getCategories);
+  const cats = catsApi.data ?? [];
   const [pattern, setPattern] = useState("");
-  const [cat, setCat] = useState("");
+  const [cat, setCat] = useState<number | "">("");
   const [priority, setPriority] = useState(100);
   const [saving, setSaving] = useState(false);
   const [confirmar, setConfirmar] = useState<number>();
@@ -61,10 +64,7 @@ export default function Regras() {
             </div>
             <div className="flex flex-col gap-1.5">
               <label htmlFor="categoria" className={label}>Categoria</label>
-              <select id="categoria" className={input} required value={cat} onChange={(e) => setCat(e.target.value)}>
-                <option value="" disabled>Escolha uma categoria</option>
-                {cats.map((c) => <option key={c.id} value={c.id}>{catLabel(c.name)}</option>)}
-              </select>
+              <CategoryPicker id="categoria" categories={cats} value={cat} onChange={setCat} placeholder="Escolha uma categoria" />
             </div>
             <div className="flex flex-col gap-1.5">
               <label htmlFor="prioridade" className={label}>Prioridade</label>
@@ -115,6 +115,9 @@ export default function Regras() {
             </Async>
           </div>
         </Panel>
+      </div>
+      <div className="mt-6">
+        <CategoriesPanel categories={cats} onChange={catsApi.reload} />
       </div>
     </>
   );

@@ -32,6 +32,15 @@ CATEGORIAS_BASE = {
     "Receita": "receita",
     SEM_CATEGORIA: "variavel",
 }
+# Subcategoria -> categoria-mae. Um nivel so; o kind e herdado da mae (e o que decide gasto/receita/
+# transferencia). O usuario cria as suas por POST /categories.
+SUBCATEGORIAS_BASE = {
+    "Salario": "Receita",
+    "Bolsa": "Receita",
+    "Renda fixa": "Investimentos",
+    "Renda variavel": "Investimentos",
+    "Cripto": "Investimentos",
+}
 
 # Ordem = prioridade (menor vence). As especificas vem antes das genericas: "uber eats" antes de "uber",
 # "mercado livre" antes de "mercado". \b evita casar pedaco de palavra ("tim" em "timbo", "raia" em "praia").
@@ -49,11 +58,21 @@ REGRAS_BASE = [
     (r"\b(?:aluguel|condominio|iptu)\b", "Moradia"),
     # "Pagamento recebido" e o credito da fatura no cartao: e o dinheiro saindo da conta, nao receita.
     (r"\b(?:pagamento recebido|pag(?:amento|to)\.? ?(?:de |da )?fatura)\b", "Transferencia"),
-    (r"\b(?:rendimento|salario|provento)\b", "Receita"),
-    (r"\b(?:aplicacao|resgate|tesouro|cdb)\b", "Investimentos"),
+    (r"\b(?:salario|provento|folha de pagamento)\b", "Salario"),
+    # "bolsa de valores" nao e bolsa de estudo
+    (r"\b(?:bolsa(?! de valores)|capes|cnpq|fapesp|fapemig|faperj)\b", "Bolsa"),
+    (r"\b(?:rendimento|dividendo|jcp)\b", "Receita"),
+    (r"\b(?:tesouro|cdb|rdb|lci|lca|debenture)\b", "Renda fixa"),
+    (r"\b(?:acoes|fii|etf|bdr|bolsa de valores)\b", "Renda variavel"),
+    (r"\b(?:bitcoin|btc|ethereum|cripto)\b", "Cripto"),
+    (r"\b(?:aplicacao|resgate)\b", "Investimentos"),
 ]
 # Padroes que ja foram seed e deixaram de valer: apagados de bancos antigos, senao continuam vencendo.
-REGRAS_RETIRADAS = {r"\b(?:rendimento|salario|pagamento recebido)\b"}
+REGRAS_RETIRADAS = {
+    r"\b(?:rendimento|salario|pagamento recebido)\b",
+    r"\b(?:rendimento|salario|provento)\b",
+    r"\b(?:aplicacao|resgate|tesouro|cdb)\b",
+}
 
 # Chaves sem acento e em minusculas (ver _chave). Inclui os nomes em ingles que a API devolve sem traducao.
 _PLUGGY = {
@@ -184,13 +203,14 @@ _PLUGGY = {
         "tax on financial operations",
         "income taxes",
     ],
+    "Salario": ["salario", "salary"],
+    "Renda fixa": ["renda fixa", "fixed income"],
+    "Renda variavel": ["renda variavel", "variable income"],
     "Receita": [
         "renda",
-        "salario",
         "rendimentos",
         "juros e dividendos",
         "income",
-        "salary",
         "proceeds interests and dividends",
         "proceeds, interests and dividends",
     ],
@@ -206,12 +226,8 @@ _PLUGGY = {
     "Investimentos": [
         "investimentos",
         "investimento automatico",
-        "renda fixa",
-        "renda variavel",
         "investments",
         "automatic investment",
-        "fixed income",
-        "variable income",
     ],
 }
 PLUGGY_PARA_BASE = {chave: base for base, chaves in _PLUGGY.items() for chave in chaves}
@@ -237,6 +253,14 @@ def semear_categorias(sessao: Session) -> dict[str, int]:
             cats[nome] = Category(name=nome, kind=kind)
             sessao.add(cats[nome])
             novas += 1
+    sessao.flush()
+    for nome, mae in SUBCATEGORIAS_BASE.items():
+        if nome not in cats:
+            cats[nome] = Category(name=nome, kind=cats[mae].kind, parent_id=cats[mae].id)
+            sessao.add(cats[nome])
+            novas += 1
+        elif cats[nome].parent_id is None:  # criada antes de virar subcategoria
+            cats[nome].parent_id = cats[mae].id
     sessao.flush()
 
     for r in sessao.scalars(select(CategoryRule).where(CategoryRule.pattern.in_(REGRAS_RETIRADAS))):
