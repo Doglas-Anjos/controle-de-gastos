@@ -1,0 +1,20 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: api/Dockerfile
+    env_file: .env
+    environment:
+      GASTOS_DB_PATH: /app/data/gastos.db
+    volumes:
+      - ./data:/app/data   # unico lugar com dados reais; nunca sobe para o git
+    ports:
+      - "8000:8000"
+  web:
+    build: ./web
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:8000
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api

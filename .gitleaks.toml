@@ -1,0 +1,36 @@
+# Regras extras do gitleaks para este repositorio. As regras padrao continuam ativas.
+title = "controle-de-gastos"
+
+[extend]
+useDefault = true
+
+[[rules]]
+id = "cpf-brasileiro"
+description = "CPF formatado"
+regex = '''\b\d{3}\.\d{3}\.\d{3}-\d{2}\b'''
+keywords = ["cpf"]
+
+[[rules]]
+id = "pluggy-client-secret"
+description = "Pluggy clientSecret / clientId em codigo ou config"
+regex = '''(?i)(pluggy[_-]?client[_-]?(secret|id)|clientSecret)\s*[:=]\s*["']?[a-f0-9-]{20,}'''
+
+[[rules]]
+id = "pluggy-item-id"
+description = "PLUGGY_ITEM_IDS preenchido"
+regex = '''(?i)pluggy_item_ids\s*[:=]\s*["']?[a-f0-9-]{36}'''
+
+[[rules]]
+id = "openai-key"
+description = "Chave OpenAI"
+regex = '''sk-[A-Za-z0-9_-]{20,}'''
+
+[allowlist]
+description = "Placeholders e fixtures sinteticas"
+paths = [
+  '''\.env\.example$''',
+  '''api/tests/fixtures/''',
+]
+regexes = [
+  '''000\.000\.000-00''',
+]

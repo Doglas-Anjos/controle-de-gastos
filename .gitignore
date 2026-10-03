@@ -1,0 +1,46 @@
+# --- Dados pessoais: NUNCA entram no repositorio ---
+data/
+!data/inbox/.gitkeep
+!data/exports/.gitkeep
+.env
+.env.*
+!.env.example
+*.db
+*.sqlite
+*.sqlite3
+*.ofx
+*.qfx
+*.csv
+*.xlsx
+# fixtures sinteticas sao a unica excecao
+!api/tests/fixtures/**
+exports/
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.coverage
+htmlcov/
+*.egg-info/
+dist/
+build/
+
+# --- Node / Next.js ---
+node_modules/
+web/.next/
+web/out/
+web/next-env.d.ts
+*.tsbuildinfo
+npm-debug.log*
+
+# --- IDE / SO ---
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# --- Claude Code (local) ---
+.claude/settings.local.json

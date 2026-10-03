@@ -1,0 +1,16 @@
+# Instale com: pip install pre-commit && pre-commit install
+# gitleaks precisa estar no PATH (scripts/install_guardrails.ps1).
+repos:
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.24.3
+    hooks:
+      - id: gitleaks
+        args: ["--config", ".gitleaks.toml"]
+  - repo: local
+    hooks:
+      - id: sem-dados-pessoais
+        name: bloqueia dados pessoais no commit
+        entry: python scripts/check_no_personal_data.py
+        language: system
+        pass_filenames: false
+        always_run: true

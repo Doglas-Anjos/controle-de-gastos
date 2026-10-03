@@ -1,0 +1,33 @@
+{
+  "permissions": {
+    "deny": [
+      "Read(./.env)",
+      "Read(./.env.*)",
+      "Read(./data/**)",
+      "Bash(cat .env*)",
+      "Bash(cat data/*)"
+    ],
+    "allow": [
+      "Bash(python -m pytest *)",
+      "Bash(npx vitest *)",
+      "Bash(npx tsc *)",
+      "Bash(gitleaks *)",
+      "Bash(git diff *)",
+      "Bash(git status *)",
+      "Bash(git log *)"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python \"$CLAUDE_PROJECT_DIR/scripts/claude_guard_git.py\""
+          }
+        ]
+      }
+    ]
+  }
+}
