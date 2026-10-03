@@ -40,8 +40,14 @@ class Settings(BaseSettings):
         return f"sqlite:///{caminho.as_posix()}"
 
     @property
+    def pluggy_credenciais(self) -> bool:
+        """Basta para gerar connect token e abrir o widget; itens podem vir depois pelo banco."""
+        return bool(self.pluggy_client_id and self.pluggy_client_secret)
+
+    @property
     def pluggy_configurado(self) -> bool:
-        return bool(self.pluggy_client_id and self.pluggy_client_secret and self.item_ids)
+        """Credenciais + itens do .env. Itens do widget entram em ingest.pluggy_sync."""
+        return self.pluggy_credenciais and bool(self.item_ids)
 
     @property
     def openai_configurado(self) -> bool:

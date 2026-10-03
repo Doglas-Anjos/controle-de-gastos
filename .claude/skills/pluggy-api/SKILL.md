@@ -42,3 +42,9 @@ Fonte viva: MCP `pluggy-docs` (sem chave) ou https://docs.pluggy.ai/pt/reference
 3. Janela de sync: ultimos 90 dias por padrao; `--desde` para backfill. Guardar `last_sync_at` por conta.
 4. Erros de item (LOGIN_ERROR, WAITING_USER_INPUT) nao sao bug do codigo: logar e seguir para o proximo item.
 5. Testes nunca chamam a API. Fixtures em `api/tests/fixtures/pluggy/*.json` com dados sinteticos no formato acima.
+
+## Pluggy Connect (widget)
+- Backend gera o token: `POST /connect_token` (X-API-KEY) body `{"options": {"clientUserId": "..."}}`; com `"itemId"` o widget abre em modo de atualizacao de conexao. Resposta `accessToken`, valido por poucos minutos: gerar um por abertura do widget, nunca guardar.
+- Ao concluir, o front envia o `item.id` para `POST /pluggy/items`; ele fica na tabela `pluggy_items` (so no banco local, nunca devolvido pela API; a lista usa id interno).
+- O sync usa a uniao de `PLUGGY_ITEM_IDS` (.env) com `pluggy_items`, sem duplicar (`itens_para_sync`). Status e nome do conector dos itens do widget sao gravados a cada sync.
+- Bancos reais pelo widget exigem plano pago da Pluggy; no plano gratis so o conector sandbox funciona. Para bancos reais gratis, siga o fluxo Meu Pluggy + `PLUGGY_ITEM_IDS`.

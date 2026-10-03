@@ -4,11 +4,15 @@ from __future__ import annotations
 
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI
+from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy import select
+from sqlalchemy.orm import Session
 
+from gastos.api.schemas import HealthOut
 from gastos.core.config import settings
-from gastos.core.db import criar_tabelas
+from gastos.core.db import criar_tabelas, get_session
+from gastos.domain.models import PluggyItem
 
 
 @asynccontextmanager
@@ -26,9 +30,14 @@ app.add_middleware(
 )
 
 
-@app.get("/health")
-def health() -> dict:
-    return {"ok": True, "pluggy": settings.pluggy_configurado, "openai": settings.openai_configurado}
+@app.get("/health", response_model=HealthOut)
+def health(sessao: Session = Depends(get_session)):
+    itens = bool(settings.item_ids) or sessao.scalar(select(PluggyItem.id).limit(1)) is not None
+    return HealthOut(
+        pluggy=settings.pluggy_credenciais and itens,
+        pluggy_credenciais=settings.pluggy_credenciais,
+        openai=settings.openai_configurado,
+    )
 
 
 from gastos.api.routers import (  # noqa: E402
@@ -38,10 +47,11 @@ from gastos.api.routers import (  # noqa: E402
     imports,
     insights,
     overrides,
+    pluggy,
     rules,
     sync,
     transactions,
 )
 
-for _r in (accounts, categories, transactions, analytics, insights, imports, sync, rules, overrides):
+for _r in (accounts, categories, transactions, analytics, insights, imports, sync, rules, overrides, pluggy):
     app.include_router(_r.router)

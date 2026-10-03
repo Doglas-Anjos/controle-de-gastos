@@ -1,11 +1,17 @@
 "use client";
+import dynamic from "next/dynamic";
 import { useRef, useState, type DragEvent } from "react";
 import { Icon } from "@/components/Icon";
+import { PluggyItems } from "@/components/PluggyItems";
 import { useToast } from "@/components/Toast";
 import { btn, btn2, ErrorBox, iconBtn, PageHeader, Panel } from "@/components/ui";
-import { ApiError, getHealth, syncPluggy, uploadFiles } from "@/lib/api";
+import { addPluggyItem, ApiError, createConnectToken, deletePluggyItem, getHealth, getPluggyItems, syncPluggy, uploadFiles } from "@/lib/api";
 import type { ImportResult, SyncResult } from "@/lib/types";
 import { useApi } from "@/lib/useApi";
+
+// O widget injeta script externo da Pluggy: so existe no cliente.
+const PluggyConnect = dynamic(() => import("react-pluggy-connect").then((m) => m.PluggyConnect), { ssr: false });
+const SANDBOX = process.env.NEXT_PUBLIC_PLUGGY_SANDBOX === "1";
 
 const ACEITOS = [".ofx", ".csv"];
 const aceito = (f: File) => ACEITOS.some((ext) => f.name.toLowerCase().endsWith(ext));
@@ -35,6 +41,10 @@ export default function Importar() {
   const toast = useToast();
   const health = useApi(getHealth);
   const pluggyOn = health.data?.pluggy;
+  const credOn = health.data?.pluggy_credenciais;
+  const itens = useApi(getPluggyItems);
+  const [token, setToken] = useState<string>();
+  const [conn, setConn] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const [files, setFiles] = useState<File[]>([]);
   const [over, setOver] = useState(false);
@@ -73,6 +83,38 @@ export default function Importar() {
       toast("Sincronização concluída");
     } catch (e) {
       setSync({ error: e instanceof ApiError && e.status === 409 ? "Pluggy não configurado. Defina as credenciais no .env da API ou importe arquivos OFX/CSV." : (e as Error).message });
+    }
+  };
+
+  const conectar = async () => {
+    setConn(true);
+    try {
+      setToken((await createConnectToken()).access_token);
+    } catch (e) {
+      toast((e as Error).message, { tone: "error" });
+    }
+    setConn(false);
+  };
+  const aoConectar = async ({ item }: { item: { id: string; connector?: { name?: string } } }) => {
+    setToken(undefined);
+    try {
+      await addPluggyItem(item.id, item.connector?.name);
+      toast("Banco conectado, sincronizando");
+      itens.reload();
+      health.reload();
+      sincronizar();
+    } catch (e) {
+      toast((e as Error).message, { tone: "error" });
+    }
+  };
+  const remover = async (id: number) => {
+    try {
+      await deletePluggyItem(id);
+      toast("Conexão removida");
+      itens.reload();
+      health.reload();
+    } catch (e) {
+      toast((e as Error).message, { tone: "error" });
     }
   };
 
@@ -131,18 +173,32 @@ export default function Importar() {
         </Panel>
 
         <Panel className="lg:col-span-2" title="Open Finance (Pluggy)" subtitle="Sincroniza contas e cartões direto do banco, sem arquivos.">
-          {pluggyOn === false ? (
+          {credOn === false ? (
             <div className="rounded-[12px] bg-surface-2 p-4 text-sm text-ink-2">
               <div className="flex items-center gap-2 font-medium text-ink"><Icon name="lock" size={16} className="text-muted" />Não configurado</div>
               <p className="mt-1.5 leading-relaxed">
-                Defina PLUGGY_CLIENT_ID, PLUGGY_CLIENT_SECRET e PLUGGY_ITEM_IDS no <code className="rounded-[6px] bg-surface px-1 text-[13px]">.env</code> da
+                Defina PLUGGY_CLIENT_ID e PLUGGY_CLIENT_SECRET no <code className="rounded-[6px] bg-surface px-1 text-[13px]">.env</code> da
                 API e reinicie o servidor. Enquanto isso, importe arquivos ao lado.
               </p>
             </div>
           ) : (
-            <p className="text-sm leading-relaxed text-ink-2">
-              Busca as transações novas de todas as conexões cadastradas. Categorias e exclusões que você definiu são mantidas.
-            </p>
+            <div className="space-y-3">
+              {itens.error && <ErrorBox message={itens.error} />}
+              {itens.data && itens.data.length > 0 ? (
+                <PluggyItems items={itens.data} onRemove={remover} />
+              ) : (
+                !itens.loading && !itens.error && <p className="text-sm text-ink-2">Nenhum banco conectado ainda.</p>
+              )}
+            </div>
+          )}
+          <button className={`${btn2} mt-4 w-full`} disabled={!credOn || conn || !!token} onClick={conectar}>
+            <Icon name="bank" size={16} />{conn ? "Abrindo…" : "Conectar banco"}
+          </button>
+          <p className="mt-2 text-xs text-muted">Conexões feitas em meu.pluggy.ai e configuradas no .env também aparecem aqui.</p>
+          {token && (
+            <PluggyConnect connectToken={token} includeSandbox={SANDBOX} onSuccess={aoConectar}
+              onError={(e) => { setToken(undefined); toast(e.message || "Erro ao conectar", { tone: "error" }); }}
+              onClose={() => setToken(undefined)} />
           )}
           <button className={`${btn} mt-4 w-full`} disabled={!pluggyOn || sync.busy} onClick={sincronizar}
             title={pluggyOn ? undefined : "Configure a Pluggy para sincronizar"}>

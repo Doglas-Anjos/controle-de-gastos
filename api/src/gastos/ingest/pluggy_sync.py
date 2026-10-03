@@ -6,8 +6,11 @@ from __future__ import annotations
 import logging
 from datetime import UTC, date, datetime, timedelta
 
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
+from gastos.core.config import settings
+from gastos.domain.models import PluggyItem
 from gastos.ingest.pluggy_client import PluggyClient, PluggyError
 from gastos.ingest.upsert import obter_ou_criar_conta, upsert_transacoes
 
@@ -41,13 +44,23 @@ def _registro(t: dict, meses_fatura: dict[str, str]) -> dict:
     }
 
 
+def itens_para_sync(sessao: Session) -> list[str]:
+    """Uniao do .env com os itens do widget; dict preserva ordem e evita sync duplicado do mesmo item."""
+    return list(dict.fromkeys([*settings.item_ids, *sessao.scalars(select(PluggyItem.item_id))]))
+
+
 def sincronizar(sessao: Session, client: PluggyClient, item_ids: list[str], desde: date | None) -> dict:
     res = {"items": 0, "accounts": 0, "transactions_new": 0, "transactions_updated": 0, "errors": []}
     hoje = date.today()
+    do_banco = {p.item_id: p for p in sessao.scalars(select(PluggyItem))}
     for i, item_id in enumerate(item_ids, 1):
         rotulo = f"item {i}"  # o id e segredo, entao so a posicao aparece
         try:
             item = client.item(item_id)
+            if reg := do_banco.get(item_id):  # so itens do widget tem registro; os do .env nao
+                reg.status = item.get("status")
+                reg.connector_name = (item.get("connector") or {}).get("name") or reg.connector_name
+                sessao.commit()
             if item.get("status") in _ITEM_COM_PROBLEMA:
                 res["errors"].append(
                     f"{rotulo}: conexao precisa de atencao ({item['status']}); reconecte no painel da Pluggy"
@@ -81,6 +94,9 @@ def sincronizar(sessao: Session, client: PluggyClient, item_ids: list[str], desd
             res["items"] += 1
         except PluggyError as e:
             sessao.rollback()
+            if reg := do_banco.get(item_id):
+                reg.status = "ERRO"
+                sessao.commit()
             res["errors"].append(f"{rotulo}: {e}")
     log.info(
         "sync: %d itens, %d contas, %d novas, %d atualizadas, %d erros",

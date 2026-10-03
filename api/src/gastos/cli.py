@@ -27,18 +27,21 @@ def recalcular_cmd():
 def sync(desde: str = typer.Option(None, help="YYYY-MM-DD; padrao: desde o ultimo sync")):
     """Sincroniza as contas do Meu Pluggy."""
     from gastos.ingest.pluggy_client import PluggyClient
-    from gastos.ingest.pluggy_sync import sincronizar
+    from gastos.ingest.pluggy_sync import itens_para_sync, sincronizar
 
-    if not settings.pluggy_configurado:
+    criar_tabelas()
+    with SessionLocal() as sessao:
+        itens = itens_para_sync(sessao)
+    if not settings.pluggy_credenciais or not itens:
         typer.echo(
-            "Pluggy nao configurado: defina PLUGGY_CLIENT_ID, PLUGGY_CLIENT_SECRET e PLUGGY_ITEM_IDS no .env"
+            "Pluggy nao configurado: defina PLUGGY_CLIENT_ID e PLUGGY_CLIENT_SECRET no .env e "
+            "conecte um banco no app (ou defina PLUGGY_ITEM_IDS)"
         )
         raise typer.Exit(1) from None
-    criar_tabelas()
     client = PluggyClient(settings.pluggy_base_url, settings.pluggy_client_id, settings.pluggy_client_secret)
     try:
         with SessionLocal() as sessao:
-            r = sincronizar(sessao, client, settings.item_ids, date.fromisoformat(desde) if desde else None)
+            r = sincronizar(sessao, client, itens, date.fromisoformat(desde) if desde else None)
             recalcular(sessao)
     finally:
         client.close()

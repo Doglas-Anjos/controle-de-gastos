@@ -50,6 +50,9 @@ OFX / CSV exportados ───────┘          │
 2. Crie conta em [meu.pluggy.ai](https://meu.pluggy.ai), conecte seus bancos, depois em
    [dashboard.pluggy.ai](https://dashboard.pluggy.ai) crie a aplicacao, ative o conector **MeuPluggy**, copie
    `Client ID`, `Client Secret` e os `Item IDs` para o `.env`.
+   Alternativa: so `Client ID` e `Client Secret` no `.env` e use o botao **Conectar banco** na tela Importar
+   (widget Pluggy Connect). No plano gratis o widget so conecta o conector sandbox; bancos reais pelo widget
+   exigem plano pago, por isso o caminho gratis e o Meu Pluggy + `Item IDs`.
 3. (Opcional) `OPENAI_API_KEY` para as dicas.
 4. `docker compose up` e abra http://localhost:3000. Ou, sem Docker:
    ```

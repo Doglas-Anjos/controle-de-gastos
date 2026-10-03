@@ -47,16 +47,28 @@ class PluggyClient:
             self._key, self._key_em = r.json()["apiKey"], time.monotonic()
         return self._key
 
-    def _get(self, caminho: str, rotulo: str, params: dict | None = None) -> dict:
+    def _get(self, caminho: str, rotulo: str, params: dict | None = None, metodo: str = "GET", **kw) -> dict:
         for tentativa in (0, 1):
             r = self._enviar(
-                "GET", caminho, rotulo, params=params, headers={"X-API-KEY": self._apikey(tentativa == 1)}
+                metodo,
+                caminho,
+                rotulo,
+                params=params,
+                headers={"X-API-KEY": self._apikey(tentativa == 1)},
+                **kw,
             )
             if r.status_code != 401 or tentativa:
                 break
         if r.status_code >= 400:
             raise PluggyError(r.status_code, f"erro em {rotulo}")
         return r.json()
+
+    def connect_token(self, client_user_id: str | None = None, item_id: str | None = None) -> str:
+        """Token curto para o widget. Com item_id o widget abre em modo de atualizacao de conexao."""
+        corpo: dict = {"options": {"clientUserId": client_user_id}} if client_user_id else {}
+        if item_id:
+            corpo["itemId"] = item_id
+        return self._get("/connect_token", "/connect_token", metodo="POST", json=corpo)["accessToken"]
 
     def item(self, item_id: str) -> dict:
         return self._get(f"/items/{item_id}", "/items/{id}")

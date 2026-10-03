@@ -62,5 +62,14 @@ export const uploadFiles = (files: File[]) => {
   return req<T.ImportResult>("/import/upload", { method: "POST", body: fd });
 };
 export const syncPluggy = () => req<T.SyncResult>("/sync", { method: "POST" });
+export const getPluggyItems = () =>
+  req<T.PluggyItemOut[]>("/pluggy/items").catch((e) => {
+    if (e instanceof ApiError && e.status === 404) return [];
+    throw e;
+  });
+export const createConnectToken = () => req<{ access_token: string }>("/pluggy/connect-token", json("POST", {}));
+export const addPluggyItem = (item_id: string, connector_name?: string) =>
+  req<T.PluggyItemOut>("/pluggy/items", json("POST", { item_id, connector_name }));
+export const deletePluggyItem = (id: number) => req<void>(`/pluggy/items/${id}`, { method: "DELETE" });
 export const getInsights = () => req<T.InsightsOut>("/insights");
 export const askQuestion = (pergunta: string) => req<T.AnswerOut>("/insights/perguntar", json("POST", { pergunta }));

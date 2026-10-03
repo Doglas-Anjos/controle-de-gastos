@@ -3,6 +3,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState, useSyncExternalStore, type ReactNode } from "react";
 import { getHealth } from "@/lib/api";
+import type { Health } from "@/lib/types";
 import { useApi } from "@/lib/useApi";
 import { Icon, type IconName } from "./Icon";
 import { ToastProvider } from "./Toast";
@@ -14,20 +15,30 @@ export const NAV: readonly (readonly [string, string, IconName])[] = [
 ];
 
 const COMO_CONFIGURAR = {
-  Pluggy: "Defina PLUGGY_CLIENT_ID, PLUGGY_CLIENT_SECRET e PLUGGY_ITEM_IDS no .env da API e reinicie o servidor.",
+  Pluggy: "Defina PLUGGY_CLIENT_ID e PLUGGY_CLIENT_SECRET no .env da API e reinicie o servidor.",
   OpenAI: "Defina OPENAI_API_KEY no .env da API e reinicie o servidor.",
 };
 
-function Status({ name, on }: { name: keyof typeof COMO_CONFIGURAR; on?: boolean }) {
+function Status({ name, on, label, href }: { name: keyof typeof COMO_CONFIGURAR; on?: boolean; label?: string; href?: string }) {
+  const cls = "flex w-full items-center gap-2 rounded-[8px] px-2 py-1 text-left text-xs text-muted hover:bg-surface-2 hover:text-ink";
+  const inner = (
+    <>
+      <span className={`h-2 w-2 rounded-full ${on ? "bg-ok" : "bg-line-strong"}`} />
+      <span className="flex-1">{name}</span>
+      <span>{label ?? (on ? "ativo" : "não configurado")}</span>
+    </>
+  );
   return (
     <Hint className="w-full" text={on ? `${name} configurado e pronto para uso.` : COMO_CONFIGURAR[name]}>
-      <button type="button" className="flex w-full items-center gap-2 rounded-[8px] px-2 py-1 text-left text-xs text-muted hover:bg-surface-2 hover:text-ink">
-        <span className={`h-2 w-2 rounded-full ${on ? "bg-ok" : "bg-line-strong"}`} />
-        <span className="flex-1">{name}</span>
-        <span>{on ? "ativo" : "não configurado"}</span>
-      </button>
+      {href ? <Link href={href} className={cls}>{inner}</Link> : <button type="button" className={cls}>{inner}</button>}
     </Hint>
   );
+}
+
+function PluggyStatus({ h }: { h?: Health }) {
+  if (h?.pluggy) return <Status name="Pluggy" on label="conectado" />;
+  if (h?.pluggy_credenciais) return <Status name="Pluggy" label="sem bancos conectados" href="/importar" />;
+  return <Status name="Pluggy" />;
 }
 
 // Tema efetivo = data-theme salvo ou, sem escolha manual, o do sistema. Le direto do DOM.
@@ -96,7 +107,7 @@ function Footer() {
       {error ? (
         <p className="flex items-center gap-2 px-2 text-xs text-danger-text"><Icon name="alert" size={14} />API fora do ar</p>
       ) : (
-        <><Status name="Pluggy" on={h?.pluggy} /><Status name="OpenAI" on={h?.openai} /></>
+        <><PluggyStatus h={h} /><Status name="OpenAI" on={h?.openai} /></>
       )}
     </div>
   );

@@ -123,6 +123,19 @@ class Forecast(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
 
+class PluggyItem(Base):
+    """Conexao criada pelo widget Pluggy Connect dentro do app. Os itens do .env continuam valendo;
+    o sync usa a uniao dos dois. item_id fica so no banco local, nunca sai pela API."""
+
+    __tablename__ = "pluggy_items"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    item_id: Mapped[str] = mapped_column(String(80), unique=True)
+    connector_name: Mapped[str | None] = mapped_column(String(120))
+    status: Mapped[str | None] = mapped_column(String(30))
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+
+
 class Insight(Base):
     __tablename__ = "insights"
 

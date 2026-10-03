@@ -112,6 +112,31 @@ class OverrideIn(BaseModel):
     note: str | None = None
 
 
+class ConnectTokenOut(BaseModel):
+    access_token: str  # JWT de curta duracao para abrir o widget Pluggy Connect
+
+
+class PluggyItemIn(BaseModel):
+    item_id: str = Field(min_length=8, max_length=80)
+    connector_name: str | None = None
+
+
+class PluggyItemOut(BaseModel):
+    id: int
+    connector_name: str | None
+    status: str | None  # UPDATED, OUTDATED, LOGIN_ERROR... (ultimo visto no sync)
+    source: str  # env | widget
+    created_at: datetime | None = None
+    # item_id nunca sai da API: e identificador externo ligado as credenciais do usuario
+
+
+class HealthOut(BaseModel):
+    ok: bool = True
+    pluggy: bool  # credenciais + pelo menos um item (env ou widget): sync possivel
+    pluggy_credenciais: bool  # client id/secret presentes: widget possivel
+    openai: bool
+
+
 class ImportResult(BaseModel):
     files: int
     accounts_created: int
